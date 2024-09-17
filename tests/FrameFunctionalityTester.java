@@ -14,7 +14,7 @@ import javax.swing.JToolBar;
 import javax.swing.JButton;
 
 /**
- * The test class FrameFunctionalityTester.
+ * Not complete, will complete later.  It currently only works on my screen but not others so I will have to fix that.
  *
  * @author  Noah Winn
  * @version 9/17/2024
