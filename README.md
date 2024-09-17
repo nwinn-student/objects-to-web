@@ -18,7 +18,7 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [X] Read [Github README Formatting](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) should you want to work on the README, makes it easier to understand what does what.
 - [X] Submit Project Vision for the Course Project
 - [X] Submit Project Team Roles
-- [ ] Submit Product Backlog
+- [X] Submit Product Backlog
 - [ ] Submit Plan of Sprint 1
 
 </details>
