@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
+import java.util.ArrayList;
+
 
 /**
  * The Frame that will contain all of the visuals and handle them appropriately.
@@ -15,6 +17,8 @@ public class TEKFrame extends JFrame{
     // To be later used with save, creation, deletion, and modification of Objects
     private boolean unSavedChanges = false;
     private Dimension screenSize = null;
+    private ArrayList<ObjectUI> objects; // storing objects in a list
+
     /**
      * Constructor for objects of class TEKFrame
      * Titles the TEKFrame class and initializes it.
@@ -48,7 +52,21 @@ public class TEKFrame extends JFrame{
             (int)(getHeight()-getInsets().top-getInsets().bottom+10*scrollPane.getViewportBorderBounds().getHeight())));
         
         this.add(scrollPane);
+        // Initialize the list of ObjectUIs
+        objects = new ArrayList<>();
+        createSampleObjects(panel); 
     }
+    // Method to create sample ObjectUI 
+    private void createSampleObjects(TEKPanel panel) {
+        //sample objects: name, position, and size
+        objects.add(new ObjectUI("Object 1", new Point(50, 50), new Dimension(300, 100)));
+        objects.add(new ObjectUI("Object 2", new Point(500, 250), new Dimension(300, 100)));
+        objects.add(new ObjectUI("Object 3", new Point(100, 300), new Dimension(300, 100)));
+
+        // Display the objects in the panel
+        panel.displayObjects(objects);
+    }
+    
     
     /**
      * Used to tell the fileManager to update the file information with the current, when Generating HTML has been complete.
