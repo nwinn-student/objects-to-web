@@ -48,5 +48,29 @@ public class ObjectUI
         return "Name: " + name + ", Created: " + creationTime + ", Position: (" + position.x + ", " + position.y + "), Size: (" + size.width + " x " + size.height + ")";
         //returns the ObjectUI details in string format
     }
+    // Method to generate a string that can be saved to a file (for saving object state)
+    public String getDataToSave() {
+        // Format the data as: name, x-position, y-position, width, height, creationTime
+        return name + "," + position.x + "," + position.y + "," + size.width + "," + size.height + "," + creationTime;
+    }
+
+    // Static method to create an ObjectUI from saved data
+    public static ObjectUI fromData(String data) {
+        // Split the saved data string by commas to extract the properties
+        String[] parts = data.split(",");
+        String name = parts[0];
+        int x = Integer.parseInt(parts[1]);
+        int y = Integer.parseInt(parts[2]);
+        int width = Integer.parseInt(parts[3]);
+        int height = Integer.parseInt(parts[4]);
+        String creationTime = parts[5];
+
+        // Create the ObjectUI with parsed data
+        ObjectUI objectUI = new ObjectUI(name, new Point(x, y), new Dimension(width, height));
+        // Manually set the creation time
+        objectUI.creationTime = creationTime;
+
+        return objectUI;
+    }
     
 }
