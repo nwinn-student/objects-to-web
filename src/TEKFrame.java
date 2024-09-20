@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
+import java.io.*;
+import java.awt.event.*;
 
 /**
  * The Frame that will contain all of the visuals and handle them appropriately.
@@ -48,6 +50,102 @@ public class TEKFrame extends JFrame{
             (int)(getHeight()-getInsets().top-getInsets().bottom+10*scrollPane.getViewportBorderBounds().getHeight())));
         
         this.add(scrollPane);
+        
+         // Initialize the list of ObjectUIs
+        objects = new ArrayList<>();
+        createSampleObjects(panel); // create sample objects
+        
+        // Adding menu options for Open and Save
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        
+        
+        JMenuItem openItem = new JMenuItem("Open");
+        openItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                openFile();
+            }
+        });
+        
+        JMenuItem saveItem = new JMenuItem("Save");
+        saveItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                saveFile();
+            }
+        });
+
+        fileMenu.add(openItem);
+        fileMenu.add(saveItem);
+        menuBar.add(fileMenu);
+
+        setJMenuBar(menuBar);
+    }
+     // Method to create sample ObjectUI 
+    private void createSampleObjects(TEKPanel panel) {
+        //sample objects, name, position, and size
+        objects.add(new ObjectUI("Object 1", new Point(50, 50), new Dimension(300, 100)));
+        objects.add(new ObjectUI("Object 2", new Point(500, 250), new Dimension(300, 100)));
+        objects.add(new ObjectUI("Object 3", new Point(100, 300), new Dimension(300, 100)));
+
+        // Display the objects in the panel
+        panel.displayObjects(objects);
+    }
+    // Method to open a file
+    private void openFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                StringBuilder content = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+                reader.close();
+                // Assuming ObjectUI has a method to load data from the file
+                loadObjectsFromData(content.toString());
+                unSavedChanges = false;
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error reading file: " + ex.getMessage());
+            }
+        }
+    }
+
+    // Method to save a file
+    private void saveFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showSaveDialog(this); // opens a file-saving dialog
+        if (result == JFileChooser.APPROVE_OPTION) { // if "SAVE", file is obtained
+            File file = fileChooser.getSelectedFile();
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                writer.write(getDataToSave());
+                writer.close();
+                unSavedChanges = false; // checks for no unsaved changes
+            } catch (IOException ex) { 
+                JOptionPane.showMessageDialog(this, "Error writing to file: " + ex.getMessage());
+            }
+        }
+    }
+
+    // Method to generate a string representation of objects for saving
+    private String getDataToSave() {
+        StringBuilder data = new StringBuilder();
+        for (ObjectUI object : objects) { //for-each loop for every object in the list
+            data.append(object.getDataToSave()).append("\n"); // seperating and appending strings
+        }
+        return data.toString();
+    }
+
+    // Method to load objects from file data
+    private void loadObjectsFromData(String data) {
+        objects.clear(); //clears existing list of object
+        String[] lines = data.split("\n"); //splits data string into an array of lines
+        for (String line : lines) {
+            // Parse the object data and add new ObjectUI instances to the list
+        }
     }
     
     /**
