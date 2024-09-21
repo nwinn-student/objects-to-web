@@ -17,6 +17,10 @@ public class TEKFrame extends JFrame{
     // To be later used with save, creation, deletion, and modification of Objects
     private boolean unSavedChanges = false;
     private Dimension screenSize = null;
+    private ArrayList<ObjectUI> objects; // storing objects in a list
+    private TEKPanel panel; // Reference to the main panel 
+
+
     /**
      * Constructor for objects of class TEKFrame
      * Titles the TEKFrame class and initializes it.
