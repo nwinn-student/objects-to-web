@@ -24,7 +24,7 @@ public class HtmlTextExtractor {
         String bodyText = doc.body().text();
         // This code put all the body text it read into the string called fullText
 
-        String[] seperatedText = bodyText.split("\\n|\\."); 
+        String[] seperatedText = bodyText.split("\\."); 
         //This code seperate bodyText when there is a new line(\n) or there is a period in the parsed html(.)and put the after seperate text to the string seperatedtext
 
         for (String text : seperatedText) {
