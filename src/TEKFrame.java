@@ -4,6 +4,12 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+// up to you guys if you want to specifically mention each individual javax.swing utility or just do swing.* to cover all fields doesn't really matter either way ig
 
 /**
  * The Frame that will contain all of the visuals and handle them appropriately.
@@ -36,6 +42,36 @@ public class TEKFrame extends JFrame{
         scrollPane.setViewportView(panel);
         
         // Add menuBar and toolBar here, for fullscreen later we will want to pass in scrollPane
+            // Create the menu bar and titles
+                JMenuBar menuBar = new JMenuBar();
+                String[] menuItems = {"File", "Edit", "Selection", "View", "Help"};
+                for (String item : menuItems) {
+                    JMenu menu = new JMenu(item);  // Create a new jMenu for each item
+                    
+                    // Add Open and Save items to the "File" menu
+                    if (item.equals("File")) {
+                        JMenuItem openItem = new JMenuItem("Open");
+                        JMenuItem saveItem = new JMenuItem("Save");
+                        menu.add(openItem);
+                        menu.add(saveItem);
+                        // Add action listeners for Open and Save ( more to come later just did this for now to make sure it won't cause issues for other aspects)
+                        openItem.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                System.out.println("Open option selected");
+                            }
+                        });
+                        saveItem.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                System.out.println("Save option selected");
+                            }
+                        });
+                    }
+                    menuBar.add(menu);
+                }
+                // Add the menu bar to the frame ( make sure this is only ever called once bc that gave me alot of problems and was hard to figure out .-.)
+                this.setJMenuBar(menuBar);
         // for now though panel should be fine 
         // (scrollPane.getViewport().getView() will get panel and panel.getParent().getParent() will get scrollPane)
         
