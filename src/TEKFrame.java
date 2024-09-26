@@ -9,6 +9,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.awt.*;
+
 // up to you guys if you want to specifically mention each individual javax.swing utility or just do swing.* to cover all fields doesn't really matter either way ig
 
 /**
@@ -75,8 +78,16 @@ public class TEKFrame extends JFrame{
         // for now though panel should be fine 
         // (scrollPane.getViewport().getView() will get panel and panel.getParent().getParent() will get scrollPane)
         
-        this.setVisible(true);
-        this.setLocationRelativeTo(null);
+        //Create JToolBar
+            JToolBar toolBar = new JToolBar();
+            JButton button = new JButton("test");
+            toolBar.add(button);    
+                
+        //Adding toolbar to pane
+            getContentPane().add(toolBar, BorderLayout.NORTH);
+
+            this.setVisible(true);
+            this.setLocationRelativeTo(null);
         
         // Adjust to subtract toolBar height and meuBar height later
         panel.setPreferredSize(new Dimension(
