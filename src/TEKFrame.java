@@ -1,17 +1,7 @@
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import javax.swing.JScrollPane;
-import javax.swing.JPanel;
-import javax.swing.*;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.*;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
-
 // up to you guys if you want to specifically mention each individual javax.swing utility or just do swing.* to cover all fields doesn't really matter either way ig
 
 /**
@@ -21,16 +11,19 @@ import java.awt.*;
  * @version Sept. 16, 2024
  */
 public class TEKFrame extends JFrame{
+    
     // To be later used with save, creation, deletion, and modification of Objects
     private boolean unSavedChanges = false;
     private Dimension screenSize = null;
+    static final int ICON_HEIGHT = 16;
+
     /**
      * Constructor for objects of class TEKFrame
      * Titles the TEKFrame class and initializes it.
      */
     public TEKFrame(){
         super("TEK-GUI");
-        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(TEKFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
         this.addWindowListener(new TEKWindowAdapter(this));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -71,6 +64,28 @@ public class TEKFrame extends JFrame{
                             }
                         });
                     }
+
+                    //Add Undo and Redo items in "Edit" menu
+                    if (item.equals("Edit")){
+                        JMenuItem redoItem = new JMenuItem("Redo");
+                        JMenuItem undoItem = new JMenuItem("Undo");
+                        menu.add(undoItem);
+                        menu.add(redoItem);
+
+                        //Action listeners for Undo and Redo
+                        redoItem.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                System.out.println("Redo option selected");
+                            }
+                        });
+                        undoItem.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                System.out.println("Undo option selected");
+                            }
+                        });
+                    }
                     menuBar.add(menu);
                 }
                 // Add the menu bar to the frame ( make sure this is only ever called once bc that gave me alot of problems and was hard to figure out .-.)
@@ -80,6 +95,8 @@ public class TEKFrame extends JFrame{
         
         //Create JToolBar
             JToolBar toolBar = new JToolBar();
+           // toolBar.add(Box.createHorizontalGlue());
+            toolBar.add(Box.createVerticalGlue());
             JButton button = new JButton("test");
             toolBar.add(button);    
                 
@@ -89,6 +106,26 @@ public class TEKFrame extends JFrame{
             this.setVisible(true);
             this.setLocationRelativeTo(null);
         
+        //Creating buttons with icons
+            JButton redoButton = new JButton();
+            JButton undoButton = new JButton();
+       
+        try{
+            Image redoImage = ImageIO.read(getClass().getResource("/res/redo_arrow.png")).getScaledInstance(ICON_HEIGHT, ICON_HEIGHT, Image.SCALE_DEFAULT);
+            Image undoImage = ImageIO.read(getClass().getResource("/res/undo_arrow.png")).getScaledInstance(ICON_HEIGHT, ICON_HEIGHT, Image.SCALE_DEFAULT);
+
+            redoButton.setIcon(new ImageIcon(redoImage));
+            undoButton.setIcon(new ImageIcon(undoImage));
+        }
+        catch(Exception ex){
+            System.out.println(ex);
+        }
+
+        //Adding icons to toolbar
+            toolBar.add(undoButton);
+            toolBar.add(redoButton);
+            panel.setVisible(true);
+
         // Adjust to subtract toolBar height and meuBar height later
         panel.setPreferredSize(new Dimension(
             (int)(getWidth()-getInsets().left-getInsets().right+10*scrollPane.getViewportBorderBounds().getWidth()),
@@ -96,6 +133,7 @@ public class TEKFrame extends JFrame{
         
         this.add(scrollPane);
     }
+    
     
     /**
      * Used to tell the fileManager to update the file information with the current, when Generating HTML has been complete.
