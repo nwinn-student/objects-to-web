@@ -15,7 +15,6 @@ public class ObjectUI
     private String creationTime;
     private Point position;
     private Dimension size;
-    
     public ObjectUI(String name, Point position, Dimension size) //initialize objects
     {
         this.name = name;

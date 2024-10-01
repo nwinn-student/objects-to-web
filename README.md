@@ -3,6 +3,7 @@
 > [!NOTE]
 > This project is intended to be used as a college project, as such do not expect much maintenance past December 2024.
 
+
 CPSC 4900 Group Project - Involves using a GUI that has GUI object elements within that are to be used to, in some way, generate a webpage or site.
 
 
@@ -19,7 +20,10 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [X] Submit Project Vision for the Course Project
 - [X] Submit Project Team Roles
 - [X] Submit Product Backlog
-- [ ] Submit Plan of Sprint 1
+- [X] Submit Plan of Sprint 1
+- [ ] Submit Personas, Scenarios, and User Stories
+- [ ] Submit Sprint 1 Report and Deliverables
+- [ ] Presentation
 
 </details>
 
@@ -43,7 +47,7 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 
 ## Meetings
 <details>
- <summary> The dates and summary of the meetings that occurred or are planned. </summary>
+ <summary> The dates and summary of the meetings that occurred or are planned.  Will be updated by 10/9/2024. </summary>
 
 | Date | Meeting Type | Focus |
 | :--- | :--- | :--- |
@@ -52,10 +56,10 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 | Sept. 9, 2024 | Planning/Preparing | Work on meeting schedule and product backlog and Project Team Roles. |
 | Sept. 12, 2024 (FIRST FULL) | Backlog Refinement and Consolidation | Ensure consensus on Product backlog, finish Project Team Roles, and plan next meeting. |
 | Sept. 16, 2024 | Sprint Planning | Schedule meetings for Sprint 1, have members choose their task, and plan next meeting. |
-| Sept. 19, 2024 | Check-in |  |
-| Sept. 23, 2024 | Planning |  |
-| Sept. 27, 2024 | Check-in |  |
-| Sept. 30, 2024 | Planning |  |
+| Sept. 19, 2024 | Check-in | Check in w/ team and go over potential assignment and plan next meeting. |
+| Sept. 23, 2024 | Planning | Check-in w/ team and go into assignment and plan next meeting. |
+| Sept. 27, 2024 | Check-in | Check-in w/ team and go over potential assignment and plan next meeting. |
+| Sept. 30, 2024 | Planning | Redistribute tasks for those completed and plan next meeting. |
 | Oct. 3, 2024 | Preparing | Go over Sprint Report and Deliverables |
 | Oct. 7, 2024 | Preparing | Prepare for Presentation |
  
@@ -65,7 +69,7 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 
 <details>
 
-<summary>Current Features</summary>
+<summary>Current Features.  Will be updated by 10/9/2024</summary>
 
 | Title | Description |
 | :--- | :--- |

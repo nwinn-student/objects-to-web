@@ -22,7 +22,7 @@ public class TEKWindowAdapter extends WindowAdapter{
     }
     @Override
     public void windowClosing(WindowEvent e){
-        if(frame == null || !frame.unSavedChanges()){return;}
+        if(frame == null || !frame.hasSaved()){return;}
         // Add support later for if a change has occurred to ask if they want to save, until then, this does nothing
         int optionChosen = JOptionPane.showConfirmDialog(frame, 
             "Do you wish to save your changes?",
