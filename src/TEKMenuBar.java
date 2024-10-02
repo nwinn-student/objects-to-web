@@ -50,6 +50,11 @@ public class TEKMenuBar extends JMenuBar{
         addMenuItem("Delete", selectionMenu, KeyEvent.VK_DELETE, "Use Delete to remove all selected ObjectUIs.");
         addMenuItem("Delete All", selectionMenu, 0, "Removes all of the current ObjectUIs.");
         // cont. adding more
+        
+        // View   NOTE: ctrl + scrollup and ctrl + scrolldown work MUCH better than ctrl-+ and ctrl--. Don't know how to visualize those will fix later.
+        addMenuItem("Zoom In", viewMenu, KeyEvent.VK_PLUS, "Use Ctrl-+ to zoom in.");
+        addMenuItem("Zoom Out", viewMenu, KeyEvent.VK_MINUS, "Use Ctrl-- to zoom out.");
+        
     }
     /**
      * For telling the object which items you wish to not require the user
