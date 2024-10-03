@@ -11,12 +11,16 @@ import java.awt.Cursor;
  * @version Sept. 30, 2024
  */
 public class TEKLabelAdapter implements MouseListener{
-    /**
-     * Selects and deselects the TEKLabel
+/**
+     * Selects and deselects the TEKLabel when clicked
      */
-    public void mouseClicked(MouseEvent e){
-        // Hayden here
-        
+    public void mouseClicked(MouseEvent e) {
+        TEKLabel label = (TEKLabel) e.getSource(); // Cast to TEKLabel
+        if (label.isSelected) {
+            label.deselect(); // If currently selected, deselect it
+        } else {
+            label.select(); // Otherwise, select it
+        }
     }
     /**
      * Upon hover, the cursor is adjusted to the drag cursor to signify that an action can be done.

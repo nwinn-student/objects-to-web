@@ -89,26 +89,36 @@ public class TEKPanel extends JPanel{
         }
     }
     /**
-     * Removes the specified selected ObjectUI.  Should an indication 
+     * Removes the specified selected ObjectUI. Should an indication 
      * be used to determine whether an ObjectUI is selected, the 
      * indication must be reset.
      * 
      * @param obj the ObjectUI to be removed
      * @return whether the ObjectUI was within the list of selected ObjectUIs
      */
-    public boolean removeSelected(ObjectUI obj){
-        if(obj == null){return false;}
-        // Hayden here
-        return selected.remove(obj);
+    public boolean removeSelected(ObjectUI obj) {
+        if (obj == null) {
+            return false; // Return false if obj is null
+        }
+
+        // Check if the object is in the selected list
+        if (selected.contains(obj)) {
+            obj.deselect(); // Reset the selection indication
+            return selected.remove(obj); // Remove from the selected list and return true
+        }
+
+        return false; // Return false if the object was not in the selected list
     }
     /**
-     * Clears the selected ObjectUIs.  Should an indication be 
+     * Clears the selected ObjectUIs. Should an indication be 
      * used to determine whether an ObjectUI is selected, the 
      * indication must be reset.
      */
-    public void clearSelected(){
-        // Hayden here
-        selected.clear();
+    public void clearSelected() {
+        for (ObjectUI obj : selected) {
+            obj.deselect(); // Assuming ObjectUI has a deselect() method
+        }
+        selected.clear(); // Clear the selected list
     }
     /**
      * Clears the selected ObjectUIs and removes them from the 
