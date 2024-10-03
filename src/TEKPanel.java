@@ -95,7 +95,9 @@ public class TEKPanel extends JPanel{
      */
     public void generateObject(){
         // Coby here, redo this to make it nice, needed a sample for testing
-        addObject(new ObjectUI("newFile", new Point(0,0), new Dimension(50,50)));
+        //addObject(new ObjectUI("newFile", new Point(0,0), new Dimension(50,50)));
+         ObjectUI newObject = new ObjectUI("New Object", new Point(50, 50), new Dimension(100, 100));
+         addObject(newObject);
     }
     /**
      * Adds an ObjectUI to the arrayList of objects to be displayed.
