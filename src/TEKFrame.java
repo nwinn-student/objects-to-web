@@ -6,6 +6,7 @@ import javax.swing.JScrollPane;
 import java.util.ArrayList;
 import java.awt.Point;
 import java.awt.BorderLayout;
+import javax.swing.ImageIcon;
 
 /**
  * The Frame that will contain all of the visuals and handle them appropriately.
@@ -17,20 +18,23 @@ public class TEKFrame extends JFrame{
     // To be later used with save, creation, deletion, and modification of Objects
     private boolean saved = false;
     private Dimension screenSize = null;
-    private TEKPanel panel; // Reference to the main panel 
+    private TEKPanel panel; // Reference to the main panel
+    private TEKPopupMenu popupMenu = new TEKPopupMenu();
     /**
      * Constructor for objects of class TEKFrame
      * Titles the TEKFrame class and initializes it.
      */
     public TEKFrame(){
         super("TEK-GUI");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(true);
-        this.addWindowListener(new TEKWindowAdapter(this));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(true);
+        addWindowListener(new TEKFrameAdapter());
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize(screenSize.width - (int)(screenSize.width/12.5),screenSize.height - (int)(screenSize.width/12.5));
+        setSize(screenSize.width - (int)(screenSize.width/12.5),screenSize.height - (int)(screenSize.width/12.5));
         TEKFile.setFrame(this); // reference for this TEKFrame
 
+        setIconImage(new ImageIcon(getClass().getResource("/res/iconGrade.png")).getImage());
+        
         setJMenuBar(new TEKMenuBar());
         add(new TEKToolBar(), BorderLayout.NORTH);
         
@@ -45,33 +49,20 @@ public class TEKFrame extends JFrame{
         // Add menuBar and toolBar here, for fullscreen later we will want to pass in scrollPane
         // for now though panel should be fine 
         // (scrollPane.getViewport().getView() will get panel and panel.getParent().getParent() will get scrollPane)
-        // Initialize the list of ObjectUIs
         
-        createSampleObjects(panel); // create sample objects
-        
-        this.setVisible(true);
-        this.setLocationRelativeTo(null);
+        setVisible(true);
+        setLocationRelativeTo(null);
         
         // Adjust to subtract toolBar height and meuBar height later
         panel.setPreferredSize(new Dimension(
             (int)(getWidth()-getInsets().left-getInsets().right+10*scrollPane.getViewportBorderBounds().getWidth()),
             (int)(getHeight()-getInsets().top-getInsets().bottom+10*scrollPane.getViewportBorderBounds().getHeight())));
         
-        this.add(scrollPane);
+        add(scrollPane);
         pack();
     }
     public TEKPanel getPanel(){return panel;}
-     // Method to create sample ObjectUI 
-    private void createSampleObjects(TEKPanel panel) {
-        //sample objects, name, position, and size
-        ArrayList<ObjectUI> objects = new ArrayList<>();
-        objects.add(new ObjectUI("Object 1", new Point(50, 50), new Dimension(300, 100)));
-        objects.add(new ObjectUI("Object 2", new Point(500, 250), new Dimension(300, 100)));
-        objects.add(new ObjectUI("Object 3", new Point(100, 300), new Dimension(300, 100)));
-
-        // Display the objects in the panel
-        panel.displayObjects(objects);
-    }
+    public TEKPopupMenu getPopupMenu(){return popupMenu;}
     /**
      * 
      */

@@ -2,6 +2,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.Component;
 import java.awt.Cursor;
+import javax.swing.JComponent;
+
 /**
  * Houses TEKLabel's listeners, whatever they may be in time, 
  * utilizing mouse events primarily.
@@ -11,16 +13,24 @@ import java.awt.Cursor;
  * @version Sept. 30, 2024
  */
 public class TEKLabelAdapter implements MouseListener{
-/**
-     * Selects and deselects the TEKLabel when clicked
+    TEKPanel pan = null;
+    /**
+     * Selects and deselects the TEKLabel when left-clicked
+     * Activates the PopupMenu when right-clicked
      */
-    public void mouseClicked(MouseEvent e) {
-        TEKLabel label = (TEKLabel) e.getSource(); // Cast to TEKLabel
-        if (label.isSelected) {
-            label.deselect(); // If currently selected, deselect it
-        } else {
-            label.select(); // Otherwise, select it
-        }
+    public void mouseClicked(MouseEvent e){
+        if(pan == null){pan = TEKFile.getFrame().getPanel();}
+        if(e.getButton() == MouseEvent.BUTTON3){
+            // display popupMenu
+            TEKFile.getFrame().getPopupMenu().activate(e);
+        } else if(e.getButton() == MouseEvent.BUTTON1){
+            TEKLabel label = (TEKLabel) e.getSource();
+            if(label.isSelected()){
+                pan.removeSelected(TEKPanel.getObjectFromLabel(label));
+            } else {
+                pan.addSelected(TEKPanel.getObjectFromLabel(label));
+            }            
+        }        
     }
     /**
      * Upon hover, the cursor is adjusted to the drag cursor to signify that an action can be done.

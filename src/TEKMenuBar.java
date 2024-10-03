@@ -5,6 +5,7 @@ import javax.swing.KeyStroke;
 import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import javax.swing.JComponent;
 
 /**
  * <p>TEKMenuBar provides a component that is useful in displaying 
@@ -23,8 +24,8 @@ import java.util.ArrayList;
  * @version 9/30/2024
  */
 public class TEKMenuBar extends JMenuBar{
-    private TEKActionAdapter action = new TEKActionAdapter();
-    private ArrayList<String> basicKeys = new ArrayList<>();
+    private static TEKActionAdapter action = new TEKActionAdapter();
+    private static ArrayList<String> basicKeys = new ArrayList<>();
     /**
      * Creates a  TEKMenuBar with the default menu setup.
      */
@@ -47,6 +48,7 @@ public class TEKMenuBar extends JMenuBar{
         
         // Selection
         addMenuItem("Create", selectionMenu, KeyEvent.VK_INSERT, "Use Insert to create a new ObjectUI.");
+        addMenuItem("Select All", selectionMenu, KeyEvent.VK_A, "Use Ctrl-A to select all ObjectUIs.");
         addMenuItem("Delete", selectionMenu, KeyEvent.VK_DELETE, "Use Delete to remove all selected ObjectUIs.");
         addMenuItem("Delete All", selectionMenu, 0, "Removes all of the current ObjectUIs.");
         // cont. adding more
@@ -68,7 +70,7 @@ public class TEKMenuBar extends JMenuBar{
      * @param key, the keyboard key necessary to activate the button w/o clicking
      * @param description, for screen readers to provide extra information
      */
-    private JMenu addMenu(String title, JMenuBar parent, int key, String description){
+    public static JMenu addMenu(String title, JComponent parent, int key, String description){
         JMenu menu = new JMenu(title);
         if(key != 0){
              //Key is not undefined
@@ -77,6 +79,7 @@ public class TEKMenuBar extends JMenuBar{
         menu.getAccessibleContext().setAccessibleName(title);
         menu.getAccessibleContext().setAccessibleDescription(description);
         parent.add(menu);
+        
         return menu;
     }
     /**
@@ -87,7 +90,7 @@ public class TEKMenuBar extends JMenuBar{
      * @param key, the keyboard key necessary to activate the button w/o clicking
      * @param description, for screen readers to provide extra information
      */
-    private void addMenuItem(String title, JMenu parent, int key, String description){
+    public static JMenuItem addMenuItem(String title, JComponent parent, int key, String description){
         JMenuItem menuItem = new JMenuItem(title);
         if(key != 0){
             if(basicKeys.contains(title)){
@@ -101,5 +104,6 @@ public class TEKMenuBar extends JMenuBar{
         menuItem.getAccessibleContext().setAccessibleName(title);
         menuItem.getAccessibleContext().setAccessibleDescription(description);
         parent.add(menuItem);
+        return menuItem;
     }
 }

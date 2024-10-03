@@ -23,12 +23,18 @@ public class TEKActionAdapter implements ActionListener{
             case "Create": 
                 TEKManagement.createObject();
                 return;
+            case "Select All":
+                TEKManagement.selectAll();
+                return;
             case "Delete":
                 TEKManagement.removeObject();
                 return;
             case "Delete All":
                 TEKManagement.removeAllObject();
                 return;
+            case "Edit":
+                TEKManagement.editView();
+                break;
             // add more..
         }
         // another switch for toolBar if that is desired
