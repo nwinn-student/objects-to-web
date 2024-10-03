@@ -9,10 +9,13 @@ import java.awt.event.ActionEvent;
  * @author Zakariya Javed
  * @version 9/30/2024
  */
-public class TEKActionAdapter implements ActionListener{
+public class TEKActionAdapter implements ActionListener {
     @Override
-    public void actionPerformed(ActionEvent e){
-        switch(e.getActionCommand()){
+    public void actionPerformed(ActionEvent e) {
+        TEKFrame frame = TEKFile.getFrame();
+        TEKPanel panel = frame.getPanel();
+
+        switch(e.getActionCommand()) {
             case "Open":
                 TEKFile.openFile();
                 return;
@@ -28,6 +31,16 @@ public class TEKActionAdapter implements ActionListener{
                 return;
             case "Delete All":
                 TEKManagement.removeAllObject();
+                return;
+            case "Zoom In":
+                if (panel != null) {
+                    panel.zoomIn();
+                }
+                return;
+            case "Zoom Out":
+                if (panel != null) {
+                    panel.zoomOut();
+                }
                 return;
             // add more..
         }
