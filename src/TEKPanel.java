@@ -93,31 +93,36 @@ public class TEKPanel extends JPanel{
     /**
      * Creates a new objectUI and adds it to the arrayList of objects to be displayed.
      */
-    public void generateObject() {
-    
-    Point initialPosition = new Point(50, 50);
-    Dimension size = new Dimension(100, 100);
+    private Point shiftPosition(Point initialPosition, Dimension size) {
+    int shiftX = 10;
+    int shiftY = 10;
+    Point newPosition = new Point(initialPosition);
+    boolean overlapDetected;
+    do {
+        overlapDetected = false;
+        Rectangle newBounds = new Rectangle(newPosition, size);
 
-    ObjectUI newObject = new ObjectUI("New Object", initialPosition, size);
+        for (ObjectUI existingObj : getObjects()) {
+            Rectangle existingBounds = new Rectangle(existingObj.getPosition(), existingObj.getSize());
 
-
-    for (ObjectUI obj : objectList) {
-        if (boundsOverlap(newObject, obj)) {
-            initialPosition = shiftPosition(initialPosition);
-            newObject.setPosition(initialPosition);
+            if (newBounds.intersects(existingBounds)) {
+                overlapDetected = true;
+                newPosition.translate(shiftX, shiftY); 
+                newBounds.setLocation(newPosition);
+                break;
+            }
         }
-    }
-    addObject(newObject);
+    } while (overlapDetected);
+    return newPosition;
 }
-private boolean boundsOverlap(ObjectUI obj1, ObjectUI obj2) {
-    Rectangle bounds1 = new Rectangle(obj1.getPosition(), obj1.getSize());
-    Rectangle bounds2 = new Rectangle(obj2.getPosition(), obj2.getSize());
-    return bounds1.intersects(bounds2);
+    public void generateObject() {
+    Point initialPosition = new Point(0, 0);
+    Dimension size = new Dimension(100, 100);
+    ObjectUI newObject = new ObjectUI("New Object", initialPosition, size);
+    Point finalPosition = shiftPosition(initialPosition, size);
+    newObject.setPosition(finalPosition);
+    addObject(newObject); 
 }
-private Point shiftPosition(Point position) {
-    return new Point(position.x + 10, position.y + 10); // Shift by 10 units as an example
-}
-
     /**
      * Adds an ObjectUI to the arrayList of objects to be displayed.
      * @param obj the object added
