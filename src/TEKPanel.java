@@ -93,12 +93,31 @@ public class TEKPanel extends JPanel{
     /**
      * Creates a new objectUI and adds it to the arrayList of objects to be displayed.
      */
-    public void generateObject(){
-        // Coby here, redo this to make it nice, needed a sample for testing
-        //addObject(new ObjectUI("newFile", new Point(0,0), new Dimension(50,50)));
-         ObjectUI newObject = new ObjectUI("New Object", new Point(50, 50), new Dimension(100, 100));
-         addObject(newObject);
+    public void generateObject() {
+    
+    Point initialPosition = new Point(50, 50);
+    Dimension size = new Dimension(100, 100);
+
+    ObjectUI newObject = new ObjectUI("New Object", initialPosition, size);
+
+
+    for (ObjectUI obj : objectList) {
+        if (boundsOverlap(newObject, obj)) {
+            initialPosition = shiftPosition(initialPosition);
+            newObject.setPosition(initialPosition);
+        }
     }
+    addObject(newObject);
+}
+private boolean boundsOverlap(ObjectUI obj1, ObjectUI obj2) {
+    Rectangle bounds1 = new Rectangle(obj1.getPosition(), obj1.getSize());
+    Rectangle bounds2 = new Rectangle(obj2.getPosition(), obj2.getSize());
+    return bounds1.intersects(bounds2);
+}
+private Point shiftPosition(Point position) {
+    return new Point(position.x + 10, position.y + 10); // Shift by 10 units as an example
+}
+
     /**
      * Adds an ObjectUI to the arrayList of objects to be displayed.
      * @param obj the object added
