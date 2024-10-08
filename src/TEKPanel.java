@@ -178,8 +178,10 @@ public class TEKPanel extends JPanel {
     public void displayObjects(ArrayList<ObjectUI> objects) {
         this.objects = objects;  //store objects in the field
         removeAll(); // Clear existing information 
-        for (ObjectUI obj : objects) {
-            add(new TEKLabel(obj)); // Use the HTML-formatted string
+       for (ObjectUI obj : objects) {
+            TEKLabel label = new TEKLabel(obj);
+            add(label);
+            label.addMouseListener(new TEKLabelAdapter());  // mouse interacts with object
         }
         revalidate();
         repaint();
