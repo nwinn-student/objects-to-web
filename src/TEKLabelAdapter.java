@@ -3,14 +3,13 @@ import java.awt.event.MouseListener;
 import java.awt.Component;
 import java.awt.Cursor;
 import javax.swing.JComponent;
-
 /**
  * Houses TEKLabel's listeners, whatever they may be in time, 
  * utilizing mouse events primarily.
  *
  * @see java.awt.event.MouseEvent
  * @author Hayden Verstrat, Noah Winn
- * @version Sept. 30, 2024
+ * @version Oct. 2, 2024
  */
 public class TEKLabelAdapter implements MouseListener{
     TEKPanel pan = null;
