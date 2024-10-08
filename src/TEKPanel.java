@@ -17,10 +17,10 @@ import java.awt.Rectangle;
 /**
  * The panel that will house the Objects.
  *
- * @author Mara Doze, Zakariya Javed, Hayden Verstrat, Noah Winn, Coby Zhong
+ * @author Mara Doze, Hayden Verstrat, Noah Winn, Coby Zhong, Zakariya Javed (temp until I make zoom file)
  * @version Sept. 30, 2024
  */
-public class TEKPanel extends JPanel{
+public class TEKPanel extends JPanel {
     private TEKFrame frame = null;
     private static HashMap<ObjectUI, TEKLabel> labels = new HashMap<>();
     private ArrayList<ObjectUI> selected = new ArrayList<>();
@@ -290,9 +290,7 @@ public class TEKPanel extends JPanel{
         double initialZoom = zoomFactor;
         zoomFactor *= factor;
         zoomFactor = Math.max(0.5, Math.min(zoomFactor, 5.0)); // Limit zoom between 0.5x and 5xq
-
-        double actualFactor =  zoomFactor / initialZoom;
-
+        double actualFactor = zoomFactor / initialZoom;
         for (int i = 0; i < getComponentCount(); i++) {
             // handles objects found in TEKLabel and resizes them accordingly... almost.
             if (getComponent(i) instanceof TEKLabel) {
@@ -316,14 +314,6 @@ public class TEKPanel extends JPanel{
         repaint();
     }
 
-
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.scale(zoomFactor, zoomFactor);
-        g2d.dispose();
-    }
-
     public void zoomIn() {
         setZoomFactor(zoomFactor);
     }
@@ -340,7 +330,6 @@ public class TEKPanel extends JPanel{
             repaint();
         }
     }
-
     // when adding new components, adjusts dimensions based on current zoom 
     public Dimension getPreferredSize() {
         Dimension unzoomed = super.getPreferredSize();

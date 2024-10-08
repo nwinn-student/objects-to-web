@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
  * @author Zakariya Javed
  * @version 9/30/2024
  */
-public class TEKActionAdapter implements ActionListener{
+public class TEKActionAdapter implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         TEKFrame frame = TEKFile.getFrame();
@@ -21,6 +21,7 @@ public class TEKActionAdapter implements ActionListener{
         TEKPanel panel = frame.getPanel();
         if(panel == null){return;}
         switch(e.getActionCommand()){
+
             case "Open":
                 TEKFile.openFile();
                 return;
@@ -54,6 +55,7 @@ public class TEKActionAdapter implements ActionListener{
                 System.out.println("Exiting through automated ALT-F4.");
                 Helper.keyMaskedClick(KeyEvent.VK_F4, KeyEvent.VK_ALT);
                 break;
+            
             // add more..
         }
         // another switch for toolBar if that is desired

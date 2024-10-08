@@ -56,14 +56,12 @@ public class CleanedHTMLExtractor {
         HTMLCommentCleaner cleaner = new HTMLCommentCleaner();
         CleanedHTMLExtractor extractor = new CleanedHTMLExtractor();
         String[] sample = {
-        		 "Hello, <!-- heyooooo -->it is <!-- WOAAAT-->pretty cool to be abl<!-- WOAAAT-->e to cl<!-- WOAAAT-->ean co<!-- WOAAAT-->mme<!-- WOAAAT-->nts from your co<!-- WOAAAT-->de right?",
                  "<head>",
                  "<title>Test Document</title>",
                  "</head>",
                  "<body>",
                  "<p>computer</p><p>science</p>",
                  "This is more body content blablabla.",
-                 "<th>Table content</th>",
                  "</body>",
                  "</html>"
         };
