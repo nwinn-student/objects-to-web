@@ -12,11 +12,11 @@ import javax.swing.ImageIcon;
  * The Frame that will contain all of the visuals and handle them appropriately.
  *
  * @author Noah Winn
- * @version Sept. 16, 2024
+ * @version Oct. 8, 2024
  */
 public class TEKFrame extends JFrame{
     // To be later used with save, creation, deletion, and modification of Objects
-    private boolean saved = false;
+    private boolean saved = true; // set to false when a change occurs
     private Dimension screenSize = null;
     private TEKPanel panel; // Reference to the main panel
     private TEKPopupMenu popupMenu = new TEKPopupMenu();
@@ -68,6 +68,10 @@ public class TEKFrame extends JFrame{
      */
     public void save(){
         saved = true;
+        // call to TEKFile to do a save
+    }
+    public void setSaved(boolean saved){
+        this.saved = saved;
     }
     /**
      * Used by the fileManager to ask whether it is worth it to save when the user tells the application to.

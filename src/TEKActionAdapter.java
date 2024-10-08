@@ -1,5 +1,9 @@
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import java.awt.Container;
+import java.awt.event.KeyEvent;
 /**
  * The TEKAdapter for receiving action events.  Is used within a 
  * component's <b>addActionListener</b> method, and when the action 
@@ -12,6 +16,10 @@ import java.awt.event.ActionEvent;
 public class TEKActionAdapter implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e){
+        TEKFrame frame = TEKFile.getFrame();
+        if(frame == null){return;}
+        TEKPanel panel = frame.getPanel();
+        if(panel == null){return;}
         switch(e.getActionCommand()){
             case "Open":
                 TEKFile.openFile();
@@ -34,6 +42,17 @@ public class TEKActionAdapter implements ActionListener{
                 return;
             case "Edit":
                 TEKManagement.editView();
+                break;
+            case "Zoom In":
+                panel.zoomIn();
+                return;
+            case "Zoom Out":
+                panel.zoomOut();
+                return;
+            case "Exit":
+                TEKFile.getFrame().save();
+                System.out.println("Exiting through automated ALT-F4.");
+                Helper.keyMaskedClick(KeyEvent.VK_F4, KeyEvent.VK_ALT);
                 break;
             // add more..
         }

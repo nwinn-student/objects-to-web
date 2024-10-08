@@ -41,6 +41,7 @@ public class TEKMenuBar extends JMenuBar{
         // File
         addMenuItem("Open", fileMenu, KeyEvent.VK_O, "Use Ctrl-O to open a file.");
         addMenuItem("Save", fileMenu, KeyEvent.VK_S, "Use Ctrl-S to save.");
+        addMenuItem("Exit", fileMenu, KeyEvent.VK_Q, "Use Ctrl-Q to quit.");
         
         // Edit
         addMenuItem("Undo", editMenu, KeyEvent.VK_Z, "Use Ctrl-Z to undo an action.");
@@ -51,6 +52,10 @@ public class TEKMenuBar extends JMenuBar{
         addMenuItem("Select All", selectionMenu, KeyEvent.VK_A, "Use Ctrl-A to select all ObjectUIs.");
         addMenuItem("Delete", selectionMenu, KeyEvent.VK_DELETE, "Use Delete to remove all selected ObjectUIs.");
         addMenuItem("Delete All", selectionMenu, 0, "Removes all of the current ObjectUIs.");
+        
+        // View   NOTE: ctrl + scrollup and ctrl + scrolldown work MUCH better than ctrl-+ and ctrl--. Don't know how to visualize those will fix later.
+        addMenuItem("Zoom In", viewMenu, KeyEvent.VK_PLUS, "Use Ctrl-+ to zoom in.");
+        addMenuItem("Zoom Out", viewMenu, KeyEvent.VK_MINUS, "Use Ctrl-- to zoom out.");
         // cont. adding more
     }
     /**

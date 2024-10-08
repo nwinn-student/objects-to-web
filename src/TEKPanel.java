@@ -10,16 +10,24 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
+import java.awt.Graphics2D;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+
 /**
  * The panel that will house the Objects.
  *
- * @author Mara Doze, Hayden Verstrat, Noah Winn, Coby Zhong
+ * @author Mara Doze, Zakariya Javed, Hayden Verstrat, Noah Winn, Coby Zhong
  * @version Sept. 30, 2024
  */
 public class TEKPanel extends JPanel{
     private TEKFrame frame = null;
     private static HashMap<ObjectUI, TEKLabel> labels = new HashMap<>();
     private ArrayList<ObjectUI> selected = new ArrayList<>();
+    // adds zoomfactor and mouse position to jpanel
+    private double zoomFactor = 1;
+    public static Point lastMousePosition = new Point(0, 0);
+    public static final double ZOOM_FACTOR = 1.1;
     /**
      * Default constructor
      */
@@ -34,8 +42,14 @@ public class TEKPanel extends JPanel{
         // will be transparent later, just like this for testing
         setBackground(new Color(200,255,230)); 
         //this.setOpaque(false);
-        addMouseListener(new TEKPanelAdapter());
-        addMouseMotionListener(new TEKPanelAdapter());
+        TEKPanelAdapter sample = new TEKPanelAdapter();
+        addMouseListener(sample);
+        addMouseMotionListener(sample);
+        addMouseWheelListener(sample);
+        addKeyListener(sample);
+    }
+    private void alterData(){
+        if(frame.hasSaved()){frame.setSaved(false);}
     }
     /**
      * Returns the attached label to the input objectUI
@@ -93,9 +107,35 @@ public class TEKPanel extends JPanel{
     /**
      * Creates a new objectUI and adds it to the arrayList of objects to be displayed.
      */
-    public void generateObject(){
-        // Coby here, redo this to make it nice, needed a sample for testing
-        addObject(new ObjectUI("newFile", new Point(0,0), new Dimension(50,50)));
+    private Point shiftPosition(Point initialPosition, Dimension size) {
+        int shiftX = 10;
+        int shiftY = 10;
+        Point newPosition = new Point(initialPosition);
+        boolean overlapDetected;
+        do {
+            overlapDetected = false;
+            Rectangle newBounds = new Rectangle(newPosition, size);
+
+            for (ObjectUI existingObj : getObjects()) {
+                Rectangle existingBounds = new Rectangle(existingObj.getPosition(), existingObj.getSize());
+
+                if (newBounds.intersects(existingBounds)) {
+                    overlapDetected = true;
+                    newPosition.translate(shiftX, shiftY); 
+                    newBounds.setLocation(newPosition);
+                    break;
+                }
+            }
+        } while (overlapDetected);
+        return newPosition;
+    }
+    public void generateObject() {
+        Point initialPosition = new Point(0, 0);
+        Dimension size = new Dimension(100, 100);
+        ObjectUI newObject = new ObjectUI("New Object", initialPosition, size);
+        Point finalPosition = shiftPosition(initialPosition, size);
+        newObject.setPosition(finalPosition);
+        addObject(newObject); 
     }
     /**
      * Adds an ObjectUI to the arrayList of objects to be displayed.
@@ -107,6 +147,7 @@ public class TEKPanel extends JPanel{
         labels.put(obj, label);
         add(label);
         repaint();
+        // maybe alterData() here, need to confirm
     }
     public void addObject(List<ObjectUI> obj){
         if(obj == null){return;}
@@ -117,6 +158,7 @@ public class TEKPanel extends JPanel{
             add(label);
         }
         repaint();
+        // maybe alterData() here, need to confirm
     }
     public void addObject(ObjectUI... obj){
         if(obj == null){return;}
@@ -132,6 +174,7 @@ public class TEKPanel extends JPanel{
         try{remove(labels.remove(obj));}
             catch(Exception e){}
         repaint();
+        alterData();
     }
     public void removeObject(List<ObjectUI> obj){
         if(obj == null){return;}
@@ -142,6 +185,7 @@ public class TEKPanel extends JPanel{
                 catch(Exception e){}
         }
         repaint();
+        alterData();
     }
     public void removeObject(ObjectUI... obj){
         if(obj == null){return;}
@@ -156,15 +200,7 @@ public class TEKPanel extends JPanel{
         removeAll();
         revalidate();
         repaint();
-    }
-    private void select(TEKLabel label){
-        if(label.getForeground().equals(Color.RED)){
-            label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            label.setForeground(Color.BLACK);
-            return;
-        }
-        label.setBorder(BorderFactory.createLineBorder(Color.RED));
-        label.setForeground(Color.RED);
+        alterData();
     }
     /**
      * Gets all the selected ObjectUIs in this TEKPanel
@@ -235,7 +271,6 @@ public class TEKPanel extends JPanel{
             removeObject(selected.remove(0));
         }
     }
-
     /**
      * Formats object details as multi-line text and returns the details.
      * @param obj the object to get the details of
@@ -249,5 +284,69 @@ public class TEKPanel extends JPanel{
         sb.append("Size: (").append(obj.getSize().width).append(" x ").append(obj.getSize().height).append(")"); //break after size
         sb.append("</html>");
         return sb.toString(); //object converted to string
+    }
+    // more zoom functionality
+    public void zoom(double factor, Point zoomCenter) {
+        double initialZoom = zoomFactor;
+        zoomFactor *= factor;
+        zoomFactor = Math.max(0.5, Math.min(zoomFactor, 5.0)); // Limit zoom between 0.5x and 5xq
+
+        double actualFactor =  zoomFactor / initialZoom;
+
+        for (int i = 0; i < getComponentCount(); i++) {
+            // handles objects found in TEKLabel and resizes them accordingly... almost.
+            if (getComponent(i) instanceof TEKLabel) {
+                TEKLabel label = (TEKLabel) getComponent(i);
+                Point oldPosition = label.getLocation();
+                Dimension oldSize = label.getSize();
+
+                int newX = (int) ((oldPosition.x - zoomCenter.x) * actualFactor + zoomCenter.x);
+                int newY = (int) ((oldPosition.y - zoomCenter.y) * actualFactor + zoomCenter.y);
+                int newWidth = (int) (oldSize.width * actualFactor);
+                int newHeight = (int) (oldSize.height * actualFactor);                
+                label.setBounds(newX, newY, newWidth, newHeight);
+                System.out.println(actualFactor +""+ label.getBounds());
+                // Update font size based on zoom factor
+                float newFontSize = (float) (12 * zoomFactor); // Assuming 12 is the base font size, not sure.
+                label.setFont(label.getFont().deriveFont(newFontSize));
+            }
+        }
+
+        revalidate();
+        repaint();
+    }
+
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.scale(zoomFactor, zoomFactor);
+        g2d.dispose();
+    }
+
+    public void zoomIn() {
+        setZoomFactor(zoomFactor);
+    }
+
+    public void zoomOut() {
+        setZoomFactor(zoomFactor);
+    }
+
+    private void setZoomFactor(double newZoomFactor) {
+        newZoomFactor = Math.max(0.5, Math.min(newZoomFactor, 5.0));
+        if (newZoomFactor != zoomFactor) {
+            zoomFactor = newZoomFactor;
+            revalidate();
+            repaint();
+        }
+    }
+
+    // when adding new components, adjusts dimensions based on current zoom 
+    public Dimension getPreferredSize() {
+        Dimension unzoomed = super.getPreferredSize();
+        return new Dimension(
+            (int) (unzoomed.width * zoomFactor),
+            (int) (unzoomed.height * zoomFactor)
+        );
     }
 }

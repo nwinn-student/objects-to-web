@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.io.IOException;
+import javax.swing.JComponent;
 
 /**
  * <p>TEKToolBar provides a component that is useful for displaying 
@@ -48,7 +49,7 @@ public class TEKToolBar extends JToolBar{
      * @param parent, the JToolBar to add the JButton object to
      * @param description, for screen readers to provide extra information
      */
-    public static JButton addButton(String name, JToolBar parent, String description){
+    public static JButton addButton(String name, JComponent parent, String description){
         JButton button = new JButton(name);
         button.addActionListener(action);
         button.setFocusable(false);

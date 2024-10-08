@@ -31,7 +31,7 @@ public class TEKFrameAdapter implements WindowListener{
     }
     @Override
     public void windowClosing(WindowEvent e){
-        if(TEKFile.getFrame() == null || !TEKFile.getFrame().hasSaved()){return;}
+        if(TEKFile.getFrame() == null || TEKFile.getFrame().hasSaved()){return;}
         // Add support later for if a change has occurred to ask if they want to save, until then, this does nothing
         int optionChosen = JOptionPane.showConfirmDialog(TEKFile.getFrame(), 
             "Do you wish to save your changes?",

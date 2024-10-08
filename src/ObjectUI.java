@@ -38,6 +38,7 @@ public class ObjectUI
     {
         return position;
     }
+    public void setPosition(Point position){this.position = position;}
     public Dimension getSize()
     {
         return size;
