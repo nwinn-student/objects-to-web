@@ -15,7 +15,6 @@ public class ObjectUI
     private String creationTime;
     private Point position;
     private Dimension size;
-    private boolean selected;
     public ObjectUI(String name, Point position, Dimension size) //initialize objects
     {
         this.name = name;
@@ -39,6 +38,7 @@ public class ObjectUI
     {
         return position;
     }
+    public void setPosition(Point position){this.position = position;}
     public Dimension getSize()
     {
         return size;
@@ -52,22 +52,6 @@ public class ObjectUI
     public String getDataToSave() {
         // Format the data as: name, x-position, y-position, width, height, creationTime
         return name + "," + position.x + "," + position.y + "," + size.width + "," + size.height + "," + creationTime;
-    }
-        // Method to indicate that the object is selected
-    public void select() {
-        this.selected = true;
-        // Additional logic to visually indicate selection, e.g., changing color or border
-    }
-
-    // Method to indicate that the object is deselected
-    public void deselect() {
-        this.selected = false;
-        // Additional logic to visually indicate deselection, e.g., reverting color or border
-    }
-
-    // Method to check if the object is selected
-    public boolean isSelected() {
-        return selected;
     }
 
     // Static method to create an ObjectUI from saved data

@@ -56,7 +56,6 @@ public class CleanedHTMLExtractor {
         HTMLCommentCleaner cleaner = new HTMLCommentCleaner();
         CleanedHTMLExtractor extractor = new CleanedHTMLExtractor();
         String[] sample = {
-        		 "<html>",
                  "<head>",
                  "<title>Test Document</title>",
                  "</head>",
