@@ -8,12 +8,18 @@
 public class TEKManagement{
     public TEKManagement(){}
     public static void createObject(){
-        // Coby here
+        TEKFile.getFrame().getPanel().generateObject();
     }
     public static void removeObject(){
         TEKFile.getFrame().getPanel().sweepSelected();
     }
     public static void removeAllObject(){
         TEKFile.getFrame().getPanel().clearObjects();
+    }
+    public static void selectAll(){
+        TEKFile.getFrame().getPanel().selectAll();
+    }
+    public static void editView(){
+        TEKFile.getFrame().getPopupMenu().transferAttached();
     }
 }

@@ -21,7 +21,7 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [X] Submit Project Team Roles
 - [X] Submit Product Backlog
 - [X] Submit Plan of Sprint 1
-- [ ] Submit Personas, Scenarios, and User Stories
+- [X] Submit Personas, Scenarios, and User Stories
 - [ ] Submit Sprint 1 Report and Deliverables
 - [ ] Presentation
 
@@ -47,7 +47,7 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 
 ## Meetings
 <details>
- <summary> The dates and summary of the meetings that occurred or are planned.  Will be updated by 10/9/2024. </summary>
+ <summary> The dates and summary of the meetings that occurred or are planned. </summary>
 
 | Date | Meeting Type | Focus |
 | :--- | :--- | :--- |
@@ -56,11 +56,11 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 | Sept. 9, 2024 | Planning/Preparing | Work on meeting schedule and product backlog and Project Team Roles. |
 | Sept. 12, 2024 (FIRST FULL) | Backlog Refinement and Consolidation | Ensure consensus on Product backlog, finish Project Team Roles, and plan next meeting. |
 | Sept. 16, 2024 | Sprint Planning | Schedule meetings for Sprint 1, have members choose their task, and plan next meeting. |
-| Sept. 19, 2024 | Check-in | Check in w/ team and go over potential assignment and plan next meeting. |
-| Sept. 23, 2024 | Planning | Check-in w/ team and go into assignment and plan next meeting. |
-| Sept. 27, 2024 | Check-in | Check-in w/ team and go over potential assignment and plan next meeting. |
-| Sept. 30, 2024 | Planning | Redistribute tasks for those completed and plan next meeting. |
-| Oct. 3, 2024 | Preparing | Go over Sprint Report and Deliverables |
+| Sept. 19, 2024 | Sprint Check-in | Check in w/ team and generally plan personas and plan next meeting. |
+| Sept. 23, 2024 | Sprint Check-in | Check-in w/ team and plan next meeting. |
+| Sept. 27, 2024 | Preparing | Work on personas and scenarios and plan next meeting. |
+| Sept. 30, 2024 | Refinement | Work on scenario and user stories and plan next meeting. |
+| Oct. 3, 2024 | Preparing | Go over Sprint Report and Deliverables and Presentation and plan next meeting. |
 | Oct. 7, 2024 | Preparing | Prepare for Presentation |
  
 </details>
@@ -69,11 +69,21 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 
 <details>
 
-<summary>Current Features.  Will be updated by 10/9/2024</summary>
+<summary>Current Features.</summary>
 
-| Title | Description |
+| Title | Code State |
 | :--- | :--- |
-| `Sample title` | Sample description. |
+| `Frame UI Creation and Functionality` | Accepted |
+| `Object UI Base Structure` | Integrated |
+| `Open and Save Feature` | Integrated |
+| `Parse HTML from File Contents` | Reviewed |
+| `Singular Object Selection` | Reviewed |
+| `UI Menu and Tools Feature` | Integrated |
+| `Object Creation and Deletion` | Reviewed |
+| `Read Contents of Objects from Inputs` | Not Started |
+| `Edit View to See the Contents of Object` | Integrated |
+| `Common Application Menu and trools Features` | Started |
+| `Object Control Shortcut System` | Started |
 </details>
 
 <details>
@@ -103,7 +113,7 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 | `Remember Recently Used Files` | Saves the recently used files, alongside the position of the previously closed one so that the user can be where they left off whenever reopening the application, in a text file. | 7 hours, 2 people | 7 |
 | `Object Highlighting` | The ability to indicate that an Object will be selected should the user click on it, via hovering, or be selected should the user press enter.  A way to distinguish which item is being focused. | 4 hours, 1 person | 4 |
 | `Remembrance of Frame Location` | Saves the frame location and size percentages in a text file to be read from upon opening up the application. | 5 hours, 1 person | 6 |
-| `Popup Menu Feature through Right-Click` | Utilizes the sections of the Menu and Tool feature, but only includes sections that are most commonly used, like some control shortcuts and editing. | 6 hours, 2 people | 8 |
+| `Populating Popup Menu with Common Features` | Utilizes the sections of the Menu and Tool feature, but only includes sections that are most commonly used, like some control shortcuts and editing. | 6 hours, 2 people | 8 |
 | `Mass Object Selection` | The ability to select a range of UI Objects using a mouse drag selector that creates a box and anything within the box shall be selected.  Another approach would be to create a means to select multiple using a series of keyboard presses, similar to Single Object Selection. | 5 hours, 1 person | 7 |
 | `Object Relationship System` | UI Objects can be related to one another, creating a hierarchical structure of objects, thus adding a parent Object and list of child Objects stored within each Object.  Both or all related Objects should know when they are in the relationship and when it has ended.  The parent may be a directory instead of a file, but it will still be considered an Object, just void of contents aside from the name and relationship. | 5 hours, 2 people | 5 |
 | `Object Connections Visualized` | Object connections are visualized based on new UI elements that directly connect two or more Object UIs together in order to show a relationship.  The connections should follow the Object UI even if it has been moved. | 6 hours, 2 people | 11 |
@@ -123,4 +133,4 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 
 | Source | Inspired | Explanation |
 | :--- | :--- | :--- |
-| [`Sample Source`]() | [`Sample location`]() | Sample text here. |
+| [`L. Cornelius Dol`](https://stackoverflow.com/questions/342990/) | [`ControlArea`]() | ControlArea utilizes his TextAreaOutputStream class to customize the output experience for the developers. |
