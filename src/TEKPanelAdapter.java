@@ -33,6 +33,12 @@ public class TEKPanelAdapter implements MouseInputListener, MouseWheelListener, 
             return;
         }
         TEKFile.getFrame().getPopupMenu().deactivate();
+        if(e.getButton() == MouseEvent.BUTTON1){
+            Object source = e.getSource();
+            if (source instanceof TEKPanel){
+                ((TEKPanel) source).clearSelected();
+            }
+        }
     }
     @Override
     public void mouseMoved(MouseEvent e){}

@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class ObjectUI
 {
     private String name;
+    private TEKLabel label;
     private String creationTime;
     private Point position;
     private Dimension size;
@@ -21,6 +22,7 @@ public class ObjectUI
         this.creationTime = getCurrentTime();
         this.position = position;
         this.size = size;
+        this.label = new TEKLabel(this);
     }
      private String getCurrentTime() { 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -29,6 +31,12 @@ public class ObjectUI
     public String getName()
     {
         return name;
+    }
+    public TEKLabel getLabel(){
+        return label;
+    }
+    public void setLabel(TEKLabel label){
+        this.label = label;
     }
     public String getCreationTime()
     {

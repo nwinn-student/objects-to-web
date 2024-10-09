@@ -195,6 +195,12 @@ public class TEKPanel extends JPanel {
      * Clears the arrayList of objects and refreshes the screen.
      */
     public void clearObjects(){
+        for(ObjectUI obj : selected){
+            TEKLabel label = getLabel(obj);
+            if (label != null){
+                label.deselect();
+            }
+        }
         selected.clear();
         labels.clear();
         removeAll();
