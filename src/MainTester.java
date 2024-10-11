@@ -1,5 +1,13 @@
+// TEKGUI imports
+import tekgui.helper.Helper;
+import tekgui.test.window.*;
+import tekgui.test.*;
+import javax.swing.JFrame;
+
+// Java imports
 import javax.swing.UIManager;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import javax.swing.SwingUtilities;
 
 /**
  * A hub for the tester classes to be tested using a safer environment that ensures the application 
@@ -22,11 +30,16 @@ public class MainTester{
         }
         
         Helper help = new Helper();
-        help.displayOptions();
-        TestFrame.createTestFrame();
-        // need to adjust to allow for more customizability, like selecting a segment to run
-        FrameFunctionalityTest frameFunc = new FrameFunctionalityTest();
-        frameFunc.run(); 
-        
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run(){
+                help.displayOptions();
+                TestFrame.createTestFrame();
+                // need to adjust to allow for more customizability, like selecting a segment to run
+
+                TestFrame.addTests(new FrameFunctionalityTest(),new FileTest());
+                
+            }
+        });
     }
 }

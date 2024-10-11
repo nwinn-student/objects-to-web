@@ -22,8 +22,10 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [X] Submit Product Backlog
 - [X] Submit Plan of Sprint 1
 - [X] Submit Personas, Scenarios, and User Stories
-- [ ] Submit Sprint 1 Report and Deliverables
-- [ ] Presentation
+- [X] Submit Sprint 1 Report and Deliverables
+- [X] Presentation
+- [ ] Submit Plan of Sprint 2
+- [ ] Submit Software Architecture
 
 </details>
 
@@ -62,6 +64,12 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 | Sept. 30, 2024 | Refinement | Work on scenario and user stories and plan next meeting. |
 | Oct. 3, 2024 | Preparing | Go over Sprint Report and Deliverables and Presentation and plan next meeting. |
 | Oct. 7, 2024 | Preparing | Prepare for Presentation |
+| Oct. 9, 2024 | Emergency Meeting | Review code, report, and presentation. |
+| Oct. 10, 2024 | Sprint Planning | Schedule meetings for Sprint 1, have members choose their task, and plan next meeting. |
+| Oct. 17, 2024 | Preparation | Clarify tasks and prepare for Software Architecture and plan next meeting. |
+| Oct. 21, 2024 | <..> | Check-in w/ team and try to flesh out Software Architecture and plan next meeting. |
+| Oct. 24, 2024 | <..> | Complete Software Architecture <> |
+| Oct. 28, 2024 | <..> | <Presentation?> |
  
 </details>
 
