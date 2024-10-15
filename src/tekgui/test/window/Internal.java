@@ -45,13 +45,29 @@ public class Internal extends JInternalFrame{
         
         setJMenuBar(frame.getJMenuBar());
         setSize(frame.getSize());
-        setLocation(frame.getLocation());
+        //setLocation(frame.getLocation());
         setFrameIcon(new ImageIcon(getClass().getResource("/res/iconGrade.png")));
         while(frame.getContentPane().getComponents().length > 0){
             add(frame.getContentPane().getComponents()[0], 
                 ((BorderLayout)frame.getContentPane().getLayout()).getConstraints(frame.getContentPane().getComponents()[0]));
         }
         setUndecorated(true); // just removes border, because we are using DeskTopPane, it'll override whatever we do, kinda
+        
+        // Listener attachments
+        Arrays.asList(frame.getComponentListeners()).forEach(v ->{addComponentListener(v);});
+        Arrays.asList(frame.getFocusListeners()).forEach(v ->{addFocusListener(v);});
+        Arrays.asList(frame.getHierarchyBoundsListeners()).forEach(v ->{addHierarchyBoundsListener(v);});
+        Arrays.asList(frame.getHierarchyListeners()).forEach(v ->{addHierarchyListener(v);});
+        Arrays.asList(frame.getInputMethodListeners()).forEach(v ->{addInputMethodListener(v);});
+        Arrays.asList(frame.getKeyListeners()).forEach(v ->{addKeyListener(v);});
+        Arrays.asList(frame.getMouseListeners()).forEach(v ->{addMouseListener(v);});
+        Arrays.asList(frame.getMouseMotionListeners()).forEach(v ->{addMouseMotionListener(v);});
+        Arrays.asList(frame.getMouseWheelListeners()).forEach(v ->{addMouseWheelListener(v);});
+        Arrays.asList(frame.getContainerListeners()).forEach(v ->{addContainerListener(v);});
+        Arrays.asList(frame.getPropertyChangeListeners()).forEach(v ->{addPropertyChangeListener(v);});
+
+        // add a custom component listener that will resize when JDesktopPane size is altered
+        
         List<WindowListener> windowListeners = Arrays.asList(frame.getWindowListeners());
         for(WindowListener w : windowListeners){
             addInternalFrameListener(new InternalFrameListener(){
@@ -129,7 +145,12 @@ public class Internal extends JInternalFrame{
         //((BasicInternalFrameUI) getUI()).setWestPane(val ? null : westPane);
         //((BasicInternalFrameUI) getUI()).setEastPane(val ? null : eastPane);
     }
-    
+    public void updateSize(){
+        if(getDesktopPane().getSize().getWidth()-30 < getSize().getWidth()){
+            setSize((int)(getDesktopPane().getSize().getWidth()-30), (int)getSize().getHeight());
+        }        
+        if(getSize().getWidth() <= 0 || getSize().getHeight() <= 0){this.dispose();}
+    }
     public static JInternalFrame convertFrame(JFrame frame){
         JInternalFrame intern = new JInternalFrame(frame.getTitle(), true, true, true, true);
         intern.setJMenuBar(frame.getJMenuBar());

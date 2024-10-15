@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
  * Write a description of class TEKPanelAdapter here.
  *
  * @author Zakariya Javed, Noah Winn
- * @version Oct. 2, 2024
+ * @version Oct. 13, 2024
  */
 public class TEKPanelAdapter implements MouseInputListener, MouseWheelListener, KeyListener{
     @Override
@@ -44,7 +44,9 @@ public class TEKPanelAdapter implements MouseInputListener, MouseWheelListener, 
                 ((TEKPanel)source).clearSelected();
             }
         }
-        TEKFile.getFrame().getPopupMenu().deactivate();
+        if(TEKFile.getFrame() != null){
+            TEKFile.getFrame().getPopupMenu().deactivate();
+        }
     }
     @Override
     public void mouseMoved(MouseEvent e){}

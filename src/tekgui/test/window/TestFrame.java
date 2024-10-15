@@ -5,6 +5,7 @@ import tekgui.window.TEKFrame;
 import tekgui.window.TEKMenuBar;
 import tekgui.test.Test;
 
+
 // Java imports
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -22,8 +23,12 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import javax.swing.JTabbedPane;
+import javax.swing.JTree;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 /**
  * Write a description of class TestFrame here.
@@ -38,26 +43,17 @@ public class TestFrame{
     public static JFrame createTestFrame(){
         
         TEKFrame cover = new TEKFrame();
+        cover.setVisible(false);
         JFrame frame = new JFrame("TestFrame");
         frame.setUndecorated(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null);
-        JMenuBar menuBar = new JMenuBar();
-        TEKMenuBar.addMenuItem("Exit", 
-            TEKMenuBar.addMenu("File", menuBar, KeyEvent.VK_F, "Use Alt-F to select File."), 
-            KeyEvent.VK_Q, "Use Ctrl-Q to quit.");
         
-        JButton redoTest; // redoes the current test
-        JButton runTest; // runs the current test
-        JButton runAllTests; // runs all tests in a section
-        JButton haltTest; // halts the current test
-        frame.setJMenuBar(menuBar);
+        frame.setJMenuBar(new TestMenuBar());
+        
         desktop = new JDesktopPane();
-        UIManager.put("InternalFrame:InternalFrameTitlePane[Enabled].textForeground", Color.BLACK);
-        desktop.updateUI();
         internalFrame = new Internal(cover);
         desktop.add(internalFrame);
-        JScrollPane scrollPane = new JScrollPane(new ConsoleArea(0,100,false));
+        JScrollPane scrollPane = new JScrollPane(new ConsoleArea(0,60,false));
         JTabbedPane tab = new JTabbedPane();
         JPanel panel = new JPanel();
         JLabel lab = new JLabel("Credit to L. Cornelius Dol.  Source: https://stackoverflow.com/questions/342990/");
@@ -77,26 +73,34 @@ public class TestFrame{
             }
         });
         panel.add(log, BorderLayout.EAST);
+        JTree tree = new JTree();
         tab.add("Tester",desktop);
-        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-            tab, panel);
-        
-        frame.setContentPane(split);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false,
+            tree, tab);
+        split.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, 
+            new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                if(desktop.getAllFrames().length > 0){
+                    ((Internal)desktop.getAllFrames()[0]).updateSize();
+                }
+            }
+        });
+        frame.getRootPane().setDefaultButton(log);
+        frame.add(new TestToolBar(), BorderLayout.PAGE_START);
+        frame.add(split, BorderLayout.CENTER);
+        frame.add(panel, BorderLayout.PAGE_END);
         //UIManager.getDefaults().forEach((x,y)->{System.out.println(x+ " : " +y);});
         initializeLog();
-        try {
-            internalFrame.setSelected(true);
-        } catch (Exception e) {}
         cover.dispose();
-        frame.setVisible(true);
+        
         GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
-        split.setDividerLocation((int)(frame.getHeight() - 60));
-        split.setEnabled(false);
-        split.setDividerSize(1);
-        frame.getRootPane().setDefaultButton(log);
+        frame.setVisible(true);
+        split.setDividerLocation((int)(frame.getWidth()*0.1));        
         return frame;
     }
     public static Internal respawnInternal(TEKFrame frame, boolean isSaved){
+        if(frame == null){return null;}
         frame.setVisible(false);
         frame.setSaved(isSaved);
         if(internalFrame != null){
@@ -122,12 +126,17 @@ public class TestFrame{
         //... should add JTree later w/ tests and the methods to allow for
         // group or singular selection
     }
+    /**
+     * Method addTests
+     *
+     * @param test A parameter
+     */
     public static void addTests(Test... test){
         if(test == null){
             System.out.println("# FAILED TO ADD TESTS");
             return;}
         for(Test i : test){
-            addTests(test);
+            addTests(i);
         }
     }
 }

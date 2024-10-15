@@ -1,5 +1,6 @@
 package tekgui.window;
 // TEKGUI imports
+import tekgui.helper.MenuBuilder;
 import tekgui.adapter.TEKActionAdapter;
 
 // Javha imports
@@ -18,102 +19,47 @@ import javax.swing.JComponent;
  * items that menu holds.
  * 
  * <p>The default menus are File, Edit, Selection, View, and Help, 
- * these each have their own related items.  The creation of both 
- * menus and their items has been streamlined to make further 
- * creation viable for readability.
+ * these each have their own related items.  
  *
  * @see javax.swing.JMenu
  * @see javax.swing.JPopupMenu
  * @see javax.swing.JMenuItem
  * @author Zakariya Javed, Noah Winn
- * @version 9/30/2024
+ * @version 10/13/2024
  */
 public class TEKMenuBar extends JMenuBar{
     private static TEKActionAdapter action = new TEKActionAdapter();
-    private static ArrayList<String> basicKeys = new ArrayList<>();
     /**
      * Creates a  TEKMenuBar with the default menu setup.
      */
     public TEKMenuBar(){
         super();
-        propogateKeys();
-        JMenu fileMenu = addMenu("File", this, KeyEvent.VK_F, "Use Alt-F to select File.");
-        JMenu editMenu = addMenu("Edit", this, KeyEvent.VK_E, "Use Alt-E to select Edit.");
-        JMenu selectionMenu = addMenu("Selection", this, KeyEvent.VK_S, "Use Alt-S to select Selection.");
-        JMenu viewMenu = addMenu("View", this, KeyEvent.VK_V, "Use Alt-V to select View.");
-        JMenu helpMenu = addMenu("Help", this, KeyEvent.VK_H, "Use Alt-H to select Help");
+        JMenu fileMenu = MenuBuilder.addMenu("File", this, KeyEvent.VK_F, "Use Alt-F to select File.");
+        JMenu editMenu = MenuBuilder.addMenu("Edit", this, KeyEvent.VK_E, "Use Alt-E to select Edit.");
+        JMenu selectionMenu = MenuBuilder.addMenu("Selection", this, KeyEvent.VK_S, "Use Alt-S to select Selection.");
+        JMenu viewMenu = MenuBuilder.addMenu("View", this, KeyEvent.VK_V, "Use Alt-V to select View.");
+        JMenu helpMenu = MenuBuilder.addMenu("Help", this, KeyEvent.VK_H, "Use Alt-H to select Help");
         
-        // File
-        addMenuItem("Open", fileMenu, KeyEvent.VK_O, "Use Ctrl-O to open a file.");
-        addMenuItem("Save", fileMenu, KeyEvent.VK_S, "Use Ctrl-S to save.");
-        addMenuItem("Exit", fileMenu, KeyEvent.VK_Q, "Use Ctrl-Q to quit.");
+        // Name     Parent       Key to Press     Description     ActionListener
+        
+        // File                 
+        MenuBuilder.addMenuItem("Open", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK), "Use Ctrl-O to open a file.", action);
+        MenuBuilder.addMenuItem("Save", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK), "Use Ctrl-S to save.", action);
+        MenuBuilder.addMenuItem("Exit", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK), "Use Ctrl-Q to quit.", action);
         
         // Edit
-        addMenuItem("Undo", editMenu, KeyEvent.VK_Z, "Use Ctrl-Z to undo an action.");
-        addMenuItem("Redo", editMenu, KeyEvent.VK_Y, "Use Ctrl-Y to redo an action.");
+        MenuBuilder.addMenuItem("Undo", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK), "Use Ctrl-Z to undo an action.", action);
+        MenuBuilder.addMenuItem("Redo", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK), "Use Ctrl-Y to redo an action.", action);
         
         // Selection
-        addMenuItem("Create", selectionMenu, KeyEvent.VK_INSERT, "Use Insert to create a new ObjectUI.");
-        addMenuItem("Select All", selectionMenu, KeyEvent.VK_A, "Use Ctrl-A to select all ObjectUIs.");
-        addMenuItem("Delete", selectionMenu, KeyEvent.VK_DELETE, "Use Delete to remove all selected ObjectUIs.");
-        addMenuItem("Delete All", selectionMenu, 0, "Removes all of the current ObjectUIs.");
+        MenuBuilder.addMenuItem("Create", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0), "Use Insert to create a new ObjectUI.", action);
+        MenuBuilder.addMenuItem("Select All", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK), "Use Ctrl-A to select all ObjectUIs.", action);
+        MenuBuilder.addMenuItem("Delete", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "Use Delete to remove all selected ObjectUIs.", action);
+        MenuBuilder.addMenuItem("Delete All", selectionMenu, null, "Removes all of the current ObjectUIs.", action);
         
         // View   NOTE: ctrl + scrollup and ctrl + scrolldown work MUCH better than ctrl-+ and ctrl--. Don't know how to visualize those will fix later.
-        addMenuItem("Zoom In", viewMenu, KeyEvent.VK_PLUS, "Use Ctrl-+ to zoom in.");
-        addMenuItem("Zoom Out", viewMenu, KeyEvent.VK_MINUS, "Use Ctrl-- to zoom out.");
+        MenuBuilder.addMenuItem("Zoom In", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Event.CTRL_MASK), "Use Ctrl-+ to zoom in.", action);
+        MenuBuilder.addMenuItem("Zoom Out", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Event.CTRL_MASK), "Use Ctrl-- to zoom out.", action);
         // cont. adding more
-    }
-    /**
-     * For telling the object which items you wish to not require the user
-     * to press CTRL-<key> to use.  Example: "Open" will force "o" to do the open task instead
-     * of CTRL-o.
-     */
-    private void propogateKeys(){
-        basicKeys.add("Create");
-        basicKeys.add("Delete");
-    }
-    /**
-     * Used to make JMenus easier to create.
-     * 
-     * @param title, the name of the JMenu object to be created
-     * @param parent, the JMenuBar to add the JMenu object to
-     * @param key, the keyboard key necessary to activate the button w/o clicking
-     * @param description, for screen readers to provide extra information
-     */
-    public static JMenu addMenu(String title, JComponent parent, int key, String description){
-        JMenu menu = new JMenu(title);
-        if(key != 0){
-             //Key is not undefined
-            menu.setMnemonic(key);
-        }
-        menu.getAccessibleContext().setAccessibleName(title);
-        menu.getAccessibleContext().setAccessibleDescription(description);
-        parent.add(menu);
-        
-        return menu;
-    }
-    /**
-     * Used to make JMenuItems easier to create.
-     * 
-     * @param title, the name of the JMenuItem object to be created
-     * @param parent, the JMenu to add the JMenuItem object to
-     * @param key, the keyboard key necessary to activate the button w/o clicking
-     * @param description, for screen readers to provide extra information
-     */
-    public static JMenuItem addMenuItem(String title, JComponent parent, int key, String description){
-        JMenuItem menuItem = new JMenuItem(title);
-        if(key != 0){
-            if(basicKeys.contains(title)){
-               menuItem.setAccelerator(KeyStroke.getKeyStroke(key, 0));
-            } else{
-                 //Key is not undefined, will always require CTRL
-                menuItem.setAccelerator(KeyStroke.getKeyStroke(key, Event.CTRL_MASK));
-            }
-        }
-        menuItem.addActionListener(action);
-        menuItem.getAccessibleContext().setAccessibleName(title);
-        menuItem.getAccessibleContext().setAccessibleDescription(description);
-        parent.add(menuItem);
-        return menuItem;
     }
 }

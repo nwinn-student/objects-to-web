@@ -35,7 +35,7 @@ public class TEKFile
     }
     public static void openFile() {
         JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showOpenDialog(frame);
+        int result = fileChooser.showOpenDialog(frame.getPanel());
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             try {
@@ -58,7 +58,7 @@ public class TEKFile
     // Method to save a file
     public static void saveFile() {
         JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showSaveDialog(frame); // opens a file-saving dialog
+        int result = fileChooser.showSaveDialog(frame.getPanel()); // opens a file-saving dialog
         if (result == JFileChooser.APPROVE_OPTION) { // if "SAVE", file is obtained
             File file = fileChooser.getSelectedFile();
             try {

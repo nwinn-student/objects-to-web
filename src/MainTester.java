@@ -8,10 +8,14 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import javax.swing.SwingUtilities;
+import java.awt.Color;
 
 /**
  * A hub for the tester classes to be tested using a safer environment that ensures the application 
- * cannot harm any developers or users by adding emergency exits.
+ * cannot harm any developers or users by adding emergency exits.<p>
+ * 
+ * Usage for UIManager to further customize.  (What we can put(..., ...))
+ * https://www.javaprogramto.com/2019/03/java-uimanager.html
  *
  * @author Noah Winn
  * @version Oct 8, 2024
@@ -25,6 +29,7 @@ public class MainTester{
                     break;
                 }
             }
+            UIManager.put("InternalFrame:InternalFrameTitlePane[Enabled].textForeground", Color.BLACK);
         } catch (Exception e) {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }

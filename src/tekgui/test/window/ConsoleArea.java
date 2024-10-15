@@ -33,7 +33,7 @@ public class ConsoleArea extends JTextArea{
         try{
             setFont(new Font("Serif", Font.PLAIN, 20));
         } catch(Exception e){}
-        TextAreaOutputStream textAreaStream = new TextAreaOutputStream(this, 60);
+        TextAreaOutputStream textAreaStream = new TextAreaOutputStream(this, 1000);
         PrintStream printStream = new PrintStream(textAreaStream);
         System.setOut(printStream);
         System.setErr(printStream);

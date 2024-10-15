@@ -28,10 +28,7 @@ public class FileTest extends Test {
         Helper.keyClick(KeyEvent.VK_DOWN);
         Helper.keyClick(KeyEvent.VK_ENTER);
         Helper.wait(Helper.SPEED_MS);
-        Helper.mouseMove(Helper.getCenter());
-        Helper.wait(Helper.SPEED_MS);
-        Helper.mouseClick(InputEvent.BUTTON1_DOWN_MASK);
-        Helper.wait(Helper.SPEED_MS);
+        Helper.keyMaskedClick(KeyEvent.VK_TAB, KeyEvent.VK_ALT);
         //Helper.keyClick(KeyEvent.VK_H);
         //Helper.keyClick(KeyEvent.VK_E);
         //Helper.keyClick(KeyEvent.VK_L);
