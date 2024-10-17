@@ -15,11 +15,13 @@ public class ButtonBuilder{
      * @param action, the actionListener that handles the button activations
      */
     public static JButton addButton(String name, JComponent parent, String description, ActionListener action){
-        JButton button = new JButton(name);
+        JButton button = new JButton();
         if(action != null){
             button.addActionListener(action);
         }
         button.setFocusable(false);
+        button.setActionCommand(name);
+        button.setText(name);
         button.getAccessibleContext().setAccessibleName(name);
         button.getAccessibleContext().setAccessibleDescription(description);
         button.setToolTipText(name);

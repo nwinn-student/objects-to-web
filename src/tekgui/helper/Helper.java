@@ -116,7 +116,7 @@ public class Helper{
      * @return a point at the center of the component
      */
     public static Point getCenter(Component comp){
-        if(comp == null){return new Point(0,0);}
+        if(comp == null || !comp.isShowing()){return new Point(0,0);}
         return new Point((int)(comp.getLocationOnScreen().getX()+comp.getBounds().getWidth()/2), 
             (int)(comp.getLocationOnScreen().getY()+comp.getBounds().getHeight()/2));
     }
@@ -126,7 +126,7 @@ public class Helper{
      * @return a point at the top section of the component
      */
     public static Point getTop(Component comp){
-        if(comp == null){return new Point(0,0);}
+        if(comp == null || !comp.isShowing()){return new Point(0,0);}
         return new Point((int)(comp.getLocationOnScreen().getX()+comp.getBounds().getWidth()/2), 
             (int)(comp.getLocationOnScreen().getY()));
     }
@@ -136,7 +136,7 @@ public class Helper{
      * @return a point at the top section of the container
      */
     public static Point getTop(Container cont){
-        if(cont == null){return new Point(0,0);}
+        if(cont == null || !cont.isShowing()){return new Point(0,0);}
         if(cont.getClass().equals(Internal.class)){
             return new Point(getCenter(cont).x,
                              (int)cont.getLocationOnScreen().getY()+((Internal)cont).getTrueInsets().top/2);
@@ -149,7 +149,7 @@ public class Helper{
      * @return a point at the corner of the component
      */
     public static Point getCorner(Component comp){
-        if(comp == null){return new Point(0,0);}
+        if(comp == null || !comp.isShowing()){return new Point(0,0);}
         return new Point((int)comp.getLocationOnScreen().getX(), (int)comp.getLocationOnScreen().getY());
     }
     /**
@@ -226,11 +226,16 @@ public class Helper{
      * Forces the mouse to click the screen at its current location
      * @param buttonMask the button to click
      */
-    public static void mouseClick(int buttonMask){
+    public static void mouseClick(int buttonMask, int amount){
         prepRob();
         if(rob == null){return;}
-        rob.mousePress(buttonMask);
-        rob.mouseRelease(buttonMask);
+        for(int i = 0; i < amount; i++){
+            rob.mousePress(buttonMask);
+            rob.mouseRelease(buttonMask);
+        }
+    }
+    public static void mouseClick(int buttonMask){
+        mouseClick(buttonMask, 1);
     }
     /**
      * Smoothly drags the mouse across the screen from its starting point to the specified end point.
@@ -248,11 +253,18 @@ public class Helper{
         smoothMove(end);
         rob.mouseRelease(buttonMask);
     }
-    public static void keyClick(int keyMask){
+    public static void keyClick(int keyMask, int amount){
         prepRob();
         if(rob == null){return;}
-        rob.keyPress(keyMask);
-        rob.keyRelease(keyMask);
+        for(int i = 0; i < amount; i++){
+            rob.keyPress(keyMask);
+            Helper.wait(rob.getAutoDelay());
+            rob.keyRelease(keyMask);
+            Helper.wait(rob.getAutoDelay());
+        }
+    }
+    public static void keyClick(int keyMask){
+        keyClick(keyMask, 1);
     }
     public static void keyMaskedClick(int keyMask, int... keyModifier){
         prepRob();
@@ -310,7 +322,7 @@ public class Helper{
      * @return a point that the exit could be
      */
     public static Point getExit(Container frame){
-        if(frame == null){return new Point(0,0);}
+        if(frame == null || !frame.isShowing()){return new Point(0,0);}
         if(frame.getClass().equals(Internal.class)){
             return new Point((int)(frame.getLocationOnScreen().getX()+frame.getBounds().getWidth()-((Internal)frame).getTrueInsets().top*2/5),
                              (int)frame.getLocationOnScreen().getY()+((Internal)frame).getTrueInsets().top/2);
@@ -324,7 +336,7 @@ public class Helper{
      * @return a point where the maximize could be
      */
     public static Point getMaximize(Container frame){
-        if(frame == null){return new Point(0,0);}
+        if(frame == null || !frame.isShowing()){return new Point(0,0);}
         if(frame.getClass().equals(Internal.class)){
             return new Point((int)(frame.getLocationOnScreen().getX()+frame.getBounds().getWidth()-3/2*((Internal)frame).getTrueInsets().top),
                              (int)frame.getLocationOnScreen().getY()+((Internal)frame).getTrueInsets().top/2);
@@ -338,7 +350,7 @@ public class Helper{
      * @return a point where the minimize could be
      */
     public static Point getMinimize(Container frame){
-        if(frame == null){return new Point(0,0);}
+        if(frame == null || !frame.isShowing()){return new Point(0,0);}
         if(frame.getClass().equals(Internal.class)){
             return new Point((int)(frame.getLocationOnScreen().getX()+frame.getBounds().getWidth()-1.8*((Internal)frame).getTrueInsets().top),
                              (int)frame.getLocationOnScreen().getY()+((Internal)frame).getTrueInsets().top/2);

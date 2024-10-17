@@ -14,21 +14,27 @@ import java.awt.event.InputEvent;
  * @version (a version number or a date)
  */
 public class FileTest extends Test {
-    private static Internal frame;
-    public FileTest(){
-        frame = TestFrame.respawnInternal(new TEKFrame(), true);
-    }
     public void canFrameSave(){
         frame.setTitle("Can Frame Save");
         Helper.wait(Helper.SPEED_MS);
-        Helper.smoothMove(Helper.getCenter(frame.getJMenuBar().getMenu(0)));
+        
+        Helper.smoothMove(Helper.getCenter(frame));
         Helper.mouseClick(InputEvent.BUTTON1_DOWN_MASK);
-        // Click VK_DOWN
-        Helper.keyClick(KeyEvent.VK_DOWN);
-        Helper.keyClick(KeyEvent.VK_DOWN);
-        Helper.keyClick(KeyEvent.VK_ENTER);
+        Helper.keyMaskedClick(KeyEvent.VK_S, KeyEvent.VK_CONTROL);
         Helper.wait(Helper.SPEED_MS);
-        Helper.keyMaskedClick(KeyEvent.VK_TAB, KeyEvent.VK_ALT);
+        Helper.keyClick(KeyEvent.VK_TAB, 6); // not consistently 6, find a better way!
+        //Helper.mouseClick(InputEvent.BUTTON1_DOWN_MASK);
+        //Helper.smoothMove(Helper.getCenter(frame.getJMenuBar().getMenu(0).getItem(1)));
+        //Helper.mouseClick(InputEvent.BUTTON1_DOWN_MASK);
+        //Helper.mouseClick(InputEvent.BUTTON1_DOWN_MASK);
+        // Click VK_DOWN
+        //Helper.keyClick(KeyEvent.VK_DOWN);
+        //Helper.keyClick(KeyEvent.VK_DOWN);
+        //Helper.keyClick(KeyEvent.VK_ENTER);
+        //Helper.keyClick(KeyEvent.VK_ENTER);
+        //Helper.wait(20*Helper.SPEED_MS);
+        //Helper.keyClick(KeyEvent.VK_TAB);
+        //Helper.keyMaskedClick(KeyEvent.VK_TAB, KeyEvent.VK_ALT);
         //Helper.keyClick(KeyEvent.VK_H);
         //Helper.keyClick(KeyEvent.VK_E);
         //Helper.keyClick(KeyEvent.VK_L);

@@ -5,7 +5,6 @@ import tekgui.window.TEKFrame;
 import tekgui.window.TEKMenuBar;
 import tekgui.test.Test;
 
-
 // Java imports
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -39,17 +38,18 @@ import java.beans.PropertyChangeEvent;
 public class TestFrame{
     private static Internal internalFrame;
     private static JDesktopPane desktop;
+    private static TestTree tree;
     private static boolean isLogOpen = false;
     public static JFrame createTestFrame(){
         
         TEKFrame cover = new TEKFrame();
         cover.setVisible(false);
         JFrame frame = new JFrame("TestFrame");
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setUndecorated(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         frame.setJMenuBar(new TestMenuBar());
-        
         desktop = new JDesktopPane();
         internalFrame = new Internal(cover);
         desktop.add(internalFrame);
@@ -73,7 +73,7 @@ public class TestFrame{
             }
         });
         panel.add(log, BorderLayout.EAST);
-        JTree tree = new JTree();
+        tree = new TestTree();
         tab.add("Tester",desktop);
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false,
             tree, tab);
@@ -87,14 +87,14 @@ public class TestFrame{
             }
         });
         frame.getRootPane().setDefaultButton(log);
-        frame.add(new TestToolBar(), BorderLayout.PAGE_START);
-        frame.add(split, BorderLayout.CENTER);
-        frame.add(panel, BorderLayout.PAGE_END);
+        frame.getContentPane().add(new TestToolBar(), BorderLayout.PAGE_START);
+        frame.getContentPane().add(split, BorderLayout.CENTER);
+        frame.getContentPane().add(panel, BorderLayout.PAGE_END);
         //UIManager.getDefaults().forEach((x,y)->{System.out.println(x+ " : " +y);});
         initializeLog();
         cover.dispose();
         
-        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+        //GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
         frame.setVisible(true);
         split.setDividerLocation((int)(frame.getWidth()*0.1));        
         return frame;
@@ -123,6 +123,7 @@ public class TestFrame{
         if(test == null){
             System.out.println("# FAILED TO ADD TESTS");
             return;}
+        tree.add(test);
         //... should add JTree later w/ tests and the methods to allow for
         // group or singular selection
     }
@@ -139,4 +140,5 @@ public class TestFrame{
             addTests(i);
         }
     }
+    public static TestTree getTree(){return tree;}
 }
