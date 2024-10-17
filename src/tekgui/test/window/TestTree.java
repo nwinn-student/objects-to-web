@@ -1,5 +1,7 @@
 package tekgui.test.window;
 import tekgui.test.Test;
+import java.util.Queue;
+import java.util.LinkedList;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
@@ -20,6 +22,7 @@ public class TestTree extends JTree implements TreeSelectionListener{
     private DefaultTreeModel model = null;
     private DefaultMutableTreeNode root = null;
     private Handler currentHandle = null;
+    private ThreadPool threads = new ThreadPool();
     public TestTree(){
         
         super(new DefaultMutableTreeNode("Tests"));
@@ -93,6 +96,42 @@ public class TestTree extends JTree implements TreeSelectionListener{
         if(currentHandle == null){
             System.out.println("No test mechanism is currently selected.");
             return;}
-        currentHandle.start();
+        threads.execute(currentHandle);
+        //currentHandle.start();
+        
+    }
+    /**
+     * Ivan Kirchev
+     * https://stackoverflow.com/questions/2324030/java-thread-reuse
+     */
+    class ThreadPool {
+        Queue<Runnable> tasks = new LinkedList<>();
+    
+        public ThreadPool() {
+            Thread worker1 = new Thread(() -> {
+                while (true) {
+                    Runnable newTaskToBeExecuted = pollNextTask();
+                    if (newTaskToBeExecuted != null) newTaskToBeExecuted.run();
+                }
+            }, "Worker 1");
+            worker1.start();
+    
+            Thread worker2 = new Thread(() -> {
+                while (true) {
+                    Runnable newTaskToBeExecuted = pollNextTask();
+                    if (newTaskToBeExecuted != null) newTaskToBeExecuted.run();
+                }
+            }, "Worker 2");
+            worker2.start();
+    
+        }
+    
+        public void execute(Runnable newTask) {
+            tasks.add(newTask);
+        }
+    
+        private synchronized Runnable pollNextTask() {
+            return tasks.poll();
+        }
     }
 }
