@@ -13,12 +13,20 @@ import java.util.ArrayList;
 import java.awt.Point;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.util.List;
+
 
 /**
  * The Frame that will contain all of the visuals and handle them appropriately.
  *
  * @author Noah Winn
- * @version Oct. 11, 2024
+ * @version Oct. 24, 2024
  */
 public class TEKFrame extends JFrame{
     // To be later used with save, creation, deletion, and modification of Objects
@@ -26,6 +34,9 @@ public class TEKFrame extends JFrame{
     private Dimension screenSize = null;
     private TEKPanel panel; // Reference to the main panel
     private TEKPopupMenu popupMenu;
+    private RecentFilesManager recentFilesManager; // Recent files manager
+    private JMenu recentFilesMenu; // Menu display of recent files
+    
     /**
      * Constructor for objects of class TEKFrame
      * Titles the TEKFrame class and initializes it.
@@ -40,6 +51,12 @@ public class TEKFrame extends JFrame{
         TEKFile.setFrame(this); // reference for this TEKFrame
         popupMenu = new TEKPopupMenu();
         setIconImage(new ImageIcon(getClass().getResource("/res/iconGrade.png")).getImage());
+
+        // Initialize RecentFilesManager and create menu
+        recentFilesManager = new RecentFilesManager();
+        setJMenuBar(createMenuBar());
+
+        add(new TEKToolBar(), BorderLayout.NORTH);
         
         // JScrollPane errored once saying that I input Boolean when it shouldve been Color.
         JScrollPane scrollPane = new JScrollPane();
@@ -68,6 +85,50 @@ public class TEKFrame extends JFrame{
         getContentPane().add(scrollPane);
         pack();
     }
+
+    /**
+     * Creates the menu bar, including the Recent Files menu.
+     */
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        recentFilesMenu = new JMenu("Recent Files");
+        updateRecentFilesMenu();
+
+        fileMenu.add(recentFilesMenu);
+        menuBar.add(fileMenu);
+        return menuBar;
+    }
+
+    /**
+     * Updates the Recent Files menu with the latest list of files.
+     */
+    private void updateRecentFilesMenu() {
+        recentFilesMenu.removeAll();
+        List<File> recentFiles = recentFilesManager.getRecentFiles();
+
+        if (recentFiles.isEmpty()) {
+            JMenuItem noRecentItem = new JMenuItem("No recent files");
+            noRecentItem.setEnabled(false);
+            recentFilesMenu.add(noRecentItem);
+        } else {
+            for (File file : recentFiles) {
+                JMenuItem item = new JMenuItem(file.getName());
+                item.addActionListener(e -> openFile(file));
+                recentFilesMenu.add(item);
+            }
+        }
+    }
+
+    /**
+     * Opens a file and updates the recent files list.
+     */
+    private void openFile(File file) {
+        System.out.println("Opening: " + file.getAbsolutePath()); 
+        recentFilesManager.addFile(file); // Add to recent files
+        updateRecentFilesMenu(); // Refresh the menu
+    }
+    
     public TEKPanel getPanel(){return panel;}
     public TEKPopupMenu getPopupMenu(){return popupMenu;}
     /**
