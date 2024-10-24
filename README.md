@@ -31,7 +31,9 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [ ] Submit Plan of Sprint 3
 - [ ] Submit Sprint 3 Report and Deliverables
 - [ ] Final Presentation
+
 Next Semester
+
 - [ ] Submit Product Backlog
 
 </details>
