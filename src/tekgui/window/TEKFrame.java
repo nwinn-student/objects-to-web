@@ -52,7 +52,7 @@ public class TEKFrame extends JFrame{
         
         // Add menuBar and toolBar here, for fullscreen later we will want to pass in scrollPane
         setJMenuBar(new TEKMenuBar());
-        add(new TEKToolBar(), BorderLayout.NORTH);
+        getContentPane().add(new TEKToolBar(), BorderLayout.NORTH);
         
         // for now though panel should be fine 
         // (scrollPane.getViewport().getView() will get panel and panel.getParent().getParent() will get scrollPane)
@@ -65,7 +65,7 @@ public class TEKFrame extends JFrame{
             (int)(getWidth()-getInsets().left-getInsets().right+10*scrollPane.getViewportBorderBounds().getWidth()),
             (int)(getHeight()-getInsets().top-getInsets().bottom+10*scrollPane.getViewportBorderBounds().getHeight())));
         
-        add(scrollPane);
+        getContentPane().add(scrollPane);
         pack();
     }
     public TEKPanel getPanel(){return panel;}

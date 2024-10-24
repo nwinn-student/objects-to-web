@@ -24,8 +24,15 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [X] Submit Personas, Scenarios, and User Stories
 - [X] Submit Sprint 1 Report and Deliverables
 - [X] Presentation
-- [ ] Submit Plan of Sprint 2
+- [X] Submit Plan of Sprint 2
 - [ ] Submit Software Architecture
+- [ ] Submit Sprint 2 Report and Deliverables
+- [ ] Presentation
+- [ ] Submit Plan of Sprint 3
+- [ ] Submit Sprint 3 Report and Deliverables
+- [ ] Final Presentation
+Next Semester
+- [ ] Submit Product Backlog
 
 </details>
 
@@ -66,10 +73,20 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 | Oct. 7, 2024 | Preparing | Prepare for Presentation |
 | Oct. 9, 2024 | Emergency Meeting | Review code, report, and presentation. |
 | Oct. 10, 2024 | Sprint Planning | Schedule meetings for Sprint 1, have members choose their task, and plan next meeting. |
-| Oct. 17, 2024 | Preparation | Clarify tasks and prepare for Software Architecture and plan next meeting. |
-| Oct. 21, 2024 | <..> | Check-in w/ team and try to flesh out Software Architecture and plan next meeting. |
-| Oct. 24, 2024 | <..> | Complete Software Architecture <> |
-| Oct. 28, 2024 | <..> | <Presentation?> |
+| Oct. 17, 2024 | Planning | Clarify tasks and prepare for Software Architecture and plan next meeting. |
+| Oct. 21, 2024 | Sprint Check-in | Check-in w/ team and try to flesh out Software Architecture and plan next meeting. |
+| Oct. 24, 2024 | Preparing | Complete Software Architecture and prepare for Sprint Report and Deliverables. |
+| Oct. 28, 2024 | Preparing | Flesh out Sprint Report and Deliverables. |
+| Oct. 31, 2024 | Preparing | Review Sprint Report and Deliverables and flesh out presentation. |
+| Nov. 4, 2024 | Preparing | Review for presentation and prepare for Sprint 2 Plan. |
+| Nov. 7, 2024 | Sprint Planning | Flesh out Sprint 2 Plan and have members choose their task, and plan next meeting. |
+| Nov. 11, 2024 | Sprint Check-in | Check-in w/ team and try to flesh out potential assignment material. |
+| Nov. 14, 2024 | Preparing | Complete any potential assignment and flesh out Sprint Report and Delivarables and start presentation. |
+| Nov. 18, 2024 | Final Lap | Complete presentation and verify that all code and features are functional that have been completed. |
+| NEXT | SEMESTER | PROJECT |
+| Jan. 6-8, 2025  | Preparation | Find out member schedules, start generating a product backlog. |
+| Jan. 9-14, 2025 | Preparation | Finish product backlog and prepare for sprint 1 plan. |
+
  
 </details>
 

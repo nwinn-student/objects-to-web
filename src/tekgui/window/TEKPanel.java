@@ -136,13 +136,14 @@ public class TEKPanel extends JPanel{
         } while (overlapDetected);
         return newPosition;
     }
-    public void generateObject() {
+    public ObjectUI generateObject() {
         Point initialPosition = new Point(0, 0);
         Dimension size = new Dimension(100, 100);
         ObjectUI newObject = new ObjectUI("New Object", initialPosition, size);
         Point finalPosition = shiftPosition(initialPosition, size);
         newObject.setPosition(finalPosition);
         addObject(newObject); 
+        return newObject;
     }
     /**
      * Adds an ObjectUI to the arrayList of objects to be displayed.
@@ -150,9 +151,8 @@ public class TEKPanel extends JPanel{
      */
     public void addObject(ObjectUI obj){
         if(obj == null){return;}
-        TEKLabel label = new TEKLabel(obj);
-        labels.put(obj, label);
-        add(label);
+        labels.put(obj, obj.getLabel());
+        add(obj.getLabel());
         repaint();
         // maybe alterData() here, need to confirm
     }
@@ -160,9 +160,8 @@ public class TEKPanel extends JPanel{
         if(obj == null){return;}
         for(ObjectUI o : obj){
             if(o == null){continue;}
-            TEKLabel label = new TEKLabel(o);
-            labels.put(o, label);
-            add(label);
+            labels.put(o, o.getLabel());
+            add(o.getLabel());
         }
         repaint();
         // maybe alterData() here, need to confirm
@@ -202,12 +201,6 @@ public class TEKPanel extends JPanel{
      * Clears the arrayList of objects and refreshes the screen.
      */
     public void clearObjects(){
-        for(ObjectUI obj : selected){
-            TEKLabel label = getLabel(obj);
-            if (label != null){
-                label.deselect();
-            }
-        }
         selected.clear();
         labels.clear();
         removeAll();

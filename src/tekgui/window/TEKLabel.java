@@ -42,8 +42,7 @@ public class TEKLabel extends JLabel{
      * Creates a new TEKLabel with the specified objectUI.
      */
     public TEKLabel(ObjectUI obj){
-        super(TEKPanel.formatObjectDetails(obj));
-        setBounds(obj.getPosition().x, obj.getPosition().y, obj.getSize().width, obj.getSize().height);
+        //setBounds(obj.getPosition().x, obj.getPosition().y, obj.getSize().width, obj.getSize().height);
         init();
     }
     /**

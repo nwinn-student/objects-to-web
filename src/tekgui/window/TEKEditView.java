@@ -76,6 +76,7 @@ public class TEKEditView extends JFrame {
         for (JLabel label : labels) {
             labelPanel.add(label);
         }
+        //** ObjectUI.getContent(), may need to do a little more
     }
 
     private void closeView() {

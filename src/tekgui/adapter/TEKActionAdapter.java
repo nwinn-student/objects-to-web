@@ -6,6 +6,7 @@ import tekgui.window.TEKPanel;
 import tekgui.window.TEKFrame;
 import tekgui.TEKManagement;
 import tekgui.helper.Helper;
+import tekgui.ObjectUI;
 
 // Java imports
 import java.awt.event.ActionListener;

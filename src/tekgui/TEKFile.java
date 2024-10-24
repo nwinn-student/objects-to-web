@@ -2,6 +2,8 @@ package tekgui;
 
 // TEKGUI imports
 import tekgui.window.TEKFrame;
+import java.util.List;
+import javax.swing.filechooser.FileFilter;
 
 // Java imports
 import java.io.BufferedReader;
@@ -13,13 +15,14 @@ import java.io.BufferedWriter;
 import javax.swing.JOptionPane;
 import java.io.FileWriter;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.UIManager;
 
 /**
  * manages files
  *
  * @Mara Doze
- * @9/19/24
+ * @10/24/24
  */
 public class TEKFile
 {
@@ -35,26 +38,23 @@ public class TEKFile
     }
     public static void openFile() {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory( new File("*") ); // adjust to recent location
+	// filter to only allow html or directories**
+	// ....
+        fileChooser.setFileSelectionMode(fileChooser.FILES_AND_DIRECTORIES);
         int result = fileChooser.showOpenDialog(frame.getPanel());
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(file));
-                StringBuilder content = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    content.append(line).append("\n");
-                }
-                reader.close();
-                // Assuming ObjectUI has a method to load data from the file
-                loadObjectsFromData(content.toString());
-                frame.save();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error reading file: " + ex.getMessage());
-            }
+            openFile(file);
         }
     }
-
+    public static void openFile(File file){
+        try {
+             // Open the object and create it onto the screen
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(frame, "Error reading file: " + ex);
+        }
+    }
     // Method to save a file
     public static void saveFile() {
         JFileChooser fileChooser = new JFileChooser();
@@ -71,7 +71,22 @@ public class TEKFile
             }
         }
     }
+    public static void saveFile(ObjectUI object){
+        // should the file exist, we update the contents, should it not, we create
+        //  <file>.createNewFile()
+    }
+    public static void saveFile(ObjectUI... object){
+        for(ObjectUI o : object){
+            saveFile(o);
+        }
+    }
+    public static void saveFile(List<ObjectUI> object){
+        for(ObjectUI o : object){
+            saveFile(o);
+        }
+    }
     private static String getDataToSave() {
+        // adjust***
         StringBuilder data = new StringBuilder();
         for (ObjectUI object : frame.getPanel().getObjects()) { //for-each loop for every object in the list
             data.append(object.getDataToSave()).append("\n"); // seperating and appending strings
