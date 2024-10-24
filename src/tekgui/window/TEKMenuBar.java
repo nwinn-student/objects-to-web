@@ -12,6 +12,13 @@ import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JComponent;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.List;
+import javax.swing.*;
+import java.awt.*;
+
+
 
 /**
  * <p>TEKMenuBar provides a component that is useful in displaying 
@@ -25,15 +32,20 @@ import javax.swing.JComponent;
  * @see javax.swing.JPopupMenu
  * @see javax.swing.JMenuItem
  * @author Zakariya Javed, Noah Winn
- * @version 10/13/2024
+ * @version 10/24/2024
  */
 public class TEKMenuBar extends JMenuBar{
     private static TEKActionAdapter action = new TEKActionAdapter();
+    private static ArrayList<String> basicKeys = new ArrayList<>();
+    private final RecentFilesManager recentFilesManager; // Manage recent files
+    private JMenu recentFilesMenu; // Store recent files menu 
     /**
      * Creates a  TEKMenuBar with the default menu setup.
      */
     public TEKMenuBar(){
         super();
+        this.recentFilesManager = recentFilesManager; // Store the recent files manager
+        propagateKeys();
         JMenu fileMenu = MenuBuilder.addMenu("File", this, KeyEvent.VK_F, "Use Alt-F to select File.");
         JMenu editMenu = MenuBuilder.addMenu("Edit", this, KeyEvent.VK_E, "Use Alt-E to select Edit.");
         JMenu selectionMenu = MenuBuilder.addMenu("Selection", this, KeyEvent.VK_S, "Use Alt-S to select Selection.");
@@ -62,4 +74,32 @@ public class TEKMenuBar extends JMenuBar{
         MenuBuilder.addMenuItem("Zoom Out", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Event.CTRL_MASK), "Use Ctrl-- to zoom out.", action);
         // cont. adding more
     }
+    /**
+     * make the Recent Files menu with the current list of files.
+     */
+    public void updateRecentFilesMenu() {
+        recentFilesMenu.removeAll(); // Clear existing items
+
+        List<File> recentFiles = recentFilesManager.getRecentFiles();
+        if (recentFiles.isEmpty()) {
+            JMenuItem noRecentItem = new JMenuItem("No recent files");
+            noRecentItem.setEnabled(false);
+            recentFilesMenu.add(noRecentItem);
+        } else {
+            for (File file : recentFiles) {
+                JMenuItem item = new JMenuItem(file.getName());
+                item.addActionListener(e -> openFile(file));
+                recentFilesMenu.add(item);
+            }
+        }
+    }
+    /**
+     * Open the selected file and update the recent files menu.
+     */
+    private void openFile(File file) {
+        System.out.println("Opening: " + file.getAbsolutePath()); // Replace with actual file logic
+        recentFilesManager.addFile(file); // Add the file to recent files
+        updateRecentFilesMenu(); // Refresh the menu
+    }
+
 }
