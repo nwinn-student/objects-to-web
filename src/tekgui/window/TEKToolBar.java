@@ -45,5 +45,8 @@ public class TEKToolBar extends JToolBar{
         catch(Exception ex){
             System.out.println(ex);
         }
+        ButtonBuilder.addButton("Copy", this, "Copies the selected items.", action);
+        ButtonBuilder.addButton("Cut", this, "Deletes and copies the selected items.", action);
+        ButtonBuilder.addButton("Paste", this, "Pastes the copied items.", action);
     }
 }

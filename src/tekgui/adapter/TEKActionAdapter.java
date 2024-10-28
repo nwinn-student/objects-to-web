@@ -42,6 +42,9 @@ public class TEKActionAdapter implements ActionListener{
             case "Create": 
                 TEKManagement.createObject();
                 return;
+            case "Find":
+                ShortcutSystem.enact(ShortcutSystem.Shortcut.FIND);
+                return;
             case "Select All":
                 TEKManagement.selectAll();
                 return;
@@ -51,6 +54,27 @@ public class TEKActionAdapter implements ActionListener{
             case "Delete All":
                 TEKManagement.removeAllObject();
                 return;
+            case "Undo":
+                UndoManager.undo();
+                return;
+            case "Redo":
+                UndoManager.redo();
+                return;
+            case "Clear Undo":
+                UndoManager.clear();
+                return;
+            case "Copy":
+                ShortcutSystem.enact(ShortcutSystem.Shortcut.COPY);
+                return;
+            case "Cut":
+                ShortcutSystem.enact(ShortcutSystem.Shortcut.CUT);
+                return;
+            case "Paste":
+                ShortcutSystem.enact(ShortcutSystem.Shortcut.PASTE);
+                return;
+            case "Duplicate":
+                ShortcutSystem.enact(ShortcutSystem.Shortcut.DUPLICATE);
+                break;
             case "Edit":
                 TEKManagement.editView();
                 break;
@@ -59,6 +83,11 @@ public class TEKActionAdapter implements ActionListener{
                 return;
             case "Zoom Out":
                 panel.zoomOut();
+                return;
+            case "Reset Zoom":
+                return;
+            case "Settings":
+                // Open up a new window for ^*^ customization ^*^
                 return;
             case "Exit":
                 TEKFile.getFrame().save();
