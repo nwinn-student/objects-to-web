@@ -4,22 +4,66 @@ import java.util.Deque;
 
 
 /**
- * Write a description of class UndoManager here.
+ * Adds the capability to undo specified actions.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Hayden Verstrat, Noah Winn
+ * @version Oct. 28, 2024
  */
 public class UndoManager{
     // Undo is at the top, Redo is at the bottom**
-    private final short MAX_ACTION;
-    Deque<UndoableAction> undoToRedo;
-    public UndoManager(){
-        this.MAX_ACTION = 500;
+    private enum Action {UNDO, REDO}
+    private static short MAX_SIZE = 50;
+    private static Stack<UndoableAction> undoAbleList = new Stack();
+    private static Stack<UndoableAction> redoAbleList = new Stack();
+    
+    public static void setActionLimit(short actionLimit){
+        MAX_SIZE = actionLimit;
     }
-    public UndoManager(short MAX_ACTION){
-        this.MAX_ACTION = MAX_ACTION;
+    public static boolean canUndo(){
+        if(undoAbleList.empty()){
+            return false;
+        }
+        return true;
     }
-    public void addAction(UndoableAction a){
-        
+    public static boolean canRedo(){
+        if(redoAbleList.empty()){
+            return false;
+        }
+        return true;
+    }
+    private static void updateList(){
+        if(undoAbleList.size() > MAX_SIZE){
+            undoAbleList.removeElementAt(MAX_SIZE);
+        }
+    }
+    public static void addAction(UndoableAction a){
+        undoAbleList.push(a);
+        updateList();
+    }
+    public static void undo(){
+        if(canUndo()){
+            redoAbleList.push(undoAbleList.pop());
+            performAction(redoAbleList.peek(), Action.UNDO);
+        }
+    }
+    public static void redo(){
+        if(canRedo()){
+            undoAbleList.push(redoAbleList.pop());
+            performAction(undoAbleList.peek(), Action.REDO);
+        }
+    }
+    private static void performAction(UndoableAction action, Action type){
+        switch(action.getVariant()){
+            case CREATE:
+                break;
+            case DELETE:
+                break;
+            case ADJUST:
+                break;
+            case MOVE:
+                break;
+            case UNKNOWN:
+                break;
+        }
     }
 }
