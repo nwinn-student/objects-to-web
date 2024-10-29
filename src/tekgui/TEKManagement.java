@@ -2,6 +2,7 @@ package tekgui;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileFilter;
+import java.util.List;
 
 // TEKGUI imports
 
@@ -17,7 +18,6 @@ public class TEKManagement{
     public static ObjectUI createObject(){
         return TEKFile.getFrame().getPanel().generateObject();
     }
-    // Used when you know the file
     public static ObjectUI createObject(File file) throws IOException{
         if(file == null){throw new IOException("File is null.");}
         if(file.isDirectory()){
@@ -36,6 +36,24 @@ public class TEKManagement{
         ObjectUI obj = TEKFile.getFrame().getPanel().generateObject();
         obj.initFile(file);
         return obj;
+    }
+    public static ObjectUI createObject(ObjectUI obj){
+        ObjectUI newObj = TEKFile.getFrame().getPanel().generateObject();
+        try{
+            newObj.initFile(obj.getFile());
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+        return newObj;
+    }
+    public static ObjectUI[] createObject(List<ObjectUI> obj){
+        ObjectUI[] newObj = new ObjectUI[obj.size()];
+        int i = 0;
+        while(i < obj.size()){
+            newObj[i] = createObject(obj.get(i));
+            i++;
+        }
+        return newObj;
     }
     public static void removeObject(){
         TEKFile.getFrame().getPanel().sweepSelected();
