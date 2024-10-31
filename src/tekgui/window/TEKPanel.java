@@ -20,6 +20,9 @@ import java.util.Arrays;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 /**
  * The panel that will house the Objects.
@@ -35,6 +38,9 @@ public class TEKPanel extends JPanel{
     private double zoomFactor = 1;
     public static Point lastMousePosition = new Point(0, 0);
     public static final double ZOOM_FACTOR = 1.1;
+    private Rectangle selectionRect = new Rectangle(); // Rectangle for the selection box
+    private Point startPoint = null; // Starting point for the selection box
+
     /**
      * Default constructor
      */
@@ -50,10 +56,59 @@ public class TEKPanel extends JPanel{
         setBackground(new Color(200,255,230)); 
         //this.setOpaque(false);
         TEKPanelAdapter sample = new TEKPanelAdapter();
-        addMouseListener(sample);
-        addMouseMotionListener(sample);
+
+    // Adding mouse listeners for selection
+    addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            startPoint = e.getPoint();
+            selectionRect.setBounds(startPoint.x, startPoint.y, 0, 0);
+            repaint();
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            // Finalize the selection rectangle
+            selectionRect.setBounds(
+                Math.min(startPoint.x, e.getX()),
+                Math.min(startPoint.y, e.getY()),
+                Math.abs(startPoint.x - e.getX()),
+                Math.abs(startPoint.y - e.getY())
+            );
+
+            // Select objects within the rectangle
+            selectObjectsInRectangle(selectionRect);
+
+            // Reset selection
+            startPoint = null;
+            selectionRect.setBounds(0, 0, 0, 0);
+            repaint();
+        }
+    });
+    addMouseMotionListener(new MouseMotionAdapter() {
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            // Update selection rectangle as the mouse drags
+            selectionRect.setBounds(
+                Math.min(startPoint.x, e.getX()),
+                Math.min(startPoint.y, e.getY()),
+                Math.abs(startPoint.x - e.getX()),
+                Math.abs(startPoint.y - e.getY())
+            );
+            repaint();
+        }
+    });
         addMouseWheelListener(sample);
         addKeyListener(sample);
+    }
+    private void selectObjectsInRectangle(Rectangle rect) {
+        clearSelected(); // Clear previous selections
+        for (ObjectUI obj : getObjects()) {
+            Rectangle objBounds = new Rectangle(obj.getPosition(), obj.getSize());
+            if (rect.intersects(objBounds)) {
+                addSelected(obj); // Add to selected list
+            }
+        }
     }
     private void alterData(){
         if(frame.hasSaved()){frame.setSaved(false);}
@@ -321,15 +376,22 @@ public class TEKPanel extends JPanel{
         revalidate();
         repaint();
     }
-
-
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.scale(zoomFactor, zoomFactor);
+    
+        // Draw the selection rectangle
+        if (startPoint != null) {
+            g2d.setColor(new Color(0, 0, 255, 50)); // Semi-transparent blue
+            g2d.fillRect(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height);
+            g2d.setColor(Color.BLUE);
+            g2d.drawRect(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height); // Optional: draw border
+        }
+    
         g2d.dispose();
     }
-
     public void zoomIn() {
         setZoomFactor(zoomFactor);
     }

@@ -5,10 +5,19 @@ import javax.swing.JMenu;
 import javax.swing.KeyStroke;
 import java.awt.Event;
 import java.awt.event.ActionListener;
+import javax.swing.JSeparator;
+
 /**
  * The creation of both menus and their items has been streamlined to make further creation viable for readability.
  */
 public class MenuBuilder{
+    public static void addSeparator(JComponent parent){
+        JSeparator menu = new JSeparator();
+        menu.setEnabled(false);
+        if(parent != null){
+            parent.add(menu);
+        }
+    }
 /**
      * Used to make JMenus easier to create.
      * 

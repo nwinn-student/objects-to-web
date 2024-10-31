@@ -1,8 +1,11 @@
 package tekgui.window;
 
 // TEKGUI imports
+import tekgui.TEKFile;
 import tekgui.helper.MenuBuilder;
 import tekgui.adapter.TEKActionAdapter;
+import tekgui.adapter.UndoManager;
+import tekgui.adapter.ShortcutSystem;
 
 // Java imports
 import javax.swing.JPopupMenu;
@@ -19,6 +22,10 @@ public class TEKPopupMenu extends JPopupMenu{
     private static JComponent attachedComponent;
     private static TEKActionAdapter action = new TEKActionAdapter();
     
+    /**
+     * TEKPopupMenu Constructor
+     *
+     */
     public TEKPopupMenu(){
         super();
         MenuBuilder.addMenuItem("Edit", this, null, "Pops up the display menu.", action);
@@ -33,14 +40,19 @@ public class TEKPopupMenu extends JPopupMenu{
         MenuBuilder.addMenuItem("Reset Zoom", this, null, "Used to reset the zoom on the screen.", action);
         setVisible(false);
     }
+    /**
+     * Method activate
+     *
+     * @param e A parameter
+     */
     public void activate(MouseEvent e){
         setAttached((JComponent)e.getSource());
         getComponent(0).setEnabled((attachedComponent instanceof TEKLabel) ? true : false); // Edit
-        getComponent(2).setEnabled(true); // Cut, check if possible (1+ selected or current)
-        getComponent(3).setEnabled(true); // Copy, check if possible (1+ selected or current)
-        getComponent(4).setEnabled(true); // Paste, check if possible
-        getComponent(6).setEnabled(true); // Undo, check if possible (1+ action)
-        getComponent(7).setEnabled(true); // Redo, check if possible (1+ action)
+        getComponent(2).setEnabled(TEKFile.getFrame().getPanel().getSelected().size() > 0); // Cut, check if possible (1+ selected or current)
+        getComponent(3).setEnabled(TEKFile.getFrame().getPanel().getSelected().size() > 0); // Copy, check if possible (1+ selected or current)
+        getComponent(4).setEnabled(ShortcutSystem.canPaste()); // Paste, check if possible
+        getComponent(6).setEnabled(UndoManager.canUndo()); // Undo, check if possible (1+ action)
+        getComponent(7).setEnabled(UndoManager.canRedo()); // Redo, check if possible (1+ action)
         getComponent(9).setEnabled(true); // Reset Zoom, check if possible (zoom != regular)
         show(e.getComponent(), e.getX(), e.getY());
         setVisible(true);

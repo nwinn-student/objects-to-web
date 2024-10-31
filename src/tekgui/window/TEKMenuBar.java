@@ -32,7 +32,7 @@ import java.awt.*;
  * @see javax.swing.JPopupMenu
  * @see javax.swing.JMenuItem
  * @author Zakariya Javed, Noah Winn
- * @version 10/24/2024
+ * @version 10/28/2024
  */
 public class TEKMenuBar extends JMenuBar{
     private static TEKActionAdapter action = new TEKActionAdapter();
@@ -62,16 +62,27 @@ public class TEKMenuBar extends JMenuBar{
         // Edit
         MenuBuilder.addMenuItem("Undo", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK), "Use Ctrl-Z to undo an action.", action);
         MenuBuilder.addMenuItem("Redo", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK), "Use Ctrl-Y to redo an action.", action);
+        MenuBuilder.addMenuItem("Clear Undo", editMenu, null, "Clears the undoable actions, great for space management.", action);
+        MenuBuilder.addSeparator(editMenu);
+        MenuBuilder.addMenuItem("Copy", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK), "Use Ctrl-C to copy the selected items.", action);
+        MenuBuilder.addMenuItem("Cut", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK), "Use Ctrl-X to cut the selected items.", action);
+        MenuBuilder.addMenuItem("Paste", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK), "Use Ctrl-V to paste the previously selected elements.", action);
+        MenuBuilder.addMenuItem("Duplicate", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_D, Event.CTRL_MASK), "Use Ctrl-D to duplicate the selected items.", action);
         
-        // Selection
+        // Selection        // Adjust create to ask a name for the file <since we are making a file>
         MenuBuilder.addMenuItem("Create", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0), "Use Insert to create a new ObjectUI.", action);
+        MenuBuilder.addMenuItem("Find", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK), "Use Ctrl-F to find an item.", action);
         MenuBuilder.addMenuItem("Select All", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK), "Use Ctrl-A to select all ObjectUIs.", action);
         MenuBuilder.addMenuItem("Delete", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "Use Delete to remove all selected ObjectUIs.", action);
         MenuBuilder.addMenuItem("Delete All", selectionMenu, null, "Removes all of the current ObjectUIs.", action);
         
         // View   NOTE: ctrl + scrollup and ctrl + scrolldown work MUCH better than ctrl-+ and ctrl--. Don't know how to visualize those will fix later.
+        MenuBuilder.addMenuItem("Settings", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Event.CTRL_MASK), "Use Ctrl-comma to open up the Settings menu.", action);
+        MenuBuilder.addSeparator(viewMenu);
         MenuBuilder.addMenuItem("Zoom In", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Event.CTRL_MASK), "Use Ctrl-+ to zoom in.", action);
         MenuBuilder.addMenuItem("Zoom Out", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Event.CTRL_MASK), "Use Ctrl-- to zoom out.", action);
+        MenuBuilder.addMenuItem("Reset Zoom", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_0, Event.CTRL_MASK), "Use Ctrl-0 to reset zoom.", action);
+        
         // cont. adding more
     }
     /**
