@@ -89,4 +89,13 @@ public class TEKManagement{
     public static Collection<ObjectUI> getAllObjects() {
         return new HashSet<>(TEKFile.getFrame().getPanel().getObjects());
     }
+    public static String generateFullHTML(Collection<ObjectUI> objects) { // combines multiple objectUI instances into a single HMTL doc
+        StringBuilder html = new StringBuilder();
+        html.append("<html><head><title>ObjectUI Summary</title></head><body>");
+        for (ObjectUI obj : objects) {
+            html.append(obj.generateHTML());
+        }
+        html.append("</body></html>");
+        return html.toString();
+    }
 }
