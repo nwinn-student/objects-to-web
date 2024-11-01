@@ -67,4 +67,26 @@ public class TEKManagement{
     public static void editView(){
         TEKFile.getFrame().getPopupMenu().transferAttached();
     }
+    /**
+     * Connects ObjectUI instances with similar content.
+     */
+    public static void connectSimilarContentObjects() {
+        Collection<ObjectUI> allObjects = getAllObjects();
+        for (ObjectUI obj1 : allObjects) {
+            for (ObjectUI obj2 : allObjects) {
+                if (!obj1.equals(obj2)) {
+                    obj1.addIfSimilarContent(obj2);
+                }
+            }
+        }
+    }
+
+    /**
+     * Retrieves all ObjectUI instances managed by the application.
+     * 
+     * @return a collection of all ObjectUI instances
+     */
+    public static Collection<ObjectUI> getAllObjects() {
+        return new HashSet<>(TEKFile.getFrame().getPanel().getObjects());
+    }
 }
