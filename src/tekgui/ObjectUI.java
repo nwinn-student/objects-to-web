@@ -130,4 +130,24 @@ public class ObjectUI
             similarContent.add(altered);
         }
     }
+	// Method to generate HTML representation of this ObjectUI
+    public String generateHTML() {
+        StringBuilder html = new StringBuilder();
+        html.append("<div class='object-ui'>")
+        .append("<h2>").append(name).append("</h2>")
+        .append("<p><strong>Created:</strong> ").append(creationTime).append("</p>")
+        .append("<p><strong>Position:</strong> (").append(getPosition().x).append(", ").append(getPosition().y).append(")</p>")
+        .append("<p><strong>Size:</strong> (").append(getSize().width).append(" x ").append(getSize().height).append(")</p>");
+
+        if (!similarContent.isEmpty()) {
+            html.append("<h3>Similar Content</h3><ul>");
+            for (ObjectUI similar : similarContent) {
+                html.append("<li>").append(similar.getName()).append("</li>");
+            }
+            html.append("</ul>");
+        }
+
+        html.append("</div>");
+        return html.toString();
+    }
 }
