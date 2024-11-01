@@ -20,13 +20,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.util.List;
+import java.util.Collection;
+
 
 
 /**
  * The Frame that will contain all of the visuals and handle them appropriately.
  *
  * @author Noah Winn
- * @version Oct. 24, 2024
+ * @version Oct. 31, 2024
  */
 public class TEKFrame extends JFrame{
     // To be later used with save, creation, deletion, and modification of Objects
@@ -52,10 +54,6 @@ public class TEKFrame extends JFrame{
         popupMenu = new TEKPopupMenu();
         setIconImage(new ImageIcon(getClass().getResource("/res/iconGrade.png")).getImage());
 
-        // Initialize RecentFilesManager and create menu
-        recentFilesManager = new RecentFilesManager();
-        setJMenuBar(createMenuBar());
-
         add(new TEKToolBar(), BorderLayout.NORTH);
         
         // JScrollPane errored once saying that I input Boolean when it shouldve been Color.
@@ -67,8 +65,12 @@ public class TEKFrame extends JFrame{
         panel = new TEKPanel(this);
         scrollPane.setViewportView(panel);
         
+        // Initialize RecentFilesManager 
+        recentFilesManager = new RecentFilesManager();
+        
         // Add menuBar and toolBar here, for fullscreen later we will want to pass in scrollPane
-        setJMenuBar(new TEKMenuBar());
+        // Initialize Menubar
+        setJMenuBar(createMenuBar());
         getContentPane().add(new TEKToolBar(), BorderLayout.NORTH);
         
         // for now though panel should be fine 
@@ -78,11 +80,15 @@ public class TEKFrame extends JFrame{
         setLocationRelativeTo(null);
         
         // Adjust to subtract toolBar height and meuBar height later
+        panel = new TEKPanel(this);
+        scrollPane.setViewportView(panel);
         panel.setPreferredSize(new Dimension(
             (int)(getWidth()-getInsets().left-getInsets().right+10*scrollPane.getViewportBorderBounds().getWidth()),
             (int)(getHeight()-getInsets().top-getInsets().bottom+10*scrollPane.getViewportBorderBounds().getHeight())));
         
         getContentPane().add(scrollPane);
+        setLocationRelativeTo(null);
+        setVisible(true);
         pack();
     }
 
@@ -147,5 +153,20 @@ public class TEKFrame extends JFrame{
      */
     public boolean hasSaved(){
         return saved;
+    }
+    
+// method to display or interact with similar content of a given ObjectUI instance
+public void showSimilarContent(ObjectUI object) {
+        Collection<ObjectUI> similarObjects = panel.getSimilarContent(object);
+        
+        if (similarObjects.isEmpty()) {
+            System.out.println("No similar content found for this object.");
+        } else {
+            System.out.println("Similar content objects:");
+            for (ObjectUI similarObject : similarObjects) {
+                // Replace with actual logic to display or interact with similarObject
+                System.out.println(" - " + similarObject.toString()); // Assuming ObjectUI has a meaningful toString()
+            }
+        }
     }
 }
