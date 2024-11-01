@@ -23,12 +23,14 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.Collection;
+
 
 /**
  * The panel that will house the Objects.
  *
  * @author Mara Doze, Zakariya Javed, Hayden Verstrat, Noah Winn, Coby Zhong
- * @version Sept. 30, 2024
+ * @version Oct 31, 2024
  */
 public class TEKPanel extends JPanel{
     private TEKFrame frame = null;
@@ -345,6 +347,20 @@ public class TEKPanel extends JPanel{
         sb.append("Size: (").append(obj.getSize().width).append(" x ").append(obj.getSize().height).append(")"); //break after size
         sb.append("</html>");
         return sb.toString(); //object converted to string
+    }
+    /**
+     * Displays objects with similar content to the selected object.
+     * @param selectedObject the selected ObjectUI to find similar objects
+     */
+    public void displaySimilarContent(ObjectUI selectedObject) {
+        Collection<ObjectUI> similarObjects = selectedObject.getSimilarContent();
+        for (ObjectUI similarObj : similarObjects) {
+            TEKLabel similarLabel = getLabel(similarObj);
+            if (similarLabel != null) {
+                similarLabel.setBorder(BorderFactory.createDashedBorder(Color.BLUE));
+                similarLabel.setForeground(Color.BLUE);
+            }
+        }
     }
     // more zoom functionality
     public void zoom(double factor, Point zoomCenter) {
