@@ -20,7 +20,7 @@ import java.io.IOException;
  * manage object properties
  *
  * @Mara Doze
- * @10/24/24
+ * @10/31/24
  */
 public class ObjectUI
 {
@@ -31,6 +31,8 @@ public class ObjectUI
     private List<String> content; // separated for a reason
     private List<String> alteredContent;
     private boolean canSave = false;
+    // Collection to store ObjectUI instances with similar content
+    private Collection<ObjectUI> similarContent = new HashSet<>();
     public ObjectUI(String name, Point position, Dimension size) //initialize objects
     {
         this.name = name;
@@ -72,6 +74,7 @@ public class ObjectUI
         if(this.file != null){
             throw new IOException(file.getAbsolutePath()+"File already exists, it cannot be adjusted.");
         }
+	this.file = file;
 	// ....       
     }
     public File getFile(){return file;}
@@ -103,5 +106,28 @@ public class ObjectUI
         objectUI.creationTime = creationTime;
 
         return objectUI;
+    }
+	// add an ObjectUI to similarContent if it has similar content
+    public void addIfSimilarContent(ObjectUI other) {
+        if (isSimilarContent(other)) {
+            similarContent.add(other);
+        }
+    }
+
+    // compare content of this ObjectUI with another
+    private boolean isSimilarContent(ObjectUI other) {
+        return this.getContent().equals(other.getContent());
+    }
+
+    // Retrieve similar content objects
+    public Collection<ObjectUI> getSimilarContent() {
+        return similarContent;
+    }
+
+    // Optional method to handle altered content connections
+    public void updateContentConnection(ObjectUI altered) {
+        if (!similarContent.contains(altered)) {
+            similarContent.add(altered);
+        }
     }
 }
