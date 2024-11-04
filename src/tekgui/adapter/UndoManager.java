@@ -15,8 +15,8 @@ public class UndoManager{
     public static enum Style{CLASSIC, LEGACY}
     private static short MAX_SIZE = 255;
     private static Style style = Style.CLASSIC;
-    private static Stack<UndoableAction> undoAbleList = new Stack();
-    private static Stack<UndoableAction> redoAbleList = new Stack();
+    private static final Stack<UndoableAction> undoAbleList = new Stack();
+    private static final Stack<UndoableAction> redoAbleList = new Stack();
     
     public static void setActionLimit(short actionLimit){
         MAX_SIZE = actionLimit;

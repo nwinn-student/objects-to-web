@@ -4,24 +4,32 @@ package tekgui.adapter;
 import tekgui.window.TEKPanel;
 import tekgui.window.TEKLabel;
 import tekgui.TEKFile;
+import java.awt.event.KeyEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.FocusListener;
+import javax.swing.JRootPane;
 
 // Java imports
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.Component;
 import java.awt.Cursor;
 import javax.swing.JComponent;
+import java.awt.Color;
 
 /**
  * Houses TEKLabel's listeners, whatever they may be in time, utilizing mouse events primarily.
  *
  * @see java.awt.event.MouseEvent
  * @author Hayden Verstrat, Noah Winn, Coby Zhong
- * @last edited at 10/29/2024
+ * @version Nov. 1, 2024
  */
-public class TEKLabelAdapter implements MouseListener{
+public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListener{
     TEKPanel pan = null;
+    private static final transient Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
+    private static final transient Cursor defaultCursor = new Cursor(Cursor.DEFAULT_CURSOR);
+    private boolean focusDebounce = false;    
     /**
      * Selects and deselects the TEKLabel when left-clicked
      * Activates the PopupMenu when right-clicked
@@ -41,40 +49,61 @@ public class TEKLabelAdapter implements MouseListener{
      * Upon hover, the cursor is adjusted to the drag cursor to signify that an action can be done.
      */
     public void mouseEntered(MouseEvent e){
+        try{
+            ((JComponent)e.getComponent()).grabFocus(); 
+        } catch(ClassCastException k){}
+    }
     /**
-     * ((Component)e.getSource()).setCursor(new Cursor(Cursor.HAND_CURSOR));
      * Upon exiting the component, the cursor is reset to default.
      */
-         Component component = (Component) e.getSource();
-         component.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-    if (component instanceof JComponent) {
-            ((JComponent) component).setBackground(Color.LIGHT_GRAY); 
-            ((JComponent) component).setOpaque(true); 
-        }
-    }
     public void mouseExited(MouseEvent e){
-    /**
-     * ((Component)e.getSource()).setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-     */
-
-        Component component = (Component) e.getSource();
-        component.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        
-        if (component instanceof JComponent) {
-            ((JComponent) component).setBackground(null); 
-            ((JComponent) component).setOpaque(false);
-        }
+        try{
+            ((JComponent)e.getComponent().getParent()).grabFocus();
+        } catch(ClassCastException k){}
     }
-    
-    public void mousePressed(MouseEvent e){
-        
-    }
+    public void mousePressed(MouseEvent e){}
     public void mouseReleased(MouseEvent e){
         if(pan == null){pan = TEKFile.getFrame().getPanel();}
         if(e.getButton() == MouseEvent.BUTTON3){
             // display popupMenu
             TEKFile.getFrame().getPopupMenu().activate(e);
         }
+    }
+    public void keyPressed(KeyEvent e){}
+    public void keyReleased(KeyEvent e){
+        if(pan == null){pan = TEKFile.getFrame().getPanel();}
+        try{
+            if(e.getKeyCode() == e.VK_ENTER && !focusDebounce){
+                TEKLabel label = (TEKLabel) e.getSource();
+                if(label.isSelected() && !TEKFile.getFrame().getPopupMenu().isVisible()){
+                    TEKFile.getFrame().getPopupMenu().activate(e);
+                } else {
+                    pan.addSelected(TEKPanel.getObjectFromLabel(label));
+                }
+                return;
+            }
+            focusDebounce = false;
+        }
+        catch(ClassCastException k){}
+    }
+    public void keyTyped(KeyEvent e){}
+    public void focusGained(FocusEvent e){
+        try{
+            JComponent comp = (JComponent)e.getComponent();
+            if(e.getOppositeComponent() != null){
+                if(e.getOppositeComponent().getClass() == JRootPane.class){
+                    focusDebounce = true;
+                }
+            }
+            comp.setCursor(handCursor);
+            comp.setBackground(TEKLabel.getHighlightColor()); 
+        } catch(ClassCastException k){}
+    }
+    public void focusLost(FocusEvent e){
+        try{
+            JComponent comp = (JComponent)e.getComponent();
+            comp.setCursor(defaultCursor);
+            comp.setBackground(TEKLabel.getDefaultColor());            
+        } catch(ClassCastException k){}
     }
 }

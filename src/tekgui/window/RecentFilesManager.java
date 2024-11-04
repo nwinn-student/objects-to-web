@@ -1,14 +1,19 @@
+package tekgui.window;
+
 import java.io.*;
 import java.util.*;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-
+/**
+ * @author Mara Doze
+ * @version 11/1/2024
+ */
 public class RecentFilesManager {
     private static final int MAX_RECENT_FILES = 5; // Maximum number of recent files
     private final List<File> recentFiles;
 
     public RecentFilesManager() {
-        recentFiles = new ArrayList<>();
+        recentFiles = new ArrayList<>(5);
         loadRecentFiles(); // Load files from disk if needed
     }
 
@@ -36,6 +41,7 @@ public class RecentFilesManager {
             recentFiles.addAll(files);
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("No recent files loaded: " + e.getMessage());
+            saveRecentFiles();
         }
     }
 

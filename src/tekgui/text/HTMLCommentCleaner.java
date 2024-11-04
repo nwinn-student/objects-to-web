@@ -9,7 +9,6 @@ public class HTMLCommentCleaner{
     private boolean isCommentOpen = false;
     private String commentOpener = "<!--"; // should work with any comment scheme
     private String commentCloser = "-->"; // should work with any comment scheme
-    protected boolean activatePrintTestMode = false;
     public HTMLCommentCleaner(){}
     /**
      * Retrieves the comment open that will be used to clean the input text.  For java it is /** for javadoc and /* for multiline and // for single line.
@@ -32,15 +31,6 @@ public class HTMLCommentCleaner{
      */
     public void setCommentCloser(String commentCloser){this.commentCloser = commentCloser;}
     /**
-     * Used whilst testing to ensure it works properly.
-     */
-    private void print(String s){
-        if(activatePrintTestMode){
-            System.out.println(s);
-        }
-    }
-    
-    /**
      * Cleans the line of any HTML comments, expected to take in default charset
      * 
      * @param line the string
@@ -49,28 +39,31 @@ public class HTMLCommentCleaner{
     public String clean(String line){
         return clean(line, commentOpener, commentCloser, isCommentOpen);
     }
+    /**
+     * Redo this later, VERY inefficient
+     */
     public static String clean(String line, String commentOpener, String commentCloser, boolean isOpen){
         // Look for <!-- all in a row, if so isCommentOpen = true until it -->
-        if(line.contains(commentOpener.subSequence(0,commentOpener.length()-1)) && !isOpen){
+        if(line.contains(commentOpener) && !isOpen){
             // find that comment and beat it up
             String prior = line.substring(0,line.indexOf(commentOpener));
             String after = line.substring(line.indexOf(commentOpener)+commentOpener.length()-1, line.length());
-            if(!after.contains(commentCloser.subSequence(0,commentCloser.length()-1))){
+            if(!after.contains(commentCloser)){
                 isOpen = true;
                 return prior;
             } else {
                 after = line.substring(line.indexOf(commentCloser)+commentCloser.length(),line.length());
-                if(after.contains(commentOpener.subSequence(0,commentOpener.length()-1))){
+                if(after.contains(commentOpener)){
                     after = clean(after, commentOpener, commentCloser, isOpen);
                 }
             }
             line = prior+after;
-        } else if(isOpen && !line.contains(commentCloser.subSequence(0,commentCloser.length()-1))){
+        } else if(isOpen && !line.contains(commentCloser)){
             return "";
-        } else if(line.contains(commentCloser.subSequence(0,commentCloser.length()-1))){
+        } else if(line.contains(commentCloser)){
             isOpen = false;
             line = line.substring(line.indexOf(commentCloser)+commentCloser.length(),line.length());
-            if(line.contains(commentOpener.subSequence(0,commentOpener.length()-1))){
+            if(line.contains(commentOpener)){
                 line = clean(line, commentOpener, commentCloser, isOpen);
             }
         }

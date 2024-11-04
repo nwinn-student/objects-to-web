@@ -19,12 +19,26 @@ import java.awt.event.KeyEvent;
  * The TEKAdapter for receiving action events.  Is used within a 
  * component's <b>addActionListener</b> method, and when the action 
  * event occurs, the actionPerformed method is invoked.
+ * May not be worth it to have all strings saved perm, 
  *
  * @see java.awt.event.ActionEvent
  * @author Zakariya Javed
  * @version 9/30/2024
  */
 public class TEKActionAdapter implements ActionListener{
+    /*
+     * Expected to be used many times throughout the life of the app
+     */
+    private static final transient String save = "Save";
+    private static final transient String find = "Find";
+    private static final transient String selectAll = "Select All";
+    private static final transient String undo = "Undo";
+    private static final transient String redo = "Redo";
+    private static final transient String copy = "Copy";
+    private static final transient String cut = "Cut";
+    private static final transient String paste = "Paste";
+    private static final transient String edit = "Edit";
+    private static final transient String settings = "Settings";
     @Override
     public void actionPerformed(ActionEvent e){
         TEKFrame frame = TEKFile.getFrame();
@@ -35,17 +49,17 @@ public class TEKActionAdapter implements ActionListener{
             case "Open":
                 TEKFile.openFile();
                 return;
-            case "Save":
+            case save:
                 TEKFile.saveFile();
                 return;
             // note that holding down this key [Insert] WILL break the app, find a fix later
             case "Create": 
                 TEKManagement.createObject();
                 return;
-            case "Find":
+            case find:
                 ShortcutSystem.enact(ShortcutSystem.Shortcut.FIND);
                 return;
-            case "Select All":
+            case selectAll:
                 TEKManagement.selectAll();
                 return;
             case "Delete":
@@ -54,28 +68,28 @@ public class TEKActionAdapter implements ActionListener{
             case "Delete All":
                 TEKManagement.removeAllObject();
                 return;
-            case "Undo":
+            case undo:
                 UndoManager.undo();
                 return;
-            case "Redo":
+            case redo:
                 UndoManager.redo();
                 return;
             case "Clear Undo":
                 UndoManager.clear();
                 return;
-            case "Copy":
+            case copy:
                 ShortcutSystem.enact(ShortcutSystem.Shortcut.COPY);
                 return;
-            case "Cut":
+            case cut:
                 ShortcutSystem.enact(ShortcutSystem.Shortcut.CUT);
                 return;
-            case "Paste":
+            case paste:
                 ShortcutSystem.enact(ShortcutSystem.Shortcut.PASTE);
                 return;
             case "Duplicate":
                 ShortcutSystem.enact(ShortcutSystem.Shortcut.DUPLICATE);
                 break;
-            case "Edit":
+            case edit:
                 TEKManagement.editView();
                 break;
             case "Zoom In":
@@ -86,7 +100,7 @@ public class TEKActionAdapter implements ActionListener{
                 return;
             case "Reset Zoom":
                 return;
-            case "Settings":
+            case settings:
                 // Open up a new window for ^*^ customization ^*^
                 return;
             case "Exit":

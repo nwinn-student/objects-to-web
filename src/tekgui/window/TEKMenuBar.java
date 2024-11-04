@@ -2,6 +2,7 @@ package tekgui.window;
 // TEKGUI imports
 import tekgui.helper.MenuBuilder;
 import tekgui.adapter.TEKActionAdapter;
+import tekgui.TEKFile;
 
 // Javha imports
 import javax.swing.JMenuBar;
@@ -12,13 +13,8 @@ import java.awt.Event;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JComponent;
-import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.List;
-import javax.swing.*;
-import java.awt.*;
-
-
+import java.io.File;
 
 /**
  * <p>TEKMenuBar provides a component that is useful in displaying 
@@ -36,16 +32,13 @@ import java.awt.*;
  */
 public class TEKMenuBar extends JMenuBar{
     private static TEKActionAdapter action = new TEKActionAdapter();
-    private static ArrayList<String> basicKeys = new ArrayList<>();
-    private final RecentFilesManager recentFilesManager; // Manage recent files
-    private JMenu recentFilesMenu; // Store recent files menu 
+    private static final RecentFilesManager recentFilesManager = new RecentFilesManager(); // Manage recent files
+    private final JMenu recentFilesMenu; // Store recent files menu
     /**
      * Creates a  TEKMenuBar with the default menu setup.
      */
     public TEKMenuBar(){
         super();
-        this.recentFilesManager = recentFilesManager; // Store the recent files manager
-        propagateKeys();
         JMenu fileMenu = MenuBuilder.addMenu("File", this, KeyEvent.VK_F, "Use Alt-F to select File.");
         JMenu editMenu = MenuBuilder.addMenu("Edit", this, KeyEvent.VK_E, "Use Alt-E to select Edit.");
         JMenu selectionMenu = MenuBuilder.addMenu("Selection", this, KeyEvent.VK_S, "Use Alt-S to select Selection.");
@@ -56,6 +49,7 @@ public class TEKMenuBar extends JMenuBar{
         
         // File                 
         MenuBuilder.addMenuItem("Open", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK), "Use Ctrl-O to open a file.", action);
+        recentFilesMenu = MenuBuilder.addMenu("Recent Files", fileMenu);
         MenuBuilder.addMenuItem("Save", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK), "Use Ctrl-S to save.", action);
         MenuBuilder.addMenuItem("Exit", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK), "Use Ctrl-Q to quit.", action);
         
@@ -83,9 +77,10 @@ public class TEKMenuBar extends JMenuBar{
         MenuBuilder.addMenuItem("Zoom Out", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Event.CTRL_MASK), "Use Ctrl-- to zoom out.", action);
         MenuBuilder.addMenuItem("Reset Zoom", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_0, Event.CTRL_MASK), "Use Ctrl-0 to reset zoom.", action);
         
+        updateRecentFilesMenu();
         // cont. adding more
     }
-    /**
+        /**
      * make the Recent Files menu with the current list of files.
      */
     public void updateRecentFilesMenu() {
@@ -108,9 +103,12 @@ public class TEKMenuBar extends JMenuBar{
      * Open the selected file and update the recent files menu.
      */
     private void openFile(File file) {
-        System.out.println("Opening: " + file.getAbsolutePath()); // Replace with actual file logic
-        recentFilesManager.addFile(file); // Add the file to recent files
+        //System.out.println("Opening: " + file.getAbsolutePath()); // Replace with actual file logic
+        TEKFile.openFile(file);        
         updateRecentFilesMenu(); // Refresh the menu
     }
-
+    public void remember(File file){ 
+        recentFilesManager.addFile(file); // Add the file to recent files
+        updateRecentFilesMenu();
+    }
 }

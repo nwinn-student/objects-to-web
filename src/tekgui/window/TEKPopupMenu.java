@@ -6,6 +6,7 @@ import tekgui.helper.MenuBuilder;
 import tekgui.adapter.TEKActionAdapter;
 import tekgui.adapter.UndoManager;
 import tekgui.adapter.ShortcutSystem;
+import java.awt.event.KeyEvent;
 
 // Java imports
 import javax.swing.JPopupMenu;
@@ -40,13 +41,8 @@ public class TEKPopupMenu extends JPopupMenu{
         MenuBuilder.addMenuItem("Reset Zoom", this, null, "Used to reset the zoom on the screen.", action);
         setVisible(false);
     }
-    /**
-     * Method activate
-     *
-     * @param e A parameter
-     */
-    public void activate(MouseEvent e){
-        setAttached((JComponent)e.getSource());
+    private void active(JComponent e){
+        setAttached(e);
         getComponent(0).setEnabled((attachedComponent instanceof TEKLabel) ? true : false); // Edit
         getComponent(2).setEnabled(TEKFile.getFrame().getPanel().getSelected().size() > 0); // Cut, check if possible (1+ selected or current)
         getComponent(3).setEnabled(TEKFile.getFrame().getPanel().getSelected().size() > 0); // Copy, check if possible (1+ selected or current)
@@ -54,7 +50,22 @@ public class TEKPopupMenu extends JPopupMenu{
         getComponent(6).setEnabled(UndoManager.canUndo()); // Undo, check if possible (1+ action)
         getComponent(7).setEnabled(UndoManager.canRedo()); // Redo, check if possible (1+ action)
         getComponent(9).setEnabled(true); // Reset Zoom, check if possible (zoom != regular)
-        show(e.getComponent(), e.getX(), e.getY());
+    }
+    /**
+     * Method activate
+     *
+     * @param e A parameter
+     */
+    public void activate(MouseEvent e){
+        JComponent comp = (JComponent) e.getComponent();
+        active(comp);
+        show(comp, e.getX(), e.getY());
+        setVisible(true);
+    }
+    public void activate(KeyEvent e){
+        JComponent comp = (JComponent) e.getComponent();
+        active(comp);
+        show(comp, 10, 10);
         setVisible(true);
     }
     public void deactivate(){
@@ -68,6 +79,7 @@ public class TEKPopupMenu extends JPopupMenu{
     /**
      * Activates TEKEditFrame and imports the held attachment.  
      * Hides the TEKPopupMenu.
+     * Adjust***, only supports editting 1, but must accomidate later support for multiple
      */
     public void transferAttached(){
         if(attachedComponent == null){return;}

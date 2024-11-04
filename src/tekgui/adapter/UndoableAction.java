@@ -9,8 +9,8 @@ package tekgui.adapter;
  */
 public class UndoableAction{
     public static enum Variant {CREATE, DELETE, ADJUST, MOVE, UNKNOWN}
-    private Object state;
-    private Variant var;
+    private final Object state;
+    private final Variant var;
     public UndoableAction(){
         this(null, Variant.UNKNOWN);
     }

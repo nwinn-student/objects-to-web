@@ -17,16 +17,17 @@ import java.io.FileReader;
 public class CleanedHTMLExtractor {
     private List<String> cleanedHTMLBody = new ArrayList<>();
     private boolean isInsideBody = false;
-    
+    private static final String bodyStart = "<body>";
+    private static final String bodyEnd = "</body>";
     private static void addCleanedLine(String line, List<String> body, boolean inner){
-        if (line.contains("<body>")) {
+        if (line.contains(bodyStart)) {
             inner = true;
-            int bodyStartIndex = line.indexOf("<body>") + "<body>".length();
+            int bodyStartIndex = line.indexOf(bodyStart) + 6;
             line = line.substring(bodyStartIndex).trim();
         }
-        if (line.contains("</body>")) {
+        if (line.contains(bodyEnd)) {
             inner = false;
-            int bodyEndIndex = line.indexOf("</body>");
+            int bodyEndIndex = line.indexOf(bodyEnd);
             line = line.substring(0, bodyEndIndex).trim();
         }
 
@@ -69,8 +70,8 @@ public class CleanedHTMLExtractor {
         List<String> cleanedHTMLBody = new ArrayList<>();
         boolean isInsideBody = false;
         boolean isCommentOpen = false;
-        String commentOpener = "<!--";
-        String commentCloser = "-->";
+        final String commentOpener = "<!--";
+        final String commentCloser = "-->";
         while ((line = reader.readLine()) != null) {
             addCleanedLine(
                 HTMLCommentCleaner.clean(line, commentOpener, commentCloser,isCommentOpen),

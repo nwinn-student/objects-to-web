@@ -15,13 +15,19 @@ import java.awt.Color;
  * @version Sept. 30, 2024
  */
 public class TEKLabel extends JLabel{
+    private static transient Color highlightColor = Color.LIGHT_GRAY;
+    private static transient Color defaultColor = new Color(238, 238, 238);
     private boolean isSelected = false; // Track selection state
     private void init(){
-        addMouseListener(new TEKLabelAdapter());
+        TEKLabelAdapter adapt = new TEKLabelAdapter();
+        addMouseListener(adapt);
+        addKeyListener(adapt);
+        addFocusListener(adapt);
         // Ensure the label is set to automatically resize vertically based on content
         setVerticalAlignment(TOP);  // Align text to top
         setHorizontalAlignment(LEFT); // Align text to left
         setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Adding a border
+        setFocusable(true);
         setOpaque(true);
     }
     /**
@@ -44,6 +50,15 @@ public class TEKLabel extends JLabel{
     public TEKLabel(ObjectUI obj){
         //setBounds(obj.getPosition().x, obj.getPosition().y, obj.getSize().width, obj.getSize().height);
         init();
+    }
+    public static void setHighlightColor(Color color){
+        highlightColor = color;
+    }
+    public static Color getHighlightColor(){ return highlightColor; }
+    
+    public static Color getDefaultColor(){ return defaultColor; }
+    public static void setDefaultColor(Color color){
+        defaultColor = color;
     }
     /**
      * Selects the TEKLabel and signifies it to the user by coloring the border and foreground.

@@ -1,10 +1,10 @@
 # objects-to-web
 <sub>The name has yet to be fully fleshed out.</sub>
 > [!NOTE]
-> This project is intended to be used as a college project, as such do not expect much maintenance past December 2024.
+> This project is intended to be used as a college project, as such do not expect much maintenance past December 2024.  Recommended to place the jar file within a folder, since it will create files upon usage and you don't want any of your existing files to be overwritten.  The creation layout was temporarily adjusted and will need to be adjusted later.
 
 
-CPSC 4900 Group Project - Involves using a GUI that has GUI object elements within that are to be used to, in some way, generate a webpage or site.
+CPSC 4900 Group Project - Involves using a GUI that has GUI object elements within that are to be used to, in some way, generate and adjust a webpage or site.  The primary usage is adjusting.
 
 
 ## Idea
@@ -25,7 +25,7 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [X] Submit Sprint 1 Report and Deliverables
 - [X] Presentation
 - [X] Submit Plan of Sprint 2
-- [ ] Submit Software Architecture
+- [X] Submit Software Architecture
 - [ ] Submit Sprint 2 Report and Deliverables
 - [ ] Presentation
 - [ ] Submit Plan of Sprint 3

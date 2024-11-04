@@ -5,6 +5,8 @@ import tekgui.window.TEKLabel;
 import tekgui.window.TEKPanel;
 import tekgui.text.CleanedHTMLExtractor;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 // Java imports
 import java.awt.Dimension;
@@ -62,7 +64,7 @@ public class ObjectUI
     public List<String> getContent(){return alteredContent;}
     public void setContent(){
         canSave = true;
-	// later
+        // later
         // TEKFile.getFrame();
     }
     public boolean canSave(){return canSave;}
@@ -74,8 +76,8 @@ public class ObjectUI
         if(this.file != null){
             throw new IOException(file.getAbsolutePath()+"File already exists, it cannot be adjusted.");
         }
-	this.file = file;
-	// ....       
+        this.file = file;
+        // ....
     }
     public File getFile(){return file;}
     @Override
@@ -107,30 +109,27 @@ public class ObjectUI
 
         return objectUI;
     }
-	// add an ObjectUI to similarContent if it has similar content
+    // add an ObjectUI to similarContent if it has similar content
     public void addIfSimilarContent(ObjectUI other) {
         if (isSimilarContent(other)) {
             similarContent.add(other);
         }
     }
-
     // compare content of this ObjectUI with another
     private boolean isSimilarContent(ObjectUI other) {
         return this.getContent().equals(other.getContent());
     }
-
     // Retrieve similar content objects
     public Collection<ObjectUI> getSimilarContent() {
         return similarContent;
     }
-
     // Optional method to handle altered content connections
     public void updateContentConnection(ObjectUI altered) {
         if (!similarContent.contains(altered)) {
             similarContent.add(altered);
         }
     }
-	// Method to generate HTML representation of this ObjectUI
+    // Method to generate HTML representation of this ObjectUI
     public String generateHTML() {
         StringBuilder html = new StringBuilder();
         html.append("<div class='object-ui'>")

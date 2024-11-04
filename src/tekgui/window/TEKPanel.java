@@ -3,6 +3,12 @@ package tekgui.window;
 // TEKGUI imports
 import tekgui.ObjectUI;
 import tekgui.adapter.TEKPanelAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import javax.swing.JComponent;
+import javax.swing.JLayer;
+import java.util.Collection;
 
 // Java imports
 import javax.swing.JPanel;
@@ -20,17 +26,13 @@ import java.util.Arrays;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.util.Collection;
-
+import javax.swing.plaf.LayerUI;
 
 /**
  * The panel that will house the Objects.
  *
  * @author Mara Doze, Zakariya Javed, Hayden Verstrat, Noah Winn, Coby Zhong
- * @version Oct 31, 2024
+ * @version Nov. 1, 2024
  */
 public class TEKPanel extends JPanel{
     private TEKFrame frame = null;
@@ -42,7 +44,27 @@ public class TEKPanel extends JPanel{
     public static final double ZOOM_FACTOR = 1.1;
     private Rectangle selectionRect = new Rectangle(); // Rectangle for the selection box
     private Point startPoint = null; // Starting point for the selection box
-
+    private static final transient Color semiBlue = new Color(0, 0, 255, 50);
+    private static final transient Color bkgBlue = new Color(200,255,230);
+    private final LayerUI panLayer;
+    {
+        panLayer = new LayerUI(){
+            @Override
+            public void paint(Graphics g, JComponent c){
+                super.paint(g, c);
+                Graphics2D g2d = (Graphics2D) g.create();
+                // Draw the selection rectangle
+                if (startPoint != null) {
+                    g2d.setColor(semiBlue); // Semi-transparent blue
+                    g2d.fillRect(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height);
+                    g2d.setColor(Color.BLUE);
+                    g2d.drawRect(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height); // Optional: draw border
+                }
+                g2d.dispose();
+            }
+        };
+    }
+    
     /**
      * Default constructor
      */
@@ -55,58 +77,69 @@ public class TEKPanel extends JPanel{
         this.frame = frame;
         setLayout(null);
         // will be transparent later, just like this for testing
-        setBackground(new Color(200,255,230)); 
+        setBackground(bkgBlue); 
         //this.setOpaque(false);
         TEKPanelAdapter sample = new TEKPanelAdapter();
-
-    // Adding mouse listeners for selection
-    addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-            startPoint = e.getPoint();
-            selectionRect.setBounds(startPoint.x, startPoint.y, 0, 0);
-            repaint();
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            // Finalize the selection rectangle
-            selectionRect.setBounds(
-                Math.min(startPoint.x, e.getX()),
-                Math.min(startPoint.y, e.getY()),
-                Math.abs(startPoint.x - e.getX()),
-                Math.abs(startPoint.y - e.getY())
-            );
-
-            // Select objects within the rectangle
-            selectObjectsInRectangle(selectionRect);
-
-            // Reset selection
-            startPoint = null;
-            selectionRect.setBounds(0, 0, 0, 0);
-            repaint();
-        }
-    });
-    addMouseMotionListener(new MouseMotionAdapter() {
-        @Override
-        public void mouseDragged(MouseEvent e) {
-            // Update selection rectangle as the mouse drags
-            selectionRect.setBounds(
-                Math.min(startPoint.x, e.getX()),
-                Math.min(startPoint.y, e.getY()),
-                Math.abs(startPoint.x - e.getX()),
-                Math.abs(startPoint.y - e.getY())
-            );
-            repaint();
-        }
-    });
+        addMouseListener(sample);
+        addMouseMotionListener(sample);
         addMouseWheelListener(sample);
         addKeyListener(sample);
+        // Adding mouse listeners for selection
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                startPoint = e.getPoint();
+                selectionRect.setBounds(startPoint.x, startPoint.y, 0, 0);
+                repaint();
+            }
+    
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // Finalize the selection rectangle
+                if(startPoint == null){ return; }
+                selectionRect.setBounds(
+                    Math.min(startPoint.x, e.getX()),
+                    Math.min(startPoint.y, e.getY()),
+                    Math.abs(startPoint.x - e.getX()),
+                    Math.abs(startPoint.y - e.getY())
+                );
+    
+                // Select objects within the rectangle
+                selectObjectsInRectangle(selectionRect);
+    
+                // Reset selection
+                startPoint = null;
+                selectionRect.setBounds(0, 0, 0, 0);
+                repaint();
+            }
+        });
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                // Update selection rectangle as the mouse drags
+                selectionRect.setBounds(
+                    Math.min(startPoint.x, e.getX()),
+                    Math.min(startPoint.y, e.getY()),
+                    Math.abs(startPoint.x - e.getX()),
+                    Math.abs(startPoint.y - e.getY())
+                );
+                selectObjectsInRectangle(selectionRect);
+                repaint();
+            }
+        });
+    }
+    /**
+     * Generates a layer that overlays the current panel, used for
+     * mass selection.
+     */
+    public JLayer<JPanel> generateLayer(){
+        return new JLayer<JPanel>(this, panLayer);
     }
     private void selectObjectsInRectangle(Rectangle rect) {
         clearSelected(); // Clear previous selections
+        Rectangle objBounds = new Rectangle();
         for (ObjectUI obj : getObjects()) {
-            Rectangle objBounds = new Rectangle(obj.getPosition(), obj.getSize());
+            objBounds.setBounds(obj.getLabel().getBounds());
             if (rect.intersects(objBounds)) {
                 addSelected(obj); // Add to selected list
             }
@@ -140,7 +173,7 @@ public class TEKPanel extends JPanel{
     public static List<ObjectUI> getObjectFromLabel(List<TEKLabel> label){
         if(label == null){return null;}
         Map<TEKLabel,ObjectUI> flippedMap = flipLabels();
-        List<ObjectUI> obj = new ArrayList<>();
+        List<ObjectUI> obj = new ArrayList<>(flippedMap.size());
         for(TEKLabel lab : label){
             obj.add(flippedMap.get(lab));
         }
@@ -155,8 +188,7 @@ public class TEKPanel extends JPanel{
      * @return arrayList of ObjectUIs
      */
     public List<ObjectUI> getObjects(){
-        List<ObjectUI> objList = new ArrayList<ObjectUI>();
-        objList.addAll(labels.keySet());
+        List<ObjectUI> objList = new ArrayList<ObjectUI>(labels.keySet());
         return objList;
     }
     /**
@@ -164,41 +196,49 @@ public class TEKPanel extends JPanel{
      * @return arrayList of TEKLabels
      */
     public List<TEKLabel> getLabels(){
-        List<TEKLabel> labelList = new ArrayList<TEKLabel>();
+        List<TEKLabel> labelList = new ArrayList<TEKLabel>(labels.size());
         labelList.addAll(labels.values());
         return labelList;
     }
     /**
      * Creates a new objectUI and adds it to the arrayList of objects to be displayed.
+     * Adjusted to fill screen, however it really needs to be benchmarked (may be really heavy)
      */
     private Point shiftPosition(Point initialPosition, Dimension size) {
-        int shiftX = 10;
-        int shiftY = 10;
-        Point newPosition = new Point(initialPosition);
+        int shiftX = 100;
+        int shiftY = 100;
+        int width = size.width;
+        int height = size.height;
+        Rectangle newBounds = new Rectangle(initialPosition, size);
+        Rectangle existingBounds = new Rectangle();
         boolean overlapDetected;
+        
         do {
             overlapDetected = false;
-            Rectangle newBounds = new Rectangle(newPosition, size);
-
             for (ObjectUI existingObj : getObjects()) {
-                Rectangle existingBounds = new Rectangle(existingObj.getPosition(), existingObj.getSize());
+                existingBounds.setBounds(existingObj.getLabel().getBounds());
 
                 if (newBounds.intersects(existingBounds)) {
                     overlapDetected = true;
-                    newPosition.translate(shiftX, shiftY); 
-                    newBounds.setLocation(newPosition);
+                    initialPosition.translate(shiftX, 0); 
+                    newBounds.setLocation(initialPosition);
+                    // if newBounds is out of view, we shift down and x to 0
+                    if(frame.getWidth() < newBounds.getX()+newBounds.getWidth()){
+                        initialPosition.move(0, (int)newBounds.getY()+shiftY);
+                        newBounds.setLocation(initialPosition);
+                        continue;
+                    }
                     break;
                 }
             }
         } while (overlapDetected);
-        return newPosition;
+        return initialPosition;
     }
     public ObjectUI generateObject() {
         Point initialPosition = new Point(0, 0);
         Dimension size = new Dimension(100, 100);
         ObjectUI newObject = new ObjectUI("New Object", initialPosition, size);
-        Point finalPosition = shiftPosition(initialPosition, size);
-        newObject.setPosition(finalPosition);
+        newObject.setPosition(shiftPosition(initialPosition, size));
         addObject(newObject); 
         return newObject;
     }
@@ -233,6 +273,7 @@ public class TEKPanel extends JPanel{
      */
     public void removeObject(ObjectUI obj){
         if(obj == null){return;}
+        obj.getLabel().deselect();
         selected.remove(obj);
         try{remove(labels.remove(obj));}
             catch(Exception e){}
@@ -279,9 +320,9 @@ public class TEKPanel extends JPanel{
      */
     public void addSelected(ObjectUI obj){
         if(obj == null){return;}
-        if(labels.containsKey(obj)){
+        if(labels.containsKey(obj) && !obj.getLabel().isSelected()){
             selected.add(obj);
-            labels.get(obj).select();
+            obj.getLabel().select();
         }
     }
     public void addSelected(List<ObjectUI> obj){
@@ -355,7 +396,7 @@ public class TEKPanel extends JPanel{
     public void displaySimilarContent(ObjectUI selectedObject) {
         Collection<ObjectUI> similarObjects = selectedObject.getSimilarContent();
         for (ObjectUI similarObj : similarObjects) {
-            TEKLabel similarLabel = getLabel(similarObj);
+            TEKLabel similarLabel = similarObj.getLabel();
             if (similarLabel != null) {
                 similarLabel.setBorder(BorderFactory.createDashedBorder(Color.BLUE));
                 similarLabel.setForeground(Color.BLUE);
@@ -369,45 +410,43 @@ public class TEKPanel extends JPanel{
         zoomFactor = Math.max(0.5, Math.min(zoomFactor, 5.0)); // Limit zoom between 0.5x and 5xq
 
         double actualFactor =  zoomFactor / initialZoom;
-
-        for (int i = 0; i < getComponentCount(); i++) {
+        int newX, newY, newWidth, newHeight;
+        float newFontSize;
+        int compCount = getComponentCount();
+        for (int i = 0; i < compCount; i++) {
             // handles objects found in TEKLabel and resizes them accordingly... almost.
-            if (getComponent(i) instanceof TEKLabel) {
+            // a random book I found said this is slightly faster
+            try{
                 TEKLabel label = (TEKLabel) getComponent(i);
                 Point oldPosition = label.getLocation();
                 Dimension oldSize = label.getSize();
 
-                int newX = (int) ((oldPosition.x - zoomCenter.x) * actualFactor + zoomCenter.x);
-                int newY = (int) ((oldPosition.y - zoomCenter.y) * actualFactor + zoomCenter.y);
-                int newWidth = (int) (oldSize.width * actualFactor);
-                int newHeight = (int) (oldSize.height * actualFactor);                
+                newX = (int) ((oldPosition.x - zoomCenter.x) * actualFactor + zoomCenter.x);
+                newY = (int) ((oldPosition.y - zoomCenter.y) * actualFactor + zoomCenter.y);
+                newWidth = (int) (oldSize.width * actualFactor);
+                newHeight = (int) (oldSize.height * actualFactor);                
                 label.setBounds(newX, newY, newWidth, newHeight);
-                System.out.println(actualFactor +""+ label.getBounds());
+                //System.out.println(actualFactor +""+ label.getBounds());
                 // Update font size based on zoom factor
-                float newFontSize = (float) (12 * zoomFactor); // Assuming 12 is the base font size, not sure.
+                newFontSize = (float) (12 * zoomFactor); // Assuming 12 is the base font size, not sure.
                 label.setFont(label.getFont().deriveFont(newFontSize));
+            } catch(ClassCastException e){
+                e.printStackTrace(System.out);
             }
         }
 
         revalidate();
         repaint();
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.scale(zoomFactor, zoomFactor);
-    
-        // Draw the selection rectangle
-        if (startPoint != null) {
-            g2d.setColor(new Color(0, 0, 255, 50)); // Semi-transparent blue
-            g2d.fillRect(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height);
-            g2d.setColor(Color.BLUE);
-            g2d.drawRect(selectionRect.x, selectionRect.y, selectionRect.width, selectionRect.height); // Optional: draw border
-        }
-    
         g2d.dispose();
     }
+
     public void zoomIn() {
         setZoomFactor(zoomFactor);
     }
@@ -428,9 +467,10 @@ public class TEKPanel extends JPanel{
     // when adding new components, adjusts dimensions based on current zoom 
     public Dimension getPreferredSize() {
         Dimension unzoomed = super.getPreferredSize();
-        return new Dimension(
+        unzoomed.setSize(
             (int) (unzoomed.width * zoomFactor),
             (int) (unzoomed.height * zoomFactor)
         );
+        return unzoomed;
     }
 }

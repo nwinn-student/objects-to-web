@@ -2,8 +2,7 @@ package tekgui;
 
 // TEKGUI imports
 import tekgui.window.TEKFrame;
-import java.util.List;
-import javax.swing.filechooser.FileFilter;
+import tekgui.window.TEKMenuBar;
 
 // Java imports
 import java.io.BufferedReader;
@@ -17,6 +16,8 @@ import java.io.FileWriter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.UIManager;
+import java.util.List;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * manages files
@@ -27,37 +28,36 @@ import javax.swing.UIManager;
 public class TEKFile
 {
     private static TEKFrame frame = null;
+    private static final transient JFileChooser fileChooser = new JFileChooser();
     public TEKFile(){}
-    public static TEKFrame getFrame()
-    {
+    public static TEKFrame getFrame(){
         return frame;
     }
-    public static void setFrame(TEKFrame fram)
-    {
+    public static void setFrame(TEKFrame fram){
         frame = fram;
     }
     public static void openFile() {
-        JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory( new File("*") ); // adjust to recent location
-	// filter to only allow html or directories**
+        // filter to only allow html or directories**
 	// ....
         fileChooser.setFileSelectionMode(fileChooser.FILES_AND_DIRECTORIES);
         int result = fileChooser.showOpenDialog(frame.getPanel());
         if (result == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
+            File file = fileChooser.getSelectedFile();            
+            ((TEKMenuBar)frame.getJMenuBar()).remember(file);
             openFile(file);
         }
     }
     public static void openFile(File file){
         try {
-             // Open the object and create it onto the screen
+            // Open the object and create it onto the screen
+
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(frame, "Error reading file: " + ex);
         }
     }
     // Method to save a file
     public static void saveFile() {
-        JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showSaveDialog(frame.getPanel()); // opens a file-saving dialog
         if (result == JFileChooser.APPROVE_OPTION) { // if "SAVE", file is obtained
             File file = fileChooser.getSelectedFile();
