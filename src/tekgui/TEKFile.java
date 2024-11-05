@@ -1,5 +1,7 @@
 package tekgui;
 
+ 
+
 // TEKGUI imports
 import tekgui.window.TEKFrame;
 import tekgui.window.TEKMenuBar;
@@ -49,12 +51,12 @@ public class TEKFile
         }
     }
     public static void openFile(File file){
-        try {
+        //try {
             // Open the object and create it onto the screen
 
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(frame, "Error reading file: " + ex);
-        }
+        //} catch (IOException ex) {
+            //JOptionPane.showMessageDialog(frame, "Error reading file: " + ex);
+        //}
     }
     // Method to save a file
     public static void saveFile() {
