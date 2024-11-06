@@ -16,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import java.awt.Container;
 import java.awt.event.KeyEvent;
+import javax.swing.SwingUtilities;
 /**
  * The TEKAdapter for receiving action events.  Is used within a 
  * component's <b>addActionListener</b> method, and when the action 
@@ -112,7 +113,7 @@ public class TEKActionAdapter implements ActionListener{
             case "About":
                 SwingUtilities.invokeLater(() -> {
                     new AboutText(frame);
-             });
+                });
                 return;
             // add more..
         }
