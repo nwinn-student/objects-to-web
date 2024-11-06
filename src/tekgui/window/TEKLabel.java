@@ -23,12 +23,14 @@ public class TEKLabel extends JLabel{
         addMouseListener(adapt);
         addKeyListener(adapt);
         addFocusListener(adapt);
+        addMouseMotionListener(adapt);
         // Ensure the label is set to automatically resize vertically based on content
         setVerticalAlignment(TOP);  // Align text to top
         setHorizontalAlignment(LEFT); // Align text to left
         setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Adding a border
         setFocusable(true);
         setOpaque(true);
+        
     }
     /**
      * Default constructor, adds a mouseListener, aligns top left, and has a black border.
