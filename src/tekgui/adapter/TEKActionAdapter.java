@@ -7,6 +7,7 @@ import tekgui.window.TEKFrame;
 import tekgui.TEKManagement;
 import tekgui.helper.Helper;
 import tekgui.ObjectUI;
+import tekgui.window.AboutText;
 
 // Java imports
 import java.awt.event.ActionListener;
@@ -107,6 +108,9 @@ public class TEKActionAdapter implements ActionListener{
                 TEKFile.getFrame().save();
                 System.out.println("Exiting through automated ALT-F4.");
                 Helper.keyMaskedClick(KeyEvent.VK_F4, KeyEvent.VK_ALT);
+            case "About":
+                SwingUtilities.invokeLater(() -> {
+                    new AboutText(frame);
                 break;
             // add more..
         }
