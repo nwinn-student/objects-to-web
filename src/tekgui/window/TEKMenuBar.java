@@ -76,6 +76,9 @@ public class TEKMenuBar extends JMenuBar{
         MenuBuilder.addMenuItem("Zoom In", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Event.CTRL_MASK), "Use Ctrl-+ to zoom in.", action);
         MenuBuilder.addMenuItem("Zoom Out", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Event.CTRL_MASK), "Use Ctrl-- to zoom out.", action);
         MenuBuilder.addMenuItem("Reset Zoom", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_0, Event.CTRL_MASK), "Use Ctrl-0 to reset zoom.", action);
+
+        // Help information about application
+        MenuBuilder.addMenuItem("About", helpMenu, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "Learn more about TEK-GUI", action);
         
         updateRecentFilesMenu();
         // cont. adding more
