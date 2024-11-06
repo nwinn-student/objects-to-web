@@ -62,10 +62,9 @@ public class ObjectUI
     public void setLabel(TEKLabel label){this.label = label;}
     public String getCreationTime(){return creationTime;}
     public List<String> getContent(){return alteredContent;}
-    public void setContent(){
-        canSave = true;
-        // later
-        // TEKFile.getFrame();
+    public void setContent(List<String> content) {
+        this.alteredContent = new ArrayList<>(content); // Create a copy of the list to avoid external modifications
+        this.canSave = true; // Mark that the content has been altered and can be saved
     }
     public boolean canSave(){return canSave;}
     public Point getPosition(){return label.getLocation();}
