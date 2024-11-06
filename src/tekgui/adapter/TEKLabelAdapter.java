@@ -17,6 +17,9 @@ import java.awt.Component;
 import java.awt.Cursor;
 import javax.swing.JComponent;
 import java.awt.Color;
+import java.awt.event.MouseMotionListener;
+import java.awt.Point;
+
 
 /**
  * Houses TEKLabel's listeners, whatever they may be in time, utilizing mouse events primarily.
@@ -25,11 +28,12 @@ import java.awt.Color;
  * @author Hayden Verstrat, Noah Winn, Coby Zhong
  * @version Nov. 1, 2024
  */
-public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListener{
+public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListener, MouseMotionListener{
     TEKPanel pan = null;
     private static final transient Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
     private static final transient Cursor defaultCursor = new Cursor(Cursor.DEFAULT_CURSOR);
     private boolean focusDebounce = false;    
+    private Point dragStart = null;  // Track where drag started
     /**
      * Selects and deselects the TEKLabel when left-clicked
      * Activates the PopupMenu when right-clicked
@@ -46,7 +50,7 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
         }        
     }
     /**
-     * Upon hover, the cursor is adjusted to the drag cursor to signify that an action can be done.
+     * switches to drag cursor
      */
     public void mouseEntered(MouseEvent e){
         try{
@@ -61,12 +65,20 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
             ((JComponent)e.getComponent().getParent()).grabFocus();
         } catch(ClassCastException k){}
     }
-    public void mousePressed(MouseEvent e){}
+    public void mousePressed(MouseEvent e){
+        if (e.getButton() == MouseEvent.BUTTON1) {  // Left click only
+            dragStart = e.getPoint();
+            ((Component)e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+        }
+    }
     public void mouseReleased(MouseEvent e){
         if(pan == null){pan = TEKFile.getFrame().getPanel();}
         if(e.getButton() == MouseEvent.BUTTON3){
             // display popupMenu
             TEKFile.getFrame().getPopupMenu().activate(e);
+        } else if (e.getButton() == MouseEvent.BUTTON1) {
+            dragStart = null;
+            ((Component)e.getSource()).setCursor(handCursor);
         }
     }
     public void keyPressed(KeyEvent e){}
@@ -105,5 +117,27 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
             comp.setCursor(defaultCursor);
             comp.setBackground(TEKLabel.getDefaultColor());            
         } catch(ClassCastException k){}
+    }
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if (dragStart != null) {
+            Component comp = e.getComponent();
+            Point parentLocation = comp.getParent().getLocationOnScreen();
+            Point mouseLocation = e.getLocationOnScreen();
+            
+            // Calculate new position relative to parent container
+            int newX = mouseLocation.x - parentLocation.x - dragStart.x;
+            int newY = mouseLocation.y - parentLocation.y - dragStart.y;
+            
+            // prevents dragging outside window
+            newX = Math.max(0, Math.min(newX, comp.getParent().getWidth() - comp.getWidth()));
+            newY = Math.max(0, Math.min(newY, comp.getParent().getHeight() - comp.getHeight()));
+            
+            comp.setLocation(newX, newY);
+        }
+    }
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    
     }
 }
