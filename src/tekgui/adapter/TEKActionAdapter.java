@@ -108,10 +108,12 @@ public class TEKActionAdapter implements ActionListener{
                 TEKFile.getFrame().save();
                 System.out.println("Exiting through automated ALT-F4.");
                 Helper.keyMaskedClick(KeyEvent.VK_F4, KeyEvent.VK_ALT);
+                break;
             case "About":
                 SwingUtilities.invokeLater(() -> {
                     new AboutText(frame);
-                break;
+             });
+                return;
             // add more..
         }
         // another switch for toolBar if that is desired
