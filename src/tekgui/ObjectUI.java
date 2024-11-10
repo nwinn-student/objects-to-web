@@ -22,7 +22,7 @@ import java.io.IOException;
  * manage object properties
  *
  * @Mara Doze
- * @10/31/24
+ * @11/9/24
  */
 public class ObjectUI
 {
@@ -62,7 +62,7 @@ public class ObjectUI
     public void setLabel(TEKLabel label){this.label = label;}
     public String getCreationTime(){return creationTime;}
     public List<String> getContent(){return alteredContent;}
-    public void setContent(List<String> content) {
+    public void setContent(List<String> content){
         this.alteredContent = new ArrayList<>(content); // Create a copy of the list to avoid external modifications
         this.canSave = true; // Mark that the content has been altered and can be saved
     }
@@ -76,7 +76,13 @@ public class ObjectUI
             throw new IOException(file.getAbsolutePath()+"File already exists, it cannot be adjusted.");
         }
         this.file = file;
-        // ....
+        if(file != null){
+            this.name = file.getAbsolutePath(); // for locating the file
+            this.creationTime = getModifiedTime();
+            this.content = CleanedHTMLExtractor.cleanFile(file);
+            this.alteredContent = new ArrayList<String>(content);
+        }
+        label.setText(TEKPanel.formatObjectDetails(this));
     }
     public File getFile(){return file;}
     @Override

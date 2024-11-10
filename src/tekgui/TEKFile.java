@@ -1,7 +1,5 @@
 package tekgui;
 
- 
-
 // TEKGUI imports
 import tekgui.window.TEKFrame;
 import tekgui.window.TEKMenuBar;
@@ -25,12 +23,30 @@ import javax.swing.filechooser.FileFilter;
  * manages files
  *
  * @Mara Doze
- * @10/24/24
+ * @11/9/24
  */
 public class TEKFile
 {
     private static TEKFrame frame = null;
     private static final transient JFileChooser fileChooser = new JFileChooser();
+    private static final transient FileFilter filter;
+    static {
+        filter = new FileFilter(){
+            private boolean hasExtension(File file, String ext){
+                return file.getName().toLowerCase().endsWith(ext);
+            }
+            public boolean accept(File file) {
+                if (file.isDirectory() && !file.isHidden()){
+                    return true;
+                }
+                if(hasExtension(file, ".html")){
+                    return true;
+                }
+                return false;
+            }
+            public String getDescription(){return "HTML Files and Folders";}
+        };
+    }
     public TEKFile(){}
     public static TEKFrame getFrame(){
         return frame;
@@ -40,8 +56,7 @@ public class TEKFile
     }
     public static void openFile() {
         fileChooser.setCurrentDirectory( new File("*") ); // adjust to recent location
-        // filter to only allow html or directories**
-	// ....
+        fileChooser.setFileFilter(filter);
         fileChooser.setFileSelectionMode(fileChooser.FILES_AND_DIRECTORIES);
         int result = fileChooser.showOpenDialog(frame.getPanel());
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -51,12 +66,17 @@ public class TEKFile
         }
     }
     public static void openFile(File file){
-        //try {
-            // Open the object and create it onto the screen
+        try {
+             if(!file.exists() || !file.canRead() || file.isHidden()){
+                throw new IOException(file.getAbsolutePath()+"File doesn't exist or cannot be accessed.");
+            }
+            //long startTime = System.currentTimeMillis();
+            TEKManagement.createObject(file);
+            //System.out.println("TIME: "+(System.currentTimeMillis() - startTime) + " ms");
 
-        //} catch (IOException ex) {
-            //JOptionPane.showMessageDialog(frame, "Error reading file: " + ex);
-        //}
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(frame, "Error reading file: " + ex);
+        }
     }
     // Method to save a file
     public static void saveFile() {
