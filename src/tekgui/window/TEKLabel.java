@@ -30,7 +30,6 @@ public class TEKLabel extends JLabel{
         setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Adding a border
         setFocusable(true);
         setOpaque(true);
-        
     }
     /**
      * Default constructor, adds a mouseListener, aligns top left, and has a black border.

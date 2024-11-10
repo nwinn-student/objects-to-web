@@ -4,6 +4,7 @@ package tekgui.adapter;
 import tekgui.TEKFile;
 import tekgui.window.TEKPanel;
 import java.awt.Component;
+import javax.swing.JComponent;
 
 
 // Java imports
@@ -13,14 +14,12 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
-import java.awt.KeyboardFocusManager;
-import javax.swing.JComponent;
 
 /**
  * Write a description of class TEKPanelAdapter here.
  *
  * @author Zakariya Javed, Noah Winn
- * @version Oct. 13, 2024
+ * @version Nov. 9, 2024
  */
 public class TEKPanelAdapter implements MouseInputListener, MouseWheelListener, KeyListener{
     @Override
@@ -35,7 +34,7 @@ public class TEKPanelAdapter implements MouseInputListener, MouseWheelListener, 
     }
     @Override
     public void mousePressed(MouseEvent e){
-        
+        ((JComponent)e.getSource()).grabFocus();
     }
     @Override
     public void mouseReleased(MouseEvent e){
@@ -50,12 +49,7 @@ public class TEKPanelAdapter implements MouseInputListener, MouseWheelListener, 
         }
     }
     @Override
-    public void mouseMoved(MouseEvent e){
-        Component comp = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-        if(comp != null && comp.getParent() != null && comp.getParent().equals(e.getSource())){
-            KeyboardFocusManager.getCurrentKeyboardFocusManager().focusNextComponent();
-        }
-    }
+    public void mouseMoved(MouseEvent e){}
     @Override
     public void mouseDragged(MouseEvent e){}
     @Override

@@ -20,20 +20,22 @@ import java.awt.Color;
 import java.awt.event.MouseMotionListener;
 import java.awt.Point;
 
-
 /**
  * Houses TEKLabel's listeners, whatever they may be in time, utilizing mouse events primarily.
  *
  * @see java.awt.event.MouseEvent
  * @author Hayden Verstrat, Noah Winn, Coby Zhong
- * @version Nov. 1, 2024
+ * @version Nov. 9, 2024
  */
 public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListener, MouseMotionListener{
     TEKPanel pan = null;
     private static final transient Cursor handCursor = new Cursor(Cursor.HAND_CURSOR);
     private static final transient Cursor defaultCursor = new Cursor(Cursor.DEFAULT_CURSOR);
-    private boolean focusDebounce = false;    
-    private Point dragStart = null;  // Track where drag started
+    private boolean focusDebounce = false;
+    private Point dragStart = null; // Track where drag started
+    {
+        pan = TEKFile.getFrame().getPanel();
+    }
     /**
      * Selects and deselects the TEKLabel when left-clicked
      * Activates the PopupMenu when right-clicked
@@ -47,14 +49,17 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
             } else {
                 pan.addSelected(TEKPanel.getObjectFromLabel(label));
             }            
-        }        
+        }
+        ((JComponent)e.getSource()).grabFocus();
     }
     /**
-     * switches to drag cursor
+     * Upon hover, the cursor is adjusted to the drag cursor to signify that an action can be done.
      */
     public void mouseEntered(MouseEvent e){
         try{
-            ((JComponent)e.getComponent()).grabFocus(); 
+            //((JComponent)e.getComponent()).grabFocus(); 
+            e.getComponent().setCursor(handCursor);
+            e.getComponent().setBackground(TEKLabel.getHighlightColor()); 
         } catch(ClassCastException k){}
     }
     /**
@@ -62,7 +67,9 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
      */
     public void mouseExited(MouseEvent e){
         try{
-            ((JComponent)e.getComponent().getParent()).grabFocus();
+            e.getComponent().setCursor(defaultCursor);
+            e.getComponent().setBackground(TEKLabel.getDefaultColor()); 
+            //((JComponent)e.getComponent().getParent()).grabFocus();
         } catch(ClassCastException k){}
     }
     public void mousePressed(MouseEvent e){
@@ -86,11 +93,8 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
         if(pan == null){pan = TEKFile.getFrame().getPanel();}
         try{
             if(e.getKeyCode() == e.VK_ENTER && !focusDebounce){
-                TEKLabel label = (TEKLabel) e.getSource();
-                if(label.isSelected() && !TEKFile.getFrame().getPopupMenu().isVisible()){
+                if(!TEKFile.getFrame().getPopupMenu().isVisible()){
                     TEKFile.getFrame().getPopupMenu().activate(e);
-                } else {
-                    pan.addSelected(TEKPanel.getObjectFromLabel(label));
                 }
                 return;
             }
@@ -100,22 +104,28 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
     }
     public void keyTyped(KeyEvent e){}
     public void focusGained(FocusEvent e){
+        if(pan == null){pan = TEKFile.getFrame().getPanel();}
         try{
-            JComponent comp = (JComponent)e.getComponent();
+            TEKLabel comp = (TEKLabel)e.getComponent();
             if(e.getOppositeComponent() != null){
                 if(e.getOppositeComponent().getClass() == JRootPane.class){
                     focusDebounce = true;
                 }
             }
-            comp.setCursor(handCursor);
-            comp.setBackground(TEKLabel.getHighlightColor()); 
+            pan.addSelected(TEKPanel.getObjectFromLabel(comp));
         } catch(ClassCastException k){}
     }
     public void focusLost(FocusEvent e){
+        if(e.getOppositeComponent() == null){
+            return;
+        }
+        if(e.getOppositeComponent().getClass() == JRootPane.class){
+            return;
+        }
+        if(pan == null){pan = TEKFile.getFrame().getPanel();}
         try{
-            JComponent comp = (JComponent)e.getComponent();
-            comp.setCursor(defaultCursor);
-            comp.setBackground(TEKLabel.getDefaultColor());            
+            TEKLabel comp = (TEKLabel)e.getComponent();
+            pan.removeSelected(TEKPanel.getObjectFromLabel(comp));
         } catch(ClassCastException k){}
     }
     @Override

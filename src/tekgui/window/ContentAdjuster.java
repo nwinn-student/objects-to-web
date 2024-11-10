@@ -1,3 +1,6 @@
+package tekgui.window;
+import tekgui.ObjectUI;
+
 import java.awt.Point;
 import java.awt.Dimension;
 import java.util.Arrays;

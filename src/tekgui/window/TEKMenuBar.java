@@ -4,7 +4,7 @@ import tekgui.helper.MenuBuilder;
 import tekgui.adapter.TEKActionAdapter;
 import tekgui.TEKFile;
 
-// Javha imports
+// Java imports
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
@@ -28,7 +28,7 @@ import java.io.File;
  * @see javax.swing.JPopupMenu
  * @see javax.swing.JMenuItem
  * @author Zakariya Javed, Noah Winn
- * @version 10/28/2024
+ * @version 11/9/2024
  */
 public class TEKMenuBar extends JMenuBar{
     private static TEKActionAdapter action = new TEKActionAdapter();
@@ -48,37 +48,36 @@ public class TEKMenuBar extends JMenuBar{
         // Name     Parent       Key to Press     Description     ActionListener
         
         // File                 
-        MenuBuilder.addMenuItem("Open", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK), "Use Ctrl-O to open a file.", action);
+        MenuBuilder.addMenuItem("Open", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK, true), "Use Ctrl-O to open a file.", action);
         recentFilesMenu = MenuBuilder.addMenu("Recent Files", fileMenu);
-        MenuBuilder.addMenuItem("Save", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK), "Use Ctrl-S to save.", action);
-        MenuBuilder.addMenuItem("Exit", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK), "Use Ctrl-Q to quit.", action);
+        MenuBuilder.addMenuItem("Save", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK, true), "Use Ctrl-S to save.", action);
+        MenuBuilder.addMenuItem("Exit", fileMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK, true), "Use Ctrl-Q to quit.", action);
         
         // Edit
-        MenuBuilder.addMenuItem("Undo", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK), "Use Ctrl-Z to undo an action.", action);
-        MenuBuilder.addMenuItem("Redo", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK), "Use Ctrl-Y to redo an action.", action);
+        MenuBuilder.addMenuItem("Undo", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK, true), "Use Ctrl-Z to undo an action.", action);
+        MenuBuilder.addMenuItem("Redo", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK, true), "Use Ctrl-Y to redo an action.", action);
         MenuBuilder.addMenuItem("Clear Undo", editMenu, null, "Clears the undoable actions, great for space management.", action);
         MenuBuilder.addSeparator(editMenu);
-        MenuBuilder.addMenuItem("Copy", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK), "Use Ctrl-C to copy the selected items.", action);
-        MenuBuilder.addMenuItem("Cut", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK), "Use Ctrl-X to cut the selected items.", action);
-        MenuBuilder.addMenuItem("Paste", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK), "Use Ctrl-V to paste the previously selected elements.", action);
-        MenuBuilder.addMenuItem("Duplicate", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_D, Event.CTRL_MASK), "Use Ctrl-D to duplicate the selected items.", action);
+        MenuBuilder.addMenuItem("Copy", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK, true), "Use Ctrl-C to copy the selected items.", action);
+        MenuBuilder.addMenuItem("Cut", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK, true), "Use Ctrl-X to cut the selected items.", action);
+        MenuBuilder.addMenuItem("Paste", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK, true), "Use Ctrl-V to paste the previously selected elements.", action);
+        MenuBuilder.addMenuItem("Duplicate", editMenu, KeyStroke.getKeyStroke(KeyEvent.VK_D, Event.CTRL_MASK, true), "Use Ctrl-D to duplicate the selected items.", action);
         
         // Selection        // Adjust create to ask a name for the file <since we are making a file>
-        MenuBuilder.addMenuItem("Create", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0), "Use Insert to create a new ObjectUI.", action);
-        MenuBuilder.addMenuItem("Find", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK), "Use Ctrl-F to find an item.", action);
-        MenuBuilder.addMenuItem("Select All", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK), "Use Ctrl-A to select all ObjectUIs.", action);
-        MenuBuilder.addMenuItem("Delete", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "Use Delete to remove all selected ObjectUIs.", action);
+        MenuBuilder.addMenuItem("Create", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0, false), "Use Insert to create a new ObjectUI.", action);
+        MenuBuilder.addMenuItem("Find", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK, true), "Use Ctrl-F to find an item.", action);
+        MenuBuilder.addMenuItem("Select All", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK, true), "Use Ctrl-A to select all ObjectUIs.", action);
+        MenuBuilder.addMenuItem("Delete", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0, true), "Use Delete to remove all selected ObjectUIs.", action);
         MenuBuilder.addMenuItem("Delete All", selectionMenu, null, "Removes all of the current ObjectUIs.", action);
         
         // View   NOTE: ctrl + scrollup and ctrl + scrolldown work MUCH better than ctrl-+ and ctrl--. Don't know how to visualize those will fix later.
-        MenuBuilder.addMenuItem("Settings", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Event.CTRL_MASK), "Use Ctrl-comma to open up the Settings menu.", action);
+        MenuBuilder.addMenuItem("Settings", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Event.CTRL_MASK, true), "Use Ctrl-comma to open up the Settings menu.", action);
         MenuBuilder.addSeparator(viewMenu);
-        MenuBuilder.addMenuItem("Zoom In", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Event.CTRL_MASK), "Use Ctrl-+ to zoom in.", action);
-        MenuBuilder.addMenuItem("Zoom Out", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Event.CTRL_MASK), "Use Ctrl-- to zoom out.", action);
-        MenuBuilder.addMenuItem("Reset Zoom", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_0, Event.CTRL_MASK), "Use Ctrl-0 to reset zoom.", action);
-
+        MenuBuilder.addMenuItem("Zoom In", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, Event.CTRL_MASK, true), "Use Ctrl-+ to zoom in.", action);
+        MenuBuilder.addMenuItem("Zoom Out", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Event.CTRL_MASK, true), "Use Ctrl-- to zoom out.", action);
+        MenuBuilder.addMenuItem("Reset Zoom", viewMenu, KeyStroke.getKeyStroke(KeyEvent.VK_0, Event.CTRL_MASK, true), "Use Ctrl-0 to reset zoom.", action);
         // Help information about application
-        MenuBuilder.addMenuItem("About", helpMenu, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "Learn more about TEK-GUI", action);
+        MenuBuilder.addMenuItem("About", helpMenu, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0, true), "Learn more about TEK-GUI", action);
         
         updateRecentFilesMenu();
         // cont. adding more

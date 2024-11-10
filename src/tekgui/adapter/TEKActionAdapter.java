@@ -55,7 +55,7 @@ public class TEKActionAdapter implements ActionListener{
                 TEKFile.saveFile();
                 return;
             // note that holding down this key [Insert] WILL break the app, find a fix later
-            case "Create": 
+            case "Create":
                 TEKManagement.createObject();
                 return;
             case find:
