@@ -23,7 +23,7 @@ import java.util.List;
  * Write a description of class TEKFinder here.
  *
  * @author Noah Winn
- * @version Oct. 29, 2024
+ * @version Nov. 9, 2024
  */
 public class TEKFinder extends JPanel{
     private final TEKFinder finder = this;
@@ -33,9 +33,11 @@ public class TEKFinder extends JPanel{
     private static final transient String expand = "Expand";
     private final transient JButton expandButton;
     private final transient JTextField findText;
+    private String currentText = "";
     private final transient JTextField replaceText;
     private ObjectUI current;
     private ObjectUI[] highlightList = new ObjectUI[32];
+    private transient int size = 0;
     private transient int index = 0;
     /**
      * Constructor for objects of class TEKFinder
@@ -82,55 +84,80 @@ public class TEKFinder extends JPanel{
         add(replace);
         add(replaceText);        
     }
+    /**
+     * Good enough, still a little wonky
+     */
     private void highlightPrev(){
         if(current == null){
-            
+            return; // only happens when clicked when no input
+        }
+        current.getLabel().setBackground(TEKLabel.getDefaultColor());
+        if(index == 0){
+            current = highlightList[size-1];
+            index = size-1;
+            current.getLabel().setBackground(TEKLabel.getHighlightColor());
+        } else {
+            current = highlightList[--index];
+            current.getLabel().setBackground(TEKLabel.getHighlightColor());
         }
     }
     private void highlightNext(){
-        if(current == null && highlightList[index++] != null){
-            current = highlightList[index];
-            current.getLabel().setBackground(TEKLabel.getHighlightColor());
+        if(current == null){
+            if(highlightList[index] != null){
+                current = highlightList[index++];
+                current.getLabel().setBackground(TEKLabel.getHighlightColor());
+            }
             return;
         }
         current.getLabel().setBackground(TEKLabel.getDefaultColor());
-        current = highlightList[index];
-        current.getLabel().setBackground(TEKLabel.getHighlightColor());
-        
+        if(highlightList[++index] != null){
+            current = highlightList[index];
+            current.getLabel().setBackground(TEKLabel.getHighlightColor());
+        } else {
+            index = 0;
+            current = highlightList[index];
+            current.getLabel().setBackground(TEKLabel.getHighlightColor());
+        }
     }
-    /**
-     * work on, next/prev doesn't work rn, also gotta have it conn to content
-     */
     private void triggerHighlight(boolean enable){
         if(enable){
+            if (findText.getText().equals("")){
+                return;
+            } else if(currentText.equals(findText.getText().toLowerCase())){
+                highlightNext();
+                return;
+            }
+            currentText = findText.getText().toLowerCase();
             List<ObjectUI> list = TEKFile.getFrame().getPanel().getObjects();
             int index = 0;
+            this.index = 0;
             try{
+                for(int i = 0; i < highlightList.length; i++){
+                    highlightList[i] = null;
+                }
                 for(ObjectUI obj : list){
-                    if(obj.getName().contains(findText.getText())){
-                        // highlight
-                        System.out.println(obj);
+                    if(obj.getName().toLowerCase().contains(currentText)){
                         highlightList[index++] = obj;
                     }
                 }
-                
                 if(highlightList[0] != null){
-                    System.out.println(highlightList.length);
-                    //highlightNext();
+                    highlightNext();
                 }
             }
             catch(Exception e){System.out.println(e);}
-            this.index = 0;
+            this.size = index;
             return;
         }
         // List of highlighted?
-        int len = highlightList.length;
-        for(int i = 0; i < len; i++){
+        int size = this.size;
+        for(int i = 0; i < size; i++){
             if(highlightList[i] == null)
                 break;
             highlightList[i].getLabel().setBackground(TEKLabel.getDefaultColor());
+            highlightList[i] = null;
         }
-        index = 0;
+        this.size = 0;
+        this.index = 0;
     }
     public void trigger(){
         setVisible(isVisible() ? false : true);
@@ -159,10 +186,10 @@ public class TEKFinder extends JPanel{
                     triggerHighlight(true);
                     break;
                 case "Prev":
-                    //highlightPrev();
+                    highlightPrev();
                     break;
                 case "Next":
-                    //highlightNext();
+                    highlightNext();
                     break;
                 case expand:
                     finder.triggerSizeModification();
