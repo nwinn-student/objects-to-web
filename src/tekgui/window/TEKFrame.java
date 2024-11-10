@@ -4,7 +4,7 @@ package tekgui.window;
 import tekgui.TEKFile;
 import tekgui.ObjectUI;
 import tekgui.adapter.TEKFrameAdapter;
-import java.util.Collection;
+import tekgui.adapter.UndoManager;
 
 // Java imports
 import javax.swing.JFrame;
@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.awt.Point;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
-
+import java.util.Collection;
 /**
  * The Frame that will contain all of the visuals and handle them appropriately.
  *
  * @author Noah Winn
- * @version Oct. 11, 2024
+ * @version Nov. 9, 2024
  */
 public class TEKFrame extends JFrame{
     // To be later used with save, creation, deletion, and modification of Objects
@@ -28,6 +28,7 @@ public class TEKFrame extends JFrame{
     private Dimension screenSize = null;
     private TEKPanel panel; // Reference to the main panel
     private TEKPopupMenu popupMenu;
+    private UndoManager manager = new UndoManager();
     private TEKFinder finder;
     /**
      * Constructor for objects of class TEKFrame
@@ -74,6 +75,7 @@ public class TEKFrame extends JFrame{
     }
     public TEKPanel getPanel(){return panel;}
     public TEKPopupMenu getPopupMenu(){return popupMenu;}
+    public UndoManager getUndoManager(){return manager;}
     public TEKFinder getFinder(){return finder;}
     /**
      * 

@@ -7,7 +7,7 @@ import java.util.Deque;
  * Adds the capability to undo specified actions.
  *
  * @author Hayden Verstrat, Noah Winn
- * @version Oct. 28, 2024
+ * @version Nov. 9, 2024
  */
 public class UndoManager{
     // Undo is at the top, Redo is at the bottom**
@@ -64,6 +64,7 @@ public class UndoManager{
         redoAbleList.clear();
     }
     private static void performAction(UndoableAction action, Action type){
+        //System.out.println(action.getVariant());
         switch(action.getVariant()){
             case CREATE:
                 break;

@@ -1,4 +1,6 @@
 package tekgui;
+import tekgui.adapter.UndoManager;
+import tekgui.adapter.UndoableAction;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileFilter;
@@ -6,6 +8,7 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Collection;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 
 // Java imports
 /**
@@ -14,7 +17,7 @@ import java.io.FilenameFilter;
  * Supports object relationship.
  *
  * @author Mara Doze, Noah Winn, Coby Zhong
- * @version 11/1/2024
+ * @version 11/9/2024
  */
 public class TEKManagement{
     private static final String ext = ".html";
@@ -22,14 +25,16 @@ public class TEKManagement{
      * TEKManagement Constructor
      *
      */
-    public TEKManagement(){}
+    private TEKManagement(){}
     /**
      * Creates an objectUI and places it on the screen.
      *
      * @return the objectUI
      */
     public static ObjectUI createObject(){
-        return TEKFile.getFrame().getPanel().generateObject();
+        ObjectUI object = TEKFile.getFrame().getPanel().generateObject();
+        TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(object, UndoableAction.Variant.CREATE));
+        return object;
     }
     /**
      * Creates a file with a specified file.
@@ -37,32 +42,44 @@ public class TEKManagement{
      * @param file the file
      * @return the objectUI
      */
-    public static ObjectUI createObject(File file) throws IOException{
+    public static List<ObjectUI> createObject(File file) throws IOException{
+        if(file == null){return null;}
+        List<File> htmlFile = getHTMLFiles(file);
+        List<ObjectUI> object = new ArrayList<>(htmlFile.size());
+        for(File f : htmlFile){
+            ObjectUI obj = TEKFile.getFrame().getPanel().generateObject();
+            obj.initFile(f);
+            object.add(obj);
+        }
+        TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(object, UndoableAction.Variant.CREATE));
+        return object;
+    }
+    /**
+     * Gets a list of Files from an Object that MUST be HTML files
+     */
+    private static List<File> getHTMLFiles(File file) throws IOException{
+        List<File> htmlFile = new ArrayList<>(16); // Assume 16
+        trueReceiverHTML(file, htmlFile);
+        return htmlFile;
+    }
+    private static void trueReceiverHTML(File file, List<File> htmlFile) throws IOException {
         if(file == null){throw new IOException("File is null.");}
         if(file.isDirectory()){
             File[] files = file.listFiles();
             for(File f : files){
                 if(!f.isHidden()){
-                    
-                    createObject(f);
+                    trueReceiverHTML(f, htmlFile);
                 }
-                
             }
-            return null;
+            return;
         }
         else if(file.isHidden() || !file.canRead() || !file.canWrite()){
-            return null;
+            return;
         }
         else if(!file.getName().toLowerCase().endsWith(ext)){
-            return null;
+            return;
         }
-        long startTime = System.currentTimeMillis();
-        ObjectUI obj = TEKFile.getFrame().getPanel().generateObject();
-        
-        obj.initFile(file);
-        System.out.println("OBJ TIME: "+(System.currentTimeMillis() - startTime) + " ms");
-
-        return obj;
+        htmlFile.add(file);
     }
     /**
      * Duplicates an object.
@@ -71,14 +88,17 @@ public class TEKManagement{
      * @return objectUI
      */
     public static ObjectUI createObject(ObjectUI obj){
+        if(obj == null){return null;}
         ObjectUI newObj = TEKFile.getFrame().getPanel().generateObject();
         try{
             // We may not want to necessarily want to allow some elements to be duplicated
-            // Mainly, those with
+            // Mainly, those with content?
             newObj.initFile(obj.getFile());
-        } catch (IOException ioe){
+        } catch (Exception ioe){
             ioe.printStackTrace();
         }
+        
+        TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(newObj, UndoableAction.Variant.CREATE));
         return newObj;
     }
     /**
@@ -88,13 +108,24 @@ public class TEKManagement{
      * @return array of objectUIs
      */
     public static ObjectUI[] createObject(List<ObjectUI> obj){
+        if(obj == null){return null;}
         ObjectUI[] newObj = new ObjectUI[obj.size()];
         int i = 0;
         int size = obj.size();
         while(i < size){
+            ObjectUI object = TEKFile.getFrame().getPanel().generateObject();
+            try
+            {
+                object.initFile(obj.get(i).getFile());
+            }
+            catch (IOException ioe)
+            {
+                ioe.printStackTrace();
+            }
             newObj[i] = createObject(obj.get(i));
             i++;
         }
+        TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(newObj, UndoableAction.Variant.CREATE));
         return newObj;
     }
     /**
@@ -102,6 +133,7 @@ public class TEKManagement{
      *
      */
     public static void removeObject(){
+        TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(TEKFile.getFrame().getPanel().getSelected(), UndoableAction.Variant.DELETE));
         TEKFile.getFrame().getPanel().sweepSelected();
     }
     /**
@@ -109,6 +141,7 @@ public class TEKManagement{
      *
      */
     public static void removeAllObject(){
+        TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(TEKFile.getFrame().getPanel().getObjects(), UndoableAction.Variant.DELETE));
         TEKFile.getFrame().getPanel().clearObjects();
     }
     /**
