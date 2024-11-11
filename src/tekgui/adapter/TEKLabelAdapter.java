@@ -92,6 +92,8 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
     public void keyReleased(KeyEvent e){
         if(pan == null){pan = TEKFile.getFrame().getPanel();}
         try{
+            TEKLabel comp = (TEKLabel) e.getComponent();
+            pan.addSelected(TEKPanel.getObjectFromLabel(comp));
             if(e.getKeyCode() == e.VK_ENTER && !focusDebounce){
                 if(!TEKFile.getFrame().getPopupMenu().isVisible()){
                     TEKFile.getFrame().getPopupMenu().activate(e);
@@ -112,7 +114,8 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
                     focusDebounce = true;
                 }
             }
-            pan.addSelected(TEKPanel.getObjectFromLabel(comp));
+            //pan.addSelected(TEKPanel.getObjectFromLabel(comp));
+            e.getComponent().setBackground(TEKLabel.getHighlightColor());
         } catch(ClassCastException k){}
     }
     public void focusLost(FocusEvent e){
@@ -124,8 +127,9 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
         }
         if(pan == null){pan = TEKFile.getFrame().getPanel();}
         try{
-            TEKLabel comp = (TEKLabel)e.getComponent();
-            pan.removeSelected(TEKPanel.getObjectFromLabel(comp));
+            //TEKLabel comp = (TEKLabel)e.getComponent();
+            //pan.removeSelected(TEKPanel.getObjectFromLabel(comp));
+            e.getComponent().setBackground(TEKLabel.getDefaultColor());
         } catch(ClassCastException k){}
     }
     @Override

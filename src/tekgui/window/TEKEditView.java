@@ -3,28 +3,29 @@ package tekgui.window;
 // TEKGUI imports
 import tekgui.ObjectUI;
 
-
 // Java imports
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.*; // removed java.awt.* since it has List class
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 /**
- * Write a description of class TEKLabel here.
+ * Write a description of class TEKEditView here.
  * 
  * @author Mara Doze
- * @version 10/2/2024
+ * @version 11/11/2024
  */
 public class TEKEditView extends JFrame {
     
-    private ObjectUI obj;
+    private List<ObjectUI> obj;
     private ArrayList<JLabel> labels;
     private JPanel labelPanel;
     private JScrollPane scrollPane;
 
-    public TEKEditView(ObjectUI obj) {
+    public TEKEditView(List<ObjectUI> obj) {
         super("Edit Object Details");
         this.obj = obj;
         this.labels = new ArrayList<>();
@@ -71,7 +72,7 @@ public class TEKEditView extends JFrame {
 
     private void populateLabels() {
         //the TEKPanel method is used to format and display ObjectUI details
-        String details = TEKPanel.formatObjectDetails(obj);
+        String details = TEKPanel.formatObjectDetails(obj.get(0));
         labels.add(new JLabel(details));
         for (JLabel label : labels) {
             labelPanel.add(label);

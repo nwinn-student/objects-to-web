@@ -42,6 +42,10 @@ public class TEKPanel extends JPanel{
     private double zoomFactor = 1;
     public static Point lastMousePosition = new Point(0, 0);
     public static final double ZOOM_FACTOR = 1.1;
+    // saves time when adding new objects
+    private int row = 0;
+    private int column = 0;
+    
     private Rectangle selectionRect = new Rectangle(); // Rectangle for the selection box
     private Point startPoint = null; // Starting point for the selection box
     private static final transient Color semiBlue = new Color(0, 0, 255, 50);
@@ -95,6 +99,9 @@ public class TEKPanel extends JPanel{
     
             @Override
             public void mouseReleased(MouseEvent e) {
+                if(e.getButton() == MouseEvent.BUTTON3){
+                    return; // just in case
+                }
                 // Finalize the selection rectangle
                 if(startPoint == null){ return; }
                 selectionRect.setBounds(
@@ -238,6 +245,7 @@ public class TEKPanel extends JPanel{
         Point initialPosition = new Point(0, 0);
         Dimension size = new Dimension(100, 100);
         ObjectUI newObject = new ObjectUI("New Object", initialPosition, size);
+        // adjust the size to fix the text??
         newObject.setPosition(shiftPosition(initialPosition, size));
         addObject(newObject); 
         return newObject;

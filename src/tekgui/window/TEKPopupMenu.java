@@ -2,25 +2,29 @@ package tekgui.window;
 
 // TEKGUI imports
 import tekgui.TEKFile;
+import tekgui.ObjectUI;
 import tekgui.helper.MenuBuilder;
 import tekgui.adapter.TEKActionAdapter;
 import tekgui.adapter.UndoManager;
 import tekgui.adapter.ShortcutSystem;
-import java.awt.event.KeyEvent;
+
 
 // Java imports
 import javax.swing.JPopupMenu;
 import javax.swing.JComponent;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
+import java.awt.event.KeyEvent;
+import java.util.List;
 /**
- * Prepared the popupmenu for common features to be added later.
+ * A popupMenu that allows for editing to occur, alongside more ways of 
+ * interacting with the application.  Sends a list of objectUIs.
  *
  * @author Noah Winn
- * @version Oct. 13, 2024
+ * @version Nov. 11, 2024
  */
 public class TEKPopupMenu extends JPopupMenu{
-    private static JComponent attachedComponent;
+    private static List<ObjectUI> attachedComponent;
     private static TEKActionAdapter action = new TEKActionAdapter();
     
     /**
@@ -41,11 +45,12 @@ public class TEKPopupMenu extends JPopupMenu{
         MenuBuilder.addMenuItem("Reset Zoom", this, null, "Used to reset the zoom on the screen.", action);
         setVisible(false);
     }
-    private void active(JComponent e){
+    private void active(List<ObjectUI> e){
         setAttached(e);
-        getComponent(0).setEnabled((attachedComponent instanceof TEKLabel) ? true : false); // Edit
-        getComponent(2).setEnabled(TEKFile.getFrame().getPanel().getSelected().size() > 0); // Cut, check if possible (1+ selected or current)
-        getComponent(3).setEnabled(TEKFile.getFrame().getPanel().getSelected().size() > 0); // Copy, check if possible (1+ selected or current)
+        boolean isEmpty = e.size() > 0;
+        getComponent(0).setEnabled(isEmpty); // Edit
+        getComponent(2).setEnabled(isEmpty); // Cut, check if possible (1+ selected or current)
+        getComponent(3).setEnabled(isEmpty); // Copy, check if possible (1+ selected or current)
         getComponent(4).setEnabled(ShortcutSystem.canPaste()); // Paste, check if possible
         getComponent(6).setEnabled(UndoManager.canUndo()); // Undo, check if possible (1+ action)
         getComponent(7).setEnabled(UndoManager.canRedo()); // Redo, check if possible (1+ action)
@@ -57,23 +62,21 @@ public class TEKPopupMenu extends JPopupMenu{
      * @param e A parameter
      */
     public void activate(MouseEvent e){
-        JComponent comp = (JComponent) e.getComponent();
-        active(comp);
-        show(comp, e.getX(), e.getY());
+        active(TEKFile.getFrame().getPanel().getSelected());
+        show(e.getComponent(), e.getX(), e.getY());
         setVisible(true);
     }
     public void activate(KeyEvent e){
-        JComponent comp = (JComponent) e.getComponent();
-        active(comp);
-        show(comp, 10, 10);
+        active(TEKFile.getFrame().getPanel().getSelected());
+        show(e.getComponent(), 10, 10);
         setVisible(true);
     }
     public void deactivate(){
         setAttached(null);
         setVisible(false);
     }
-    public JComponent getAttached(){return attachedComponent;}
-    public void setAttached(JComponent attachedComponent){
+    public List<ObjectUI> getAttached(){return attachedComponent;}
+    public void setAttached(List<ObjectUI> attachedComponent){
         this.attachedComponent = attachedComponent;
     }
     /**
@@ -83,11 +86,10 @@ public class TEKPopupMenu extends JPopupMenu{
      */
     public void transferAttached(){
         if(attachedComponent == null){return;}
-        if(!(attachedComponent instanceof TEKLabel)){return;}
         SwingUtilities.invokeLater(new Runnable(){
             @Override
             public void run(){
-                new TEKEditView(TEKPanel.getObjectFromLabel((TEKLabel)attachedComponent));
+                new TEKEditView(attachedComponent);
                 deactivate();
             }
         });
