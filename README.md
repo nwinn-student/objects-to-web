@@ -26,9 +26,9 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [X] Presentation
 - [X] Submit Plan of Sprint 2
 - [X] Submit Software Architecture
-- [ ] Submit Sprint 2 Report and Deliverables
-- [ ] Presentation
-- [ ] Submit Plan of Sprint 3
+- [X] Submit Sprint 2 Report and Deliverables
+- [X] Presentation
+- [X] Submit Plan of Sprint 3
 - [ ] Submit Sprint 3 Report and Deliverables
 - [ ] Final Presentation
 
@@ -101,16 +101,16 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 | Title | Code State |
 | :--- | :--- |
 | `Frame UI Creation and Functionality` | Accepted |
-| `Object UI Base Structure` | Integrated |
-| `Open and Save Feature` | Integrated |
-| `Parse HTML from File Contents` | Reviewed |
-| `Singular Object Selection` | Reviewed |
-| `UI Menu and Tools Feature` | Integrated |
-| `Object Creation and Deletion` | Reviewed |
-| `Read Contents of Objects from Inputs` | Not Started |
+| `Object UI Base Structure` | Accepted |
+| `Open and Save Feature` | Accepted |
+| `Parse HTML from File Contents` | Accepted |
+| `Singular Object Selection` | Accepted |
+| `UI Menu and Tools Feature` | Accepted |
+| `Object Creation and Deletion` | Accepted |
+| `Read Contents of Objects from Inputs` | Accepted |
 | `Edit View to See the Contents of Object` | Integrated |
-| `Common Application Menu and trools Features` | Started |
-| `Object Control Shortcut System` | Started |
+| `Common Application Menu and Tools Features` | Accepted |
+| `Object Control Shortcut System` | Integrated |
 </details>
 
 <details>
