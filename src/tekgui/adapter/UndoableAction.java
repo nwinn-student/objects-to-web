@@ -21,8 +21,12 @@ public class UndoableAction{
         this.state = state;
         this.var = var;
     }
-    public Variant getVariant(){return var;}
-    public Object getObject(){return state;}
+    public Variant getVariant(){
+        return var;
+    }
+    public Object getObject(){
+        return state;
+    }
     public String toString(){
         return var+"["+state.toString()+"]";
     }

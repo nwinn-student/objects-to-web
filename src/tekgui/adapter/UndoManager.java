@@ -1,6 +1,11 @@
 package tekgui.adapter;
 import java.util.Stack;
+
+import tekgui.ObjectUI;
+import tekgui.TEKFile;
+
 import java.util.Deque;
+import java.util.List;
 
 
 /**
@@ -67,6 +72,39 @@ public class UndoManager{
         //System.out.println(action.getVariant());
         switch(action.getVariant()){
             case CREATE:
+                Object state = action.getObject();
+            // Check the type of state and handle accordingly
+            if (type == Action.UNDO) {
+                // Undo CREATE (remove the object)
+                if (state instanceof ObjectUI) {
+                    TEKFile.getFrame().getPanel().removeObject((ObjectUI) state);
+                } else if (state instanceof List) {
+                    List<ObjectUI> objects = (List<ObjectUI>) state;
+                    for (ObjectUI obj : objects) {
+                        TEKFile.getFrame().getPanel().removeObject(obj);
+                    }
+                } else if (state instanceof ObjectUI[]) {
+                    ObjectUI[] objectsArray = (ObjectUI[]) state;
+                    for (ObjectUI obj : objectsArray) {
+                        TEKFile.getFrame().getPanel().removeObject(obj);
+                    }
+                }
+            } else if (type == Action.REDO) {
+                // Redo CREATE (re-add the object)
+                if (state instanceof ObjectUI) {
+                    TEKFile.getFrame().getPanel().addObject((ObjectUI) state);
+                } else if (state instanceof List) {
+                    List<ObjectUI> objects = (List<ObjectUI>) state;
+                    for (ObjectUI obj : objects) {
+                        TEKFile.getFrame().getPanel().addObject(obj);
+                    }
+                } else if (state instanceof ObjectUI[]) {
+                    ObjectUI[] objectsArray = (ObjectUI[]) state;
+                    for (ObjectUI obj : objectsArray) {
+                        TEKFile.getFrame().getPanel().addObject(obj);
+                    }
+                }
+            }
                 break;
             case DELETE:
                 break;
