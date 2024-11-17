@@ -27,12 +27,12 @@ import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javax.swing.plaf.LayerUI;
-
+import javax.swing.SwingUtilities;
 /**
  * The panel that will house the Objects.
  *
  * @author Mara Doze, Zakariya Javed, Hayden Verstrat, Noah Winn, Coby Zhong
- * @version Nov. 1, 2024
+ * @version Nov. 17, 2024
  */
 public class TEKPanel extends JPanel{
     private TEKFrame frame = null;
@@ -257,7 +257,7 @@ public class TEKPanel extends JPanel{
     public void addObject(ObjectUI obj){
         if(obj == null){return;}
         labels.put(obj, obj.getLabel());
-        add(obj.getLabel());
+        add(obj.getLabel()); // very slow, too much causes app to freeze up
         repaint();
         // maybe alterData() here, need to confirm
     }
@@ -389,11 +389,11 @@ public class TEKPanel extends JPanel{
      * @return the object's details
      */
     public static String formatObjectDetails(ObjectUI obj) {
-        StringBuilder sb = new StringBuilder("<html>");
+        StringBuilder sb = new StringBuilder(128); // More efficient
+        sb.append("<html>");
         sb.append("Name: ").append(obj.getName()).append("<br>"); // break after name
         sb.append("Created: ").append(obj.getCreationTime()).append("<br>"); //break after time
-        sb.append("Position: (").append(obj.getPosition().x).append(", ").append(obj.getPosition().y).append(")<br>"); //break after position
-        sb.append("Size: (").append(obj.getSize().width).append(" x ").append(obj.getSize().height).append(")"); //break after size
+        // removes size and position since it was overwhelming when many
         sb.append("</html>");
         return sb.toString(); //object converted to string
     }

@@ -1,6 +1,7 @@
 package tekgui;
 import tekgui.adapter.UndoManager;
 import tekgui.adapter.UndoableAction;
+import tekgui.window.TEKPanel;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileFilter;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * Supports object relationship.
  *
  * @author Mara Doze, Noah Winn, Coby Zhong
- * @version 11/9/2024
+ * @version 11/17/2024
  */
 public class TEKManagement{
     private static final String ext = ".html";
@@ -34,6 +35,7 @@ public class TEKManagement{
     public static ObjectUI createObject(){
         ObjectUI object = TEKFile.getFrame().getPanel().generateObject();
         TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(object, UndoableAction.Variant.CREATE));
+        TEKFile.getFrame().getPanel().repaint();
         return object;
     }
     /**
@@ -44,13 +46,26 @@ public class TEKManagement{
      */
     public static List<ObjectUI> createObject(File file) throws IOException{
         if(file == null){return null;}
-        List<File> htmlFile = getHTMLFiles(file);
+        
+        /*
+         * Could improve by using Files.walkFileTree(file.getPath(), ...)
+         *      changes to avg of 25 ms
+         * Not an issue performance-wise, something else is killing it
+         */ 
+        List<File> htmlFile = getHTMLFiles(file); // Avg of 50 ms going through Files: 805, dirs: 272 
+
         List<ObjectUI> object = new ArrayList<>(htmlFile.size());
+        
+        // Sluggish, but slightly better now
+        TEKPanel pan = TEKFile.getFrame().getPanel();
+        //long startTime = System.currentTimeMillis();
         for(File f : htmlFile){
-            ObjectUI obj = TEKFile.getFrame().getPanel().generateObject();
+            ObjectUI obj = pan.generateObject();
             obj.initFile(f);
             object.add(obj);
         }
+        pan.repaint();
+        //System.out.println("TIME: "+(System.currentTimeMillis() - startTime) + " ms");
         TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(object, UndoableAction.Variant.CREATE));
         return object;
     }
@@ -97,7 +112,7 @@ public class TEKManagement{
         } catch (Exception ioe){
             ioe.printStackTrace();
         }
-        
+        TEKFile.getFrame().getPanel().repaint();
         TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(newObj, UndoableAction.Variant.CREATE));
         return newObj;
     }
@@ -125,6 +140,7 @@ public class TEKManagement{
             newObj[i] = createObject(obj.get(i));
             i++;
         }
+        TEKFile.getFrame().getPanel().repaint();
         TEKFile.getFrame().getUndoManager().addAction(new UndoableAction(newObj, UndoableAction.Variant.CREATE));
         return newObj;
     }
@@ -160,6 +176,7 @@ public class TEKManagement{
     }
     /**
      * Connects ObjectUI instances with similar content.
+     * Called infrequently due to the cost.
      */
     public static void connectSimilarContentObjects() {
         Collection<ObjectUI> allObjects = getAllObjects();
@@ -169,6 +186,13 @@ public class TEKManagement{
                     obj1.addIfSimilarContent(obj2);
                 }
             }
+        }
+    }
+    public static void displayConnectedObjects(){
+        TEKPanel pan = TEKFile.getFrame().getPanel();
+        List<ObjectUI> selected = TEKFile.getFrame().getPanel().getSelected();
+        for(ObjectUI obj : selected){
+            pan.displaySimilarContent(obj);
         }
     }
     /**

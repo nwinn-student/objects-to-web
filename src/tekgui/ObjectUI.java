@@ -21,8 +21,8 @@ import java.io.IOException;
 /**
  * manage object properties
  *
- * @Mara Doze
- * @11/9/24
+ * @Mara Doze, Noah Winn
+ * @11/17/24
  */
 public class ObjectUI
 {
@@ -122,7 +122,20 @@ public class ObjectUI
     }
     // compare content of this ObjectUI with another
     private boolean isSimilarContent(ObjectUI other) {
-        return this.getContent().equals(other.getContent());
+        if(this.getContent() == null)
+            return false;
+        if(other == null)
+            return false;
+        if(other.getContent() == null)
+            return false;
+        // Very heavy**
+        for(String val : this.getContent()){
+            for(String lav : other.getContent()){
+                if(val.equals(lav))
+                    return true;
+            }
+        }
+        return false;
     }
     // Retrieve similar content objects
     public Collection<ObjectUI> getSimilarContent() {

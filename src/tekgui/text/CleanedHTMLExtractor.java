@@ -12,17 +12,19 @@ import java.io.FileReader;
  * after the comments have been removed from the HTML using HTMLCommentCleaner.
  *  Altered to suit the needs of files.
  * @author Coby Zhong, Noah Winn
- * @version Oct, 23, 2024
+ * @version Nov. 17, 2024
  */
 public class CleanedHTMLExtractor {
     private List<String> cleanedHTMLBody = new ArrayList<>();
     private boolean isInsideBody = false;
-    private static final String bodyStart = "<body>";
-    private static final String bodyEnd = "</body>";
-    private static void addCleanedLine(String line, List<String> body, boolean inner){
+    private static final String bodyStart = "<body";
+    private static final String bodyEnd = "</body";
+    private static boolean addCleanedLine(String line, List<String> body, boolean inner){
         if (line.contains(bodyStart)) {
             inner = true;
-            int bodyStartIndex = line.indexOf(bodyStart) + 6;
+            int bodyStartIndex = line.indexOf(bodyStart) + 5;
+            line = line.substring(bodyStartIndex);
+            bodyStartIndex = line.indexOf(">") + 1;
             line = line.substring(bodyStartIndex).trim();
         }
         if (line.contains(bodyEnd)) {
@@ -40,6 +42,7 @@ public class CleanedHTMLExtractor {
                  }
              }
         }
+        return inner;
     }    
     public void addCleanedLine(String cleanedLine) {
         addCleanedLine(cleanedLine, cleanedHTMLBody, isInsideBody);
@@ -73,11 +76,11 @@ public class CleanedHTMLExtractor {
         final String commentOpener = "<!--";
         final String commentCloser = "-->";
         while ((line = reader.readLine()) != null) {
-            addCleanedLine(
+            isInsideBody = addCleanedLine(
                 HTMLCommentCleaner.clean(line, commentOpener, commentCloser,isCommentOpen),
                 cleanedHTMLBody,
                 isInsideBody
-            );
+            ); // For some reason booleans input were not changing correctly, odd that Java doesn't support reference inputs for primitives
         }
         reader.close();
         return cleanedHTMLBody;

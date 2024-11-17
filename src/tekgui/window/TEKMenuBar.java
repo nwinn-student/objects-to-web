@@ -28,7 +28,7 @@ import java.io.File;
  * @see javax.swing.JPopupMenu
  * @see javax.swing.JMenuItem
  * @author Zakariya Javed, Noah Winn
- * @version 11/9/2024
+ * @version 11/17/2024
  */
 public class TEKMenuBar extends JMenuBar{
     private static TEKActionAdapter action = new TEKActionAdapter();
@@ -66,6 +66,8 @@ public class TEKMenuBar extends JMenuBar{
         // Selection        // Adjust create to ask a name for the file <since we are making a file>
         MenuBuilder.addMenuItem("Create", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0, false), "Use Insert to create a new ObjectUI.", action);
         MenuBuilder.addMenuItem("Find", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK, true), "Use Ctrl-F to find an item.", action);
+        MenuBuilder.addMenuItem("Connect", selectionMenu, null, "Connects all of the ObjectUIs.", action);
+        MenuBuilder.addMenuItem("Display Connected", selectionMenu, null, "Displays all of the connected ObjectUIs.", action);
         MenuBuilder.addMenuItem("Select All", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK, true), "Use Ctrl-A to select all ObjectUIs.", action);
         MenuBuilder.addMenuItem("Delete", selectionMenu, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0, true), "Use Delete to remove all selected ObjectUIs.", action);
         MenuBuilder.addMenuItem("Delete All", selectionMenu, null, "Removes all of the current ObjectUIs.", action);
