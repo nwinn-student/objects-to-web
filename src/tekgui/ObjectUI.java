@@ -18,6 +18,8 @@ import java.util.List;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.io.IOException;
+import java.io.FileWriter;
+
 /**
  * manage object properties
  *
@@ -166,5 +168,38 @@ public class ObjectUI
 
         html.append("</div>");
         return html.toString();
+    }
+    // Method to create a text output file with the generated HTML
+    public void createHTMLTextFile() {
+        String htmlContent = generateHTML();
+        String fileName = "output.html"; //file name
+
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write(htmlContent);
+            System.out.println("HTML content successfully written to " + fileName);
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing to the file: " + e.getMessage());
+        }
+    }
+
+    // New methods to edit object details
+    public void editName(String newName) throws IOException { //edits object name
+     setName(newName);
+     label.setText(TEKPanel.formatObjectDetails(this));
+    }
+
+    public void editPosition(Point newPosition) { //edits object position
+     setPosition(newPosition);
+     label.setText(TEKPanel.formatObjectDetails(this));
+    }
+
+    public void editSize(Dimension newSize) { //edits object size
+     setSize(newSize);
+     label.setText(TEKPanel.formatObjectDetails(this));
+    }
+
+    public void editContent(List<String> newContent) { //edits object content
+     setContent(newContent);
+     label.setText(TEKPanel.formatObjectDetails(this));
     }
 }
