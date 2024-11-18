@@ -23,16 +23,18 @@ import java.awt.event.WindowEvent;
  * @author: 
  * @version Nov. 18, 2024
  */
-public class ContentAdjuster extends JFrame {
+public class ContentAdjuster extends JDialog {
     private ObjectUI object;
     private  JTextArea contentArea;
     private JButton saveButton, cancelButton;
     private UndoManager undoManager;
 
-
-    public ContentAdjuster(ObjectUI object) {
-        this.object = object;
-        setTitle("Content Adjuster"+ object.getName());
+    public ContentAdjuster(List<ObjectUI> object) {
+        if(object.size() > 1){
+            // get the similar content and display that instead? idk
+        }
+        this.object = object.get(0);
+        setTitle("Content Adjuster"+ object.get(0).getName());
         setLayout(new BorderLayout());
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -102,11 +104,15 @@ public class ContentAdjuster extends JFrame {
                     updateStatus();
                 }
             });
+        
+        setVisible(true);
     }
 
     private void loadObjectContent() {
         if (object != null) {
             List<String> contentList = object.getContent();
+            if(contentList == null)
+                return;
             String content = String.join(", ", contentList); // Join list elements into a single String
             contentArea.setText(content);
         }

@@ -110,6 +110,7 @@ public class TEKActionAdapter implements ActionListener{
                 return;
             case settings:
                 // Open up a new window for ^*^ customization ^*^
+                TEKFile.getFrame().getSettings().displaySettings();
                 return;
             case "Exit":
                 TEKFile.getFrame().save();

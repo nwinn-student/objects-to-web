@@ -30,6 +30,7 @@ public class TEKFrame extends JFrame{
     private TEKPopupMenu popupMenu;
     private UndoManager manager = new UndoManager();
     private TEKFinder finder;
+    private MainWindow settings = new MainWindow();
     /**
      * Constructor for objects of class TEKFrame
      * Titles the TEKFrame class and initializes it.
@@ -77,6 +78,7 @@ public class TEKFrame extends JFrame{
     public TEKPopupMenu getPopupMenu(){return popupMenu;}
     public UndoManager getUndoManager(){return manager;}
     public TEKFinder getFinder(){return finder;}
+    public MainWindow getSettings(){return settings;}
     /**
      * 
      */

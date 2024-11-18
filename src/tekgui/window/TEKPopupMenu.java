@@ -89,7 +89,7 @@ public class TEKPopupMenu extends JPopupMenu{
         SwingUtilities.invokeLater(new Runnable(){
             @Override
             public void run(){
-                new TEKEditView(attachedComponent);
+                new ContentAdjuster(attachedComponent);
                 deactivate();
             }
         });

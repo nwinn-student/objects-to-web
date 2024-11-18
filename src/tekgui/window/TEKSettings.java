@@ -1,5 +1,6 @@
 package tekgui.window;
 import tekgui.helper.ButtonBuilder;
+import tekgui.TEKFile;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,7 +22,7 @@ import java.awt.*;
  * @version November 18, 2024
  */
 public class TEKSettings extends JDialog{
-    public TEKSettings(JFrame parent){
+    public TEKSettings(JFrame parent, MainWindow settingsInfo){
         super(parent, "Settings", true);
         JPanel house = new JPanel(new BorderLayout());
         // Sample
@@ -39,9 +40,9 @@ public class TEKSettings extends JDialog{
 
         // the components for the window size adjustment
         JLabel widthLabel = new JLabel("Window Width:");
-        JTextField widthField = new JTextField("500", 10); // Default width
+        JTextField widthField = new JTextField(""+TEKFile.getFrame().getWidth(), 10); // Default width
         JLabel heightLabel = new JLabel("Window Height:");
-        JTextField heightField = new JTextField("300", 10); // Default height
+        JTextField heightField = new JTextField(""+TEKFile.getFrame().getHeight(), 10); // Default height
 
         // components to the container panel
         container.setLayout(new GridLayout(4, 2));
@@ -60,13 +61,6 @@ public class TEKSettings extends JDialog{
         JPanel exitHouse = new JPanel();
         JButton confirm = ButtonBuilder.addButton("Confirm", exitHouse, "Button to submit changes of settings.", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // parent.updateSettings(...) // send changes to parent
-                dispose();
-            }
-        });
-
-        JButton cancel = ButtonBuilder.addButton("Cancel", exitHouse, "Button to cancel changes to settings.", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
                 // Save settings 
                 String selectedTheme = (String) themeComboBox.getSelectedItem();
                 String selectedFontSize = (String) fontSizeComboBox.getSelectedItem();
@@ -74,8 +68,7 @@ public class TEKSettings extends JDialog{
                 int height = Integer.parseInt(heightField.getText());
 
                 // Calling the parent method to update settings
-                ((MainWindow) parent).updateSettings(selectedTheme, selectedFontSize, width, height);
-                dispose();
+                settingsInfo.updateSettings(selectedTheme, selectedFontSize, width, height);                dispose();
             }
         });
 
@@ -94,14 +87,5 @@ public class TEKSettings extends JDialog{
         pack();
         setLocationRelativeTo(parent);
         setVisible(true);
-    }
-    /**
-     * Sample to quickly test
-     */
-    public static void main(String[] args){
-        JFrame frame = new JFrame();
-        frame.setSize(500,500);
-        frame.setVisible(true);
-        new TEKSettings(frame);
     }
 }
