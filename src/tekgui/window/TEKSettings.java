@@ -13,8 +13,6 @@ import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 /**
  * Write a description of class TEKSettings here.
