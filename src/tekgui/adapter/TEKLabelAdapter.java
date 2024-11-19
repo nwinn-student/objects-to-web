@@ -25,8 +25,8 @@ import tekgui.ObjectUI;
  * Houses TEKLabel's listeners, whatever they may be in time, utilizing mouse events primarily.
  *
  * @see java.awt.event.MouseEvent
- * @author Hayden Verstrat, Noah Winn, Coby Zhong
- * @version Nov. 9, 2024
+ * @author Zakariya Javed, Hayden Verstrat, Noah Winn, Coby Zhong
+ * @version Nov. 19, 2024
  */
 public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListener, MouseMotionListener{
     TEKPanel pan = null;
@@ -195,9 +195,7 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
             }
         }
     }
-    
-    
-    
+    public void mouseMoved(MouseEvent e){}
  
     //  method to check if the mouse is near any corner of the object and changes cursor to "drag mode"
     private boolean isNearCorner(Point point, TEKLabel label) {
