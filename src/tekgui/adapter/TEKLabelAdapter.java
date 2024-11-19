@@ -19,6 +19,7 @@ import javax.swing.JComponent;
 import java.awt.Color;
 import java.awt.event.MouseMotionListener;
 import java.awt.Point;
+import tekgui.ObjectUI;
 
 /**
  * Houses TEKLabel's listeners, whatever they may be in time, utilizing mouse events primarily.
@@ -33,6 +34,9 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
     private static final transient Cursor defaultCursor = new Cursor(Cursor.DEFAULT_CURSOR);
     private boolean focusDebounce = false;
     private Point dragStart = null; // Track where drag started
+    private boolean resizing = false; // Track if resizing is active
+    private Point resizeStart = null; // Track the starting point for resizing
+    private static final int CORNER_SIZE = 15; // Size of the corner area to detect
     {
         pan = TEKFile.getFrame().getPanel();
     }
@@ -57,9 +61,16 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
      */
     public void mouseEntered(MouseEvent e){
         try{
-            //((JComponent)e.getComponent()).grabFocus(); 
+            TEKLabel label = (TEKLabel) e.getComponent();
             e.getComponent().setCursor(handCursor);
-            e.getComponent().setBackground(TEKLabel.getHighlightColor()); 
+            e.getComponent().setBackground(TEKLabel.getHighlightColor());
+
+            // Change cursor to resize if near any corner
+            if (isNearCorner(e.getPoint(), label)) {
+                e.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR));
+            } else {
+                e.getComponent().setCursor(handCursor); // Default hand cursor for dragging
+            }
         } catch(ClassCastException k){}
     }
     /**
@@ -68,14 +79,19 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
     public void mouseExited(MouseEvent e){
         try{
             e.getComponent().setCursor(defaultCursor);
-            e.getComponent().setBackground(TEKLabel.getDefaultColor()); 
-            //((JComponent)e.getComponent().getParent()).grabFocus();
+            e.getComponent().setBackground(TEKLabel.getDefaultColor());
         } catch(ClassCastException k){}
     }
     public void mousePressed(MouseEvent e){
         if (e.getButton() == MouseEvent.BUTTON1) {  // Left click only
-            dragStart = e.getPoint();
-            ((Component)e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+            TEKLabel label = (TEKLabel) e.getSource();
+            if (isNearCorner(e.getPoint(), label)) {
+                resizing = true;
+                resizeStart = e.getPoint();
+            } else {
+                dragStart = e.getPoint();
+                ((Component)e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+            }
         }
     }
     public void mouseReleased(MouseEvent e){
@@ -86,6 +102,10 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
         } else if (e.getButton() == MouseEvent.BUTTON1) {
             dragStart = null;
             ((Component)e.getSource()).setCursor(handCursor);
+        }
+        if (resizing) {
+            resizing = false; // Stop resizing
+            resizeStart = null; // Clear the resize start point
         }
     }
     public void keyPressed(KeyEvent e){}
@@ -108,13 +128,12 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
     public void focusGained(FocusEvent e){
         if(pan == null){pan = TEKFile.getFrame().getPanel();}
         try{
-            TEKLabel comp = (TEKLabel)e.getComponent();
             if(e.getOppositeComponent() != null){
                 if(e.getOppositeComponent().getClass() == JRootPane.class){
                     focusDebounce = true;
                 }
             }
-            //pan.addSelected(TEKPanel.getObjectFromLabel(comp));
+           
             e.getComponent().setBackground(TEKLabel.getHighlightColor());
         } catch(ClassCastException k){}
     }
@@ -127,31 +146,64 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
         }
         if(pan == null){pan = TEKFile.getFrame().getPanel();}
         try{
-            //TEKLabel comp = (TEKLabel)e.getComponent();
-            //pan.removeSelected(TEKPanel.getObjectFromLabel(comp));
+        
             e.getComponent().setBackground(TEKLabel.getDefaultColor());
         } catch(ClassCastException k){}
     }
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (dragStart != null) {
-            Component comp = e.getComponent();
-            Point parentLocation = comp.getParent().getLocationOnScreen();
+        if (resizing) {
+            TEKLabel label = (TEKLabel) e.getSource();
+            int deltaX = e.getX() - resizeStart.x;
+            int deltaY = e.getY() - resizeStart.y;
+
+            // Determine which corner is being dragged
+            if (isNearCorner(resizeStart, label)) {
+                if (resizeStart.x <= CORNER_SIZE && resizeStart.y <= CORNER_SIZE) { // Top-left corner
+                    label.setSize(Math.max(50, label.getWidth() - deltaX), Math.max(50, label.getHeight() - deltaY));
+                    label.setLocation(label.getX() + deltaX, label.getY() + deltaY);
+                } else if (resizeStart.x >= label.getWidth() - CORNER_SIZE && resizeStart.y <= CORNER_SIZE) { // Top-right corner
+                    label.setSize(Math.max(50, label.getWidth() + deltaX), Math.max(50, label.getHeight() - deltaY));
+                    label.setLocation(label.getX(), label.getY() + deltaY);
+                } else if (resizeStart.x <= CORNER_SIZE && resizeStart.y >= label.getHeight() - CORNER_SIZE) { // Bottom-left corner
+                    label.setSize(Math.max(50, label.getWidth() - deltaX), Math.max(50, label.getHeight() + deltaY));
+                    label.setLocation(label.getX() + deltaX, label.getY());
+                } else if (resizeStart.x >= label.getWidth() - CORNER_SIZE && resizeStart.y >= label.getHeight() - CORNER_SIZE) { // Bottom-right corner
+                    label.setSize(Math.max(50, label.getWidth() + deltaX), Math.max(50, label.getHeight() + deltaY));
+                }
+            }
+            resizeStart = e.getPoint(); // Update the starting point for the next drag
+        } else if (dragStart != null && pan != null) {
+            Component sourceComp = e.getComponent();
+            Point parentLocation = sourceComp.getParent().getLocationOnScreen();
             Point mouseLocation = e.getLocationOnScreen();
             
-            // Calculate new position relative to parent container
-            int newX = mouseLocation.x - parentLocation.x - dragStart.x;
-            int newY = mouseLocation.y - parentLocation.y - dragStart.y;
+            int deltaX = mouseLocation.x - parentLocation.x - dragStart.x - sourceComp.getX();
+            int deltaY = mouseLocation.y - parentLocation.y - dragStart.y - sourceComp.getY();
             
-            // prevents dragging outside window
-            newX = Math.max(0, Math.min(newX, comp.getParent().getWidth() - comp.getWidth()));
-            newY = Math.max(0, Math.min(newY, comp.getParent().getHeight() - comp.getHeight()));
-            
-            comp.setLocation(newX, newY);
+            // Move all "selected" components simutaneously 
+            for (ObjectUI obj : pan.getSelected()) {
+                Component comp = obj.getLabel();
+                int newX = comp.getX() + deltaX;
+                int newY = comp.getY() + deltaY;
+                
+                // Prevent dragging outside window
+                newX = Math.max(0, Math.min(newX, comp.getParent().getWidth() - comp.getWidth()));
+                newY = Math.max(0, Math.min(newY, comp.getParent().getHeight() - comp.getHeight()));
+                
+                comp.setLocation(newX, newY);
+            }
         }
     }
-    @Override
-    public void mouseMoved(MouseEvent e) {
     
+    
+    
+ 
+    //  method to check if the mouse is near any corner of the object and changes cursor to "drag mode"
+    private boolean isNearCorner(Point point, TEKLabel label) {
+        return (point.x <= CORNER_SIZE && point.y <= CORNER_SIZE) || // Top-left corner
+               (point.x >= label.getWidth() - CORNER_SIZE && point.y <= CORNER_SIZE) || // Top-right corner
+               (point.x <= CORNER_SIZE && point.y >= label.getHeight() - CORNER_SIZE) || // Bottom-left corner
+               (point.x >= label.getWidth() - CORNER_SIZE && point.y >= label.getHeight() - CORNER_SIZE); // Bottom-right corner
     }
 }
