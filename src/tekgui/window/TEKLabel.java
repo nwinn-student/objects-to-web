@@ -8,6 +8,7 @@ import tekgui.adapter.TEKLabelAdapter;
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
 import java.awt.Color;
+import java.awt.Graphics;
 /**
  * Write a description of class TEKLabel here.
  *
@@ -30,6 +31,7 @@ public class TEKLabel extends JLabel{
         setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Adding a border
         setFocusable(true);
         setOpaque(true);
+        
     }
     /**
      * Default constructor, adds a mouseListener, aligns top left, and has a black border.
@@ -79,5 +81,20 @@ public class TEKLabel extends JLabel{
     }
     public boolean isSelected() {
         return isSelected;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (isSelected) {
+            // Draw a border around the label
+            g.setColor(Color.BLUE);
+            g.drawRect(0, 0, getWidth() - 1, getHeight() - 1); // Draw border
+            int cornerSize = 10; // Size of the corner indicators
+            g.fillOval(0, 0, cornerSize, cornerSize); // Top-left corner
+            g.fillOval(getWidth() - cornerSize, 0, cornerSize, cornerSize); // Top-right corner
+            g.fillOval(0, getHeight() - cornerSize, cornerSize, cornerSize); // Bottom-left corner
+            g.fillOval(getWidth() - cornerSize, getHeight() - cornerSize, cornerSize, cornerSize); // Bottom-right corner
+        }
     }
 }
