@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
  *
  * @see java.awt.event.ActionEvent
  * @author Zakariya Javed
- * @version 11/17/2024
+ * @version 9/30/2024
  */
 public class TEKActionAdapter implements ActionListener{
     /*
@@ -55,17 +55,11 @@ public class TEKActionAdapter implements ActionListener{
                 TEKFile.saveFile();
                 return;
             // note that holding down this key [Insert] WILL break the app, find a fix later
-            case "Create":
+            case "Create": 
                 TEKManagement.createObject();
                 return;
             case find:
                 ShortcutSystem.enact(ShortcutSystem.Shortcut.FIND);
-                return;
-            case "Connect":
-                TEKManagement.connectSimilarContentObjects();
-                return;
-            case "Display Connected":
-                TEKManagement.displayConnectedObjects();
                 return;
             case selectAll:
                 TEKManagement.selectAll();
@@ -110,7 +104,6 @@ public class TEKActionAdapter implements ActionListener{
                 return;
             case settings:
                 // Open up a new window for ^*^ customization ^*^
-                TEKFile.getFrame().getSettings().displaySettings();
                 return;
             case "Exit":
                 TEKFile.getFrame().save();
