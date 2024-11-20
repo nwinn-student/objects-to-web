@@ -31,6 +31,7 @@ public static void saveFrameState(int x, int y, int width, int height, int scree
 
    
 public static int[] loadFrameState(int screenWidth, int screenHeight) {
+    //Load the data on the file to the frame
         Properties properties = new Properties();
 
         try (FileInputStream in = new FileInputStream(STOREDFILE)) {
