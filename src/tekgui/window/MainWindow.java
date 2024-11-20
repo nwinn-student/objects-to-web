@@ -1,32 +1,30 @@
 package tekgui.window;
 import tekgui.TEKFile;
 
-public class MainWindow {
-    private String currentTheme;
-    private String currentFontSize;
-    private int currentWidth;
-    private int currentHeight;
+public class MainWindow  extends JFrame {
     public MainWindow() {
-        //initializing default values
-        this.currentTheme = "Light";
-        this.currentFontSize = "Medium";
-        this.currentWidth = 800;
-        this.currentHeight = 600;
+        // Set initial window properties
+        setTitle("Main Window");
+        setSize(800, 600);  // Initial size
+        setVisible(true);
+
+        // Open the settings dialog
+        TEKSettings settingsDialog = new TEKSettings(this, this);
     }
 
-    //  the method being called by TEKSettings to update settings
-    public void updateSettings(String theme, String fontSize, int width, int height) {
-        this.currentTheme = theme;
-        this.currentFontSize = fontSize;
-        this.currentWidth = width;
-        this.currentHeight = height;
+    // Method to update settings from the TEKSettings dialog
+    public void updateSettings(String fontSize, int width, int height) {
+        // Apply the font size change
+        setFont(new Font("Arial", Font.PLAIN, getFontSize(fontSize)));
 
-        // Apply the theme
-        System.out.println("Applied settings: Theme = " + theme + ", Font Size = " + fontSize);
-        
-        // Apply window size changes
-        TEKFile.getFrame().setSize(currentWidth, currentHeight);
-    
+        // Apply the window size change
+        setSize(width, height);
+
+        // Refresh the UI after changes
+        SwingUtilities.updateComponentTreeUI(this);
+
+        // Print the applied settings for verification
+        System.out.println("Applied settings: Font Size = " + fontSize + ", Width = " + width + ", Height = " + height);
     }
 
     // Helper method to convert font size string to actual size
@@ -38,8 +36,7 @@ public class MainWindow {
             default: return 16; // medium size 
         }
     }
-    public void displaySettings(){
-        // Create and display the settings dialog (when needed)
-        TEKSettings settingsDialog = new TEKSettings(TEKFile.getFrame(), this);
+   public static void main(String[] args) {
+        new MainWindow();
     }
 }
