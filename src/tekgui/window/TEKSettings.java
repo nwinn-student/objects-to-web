@@ -29,16 +29,12 @@ public class TEKSettings extends JDialog{
         JPanel container = new JPanel();
         container.setPreferredSize(new Dimension(300,300));
         
-        // settings options in the container panel
-        JLabel themeLabel = new JLabel("Select Theme:");
-        String[] themes = {"Light", "Dark"}; //theme options
-        JComboBox<String> themeComboBox = new JComboBox<>(themes);
         
         JLabel fontLabel = new JLabel("Select Font Size:");
         String[] fontSizes = {"Small", "Medium", "Large"}; //font size options
         JComboBox<String> fontSizeComboBox = new JComboBox<>(fontSizes);
 
-        // the components for the window size adjustment
+        // window size adjustment
         JLabel widthLabel = new JLabel("Window Width:");
         JTextField widthField = new JTextField(""+TEKFile.getFrame().getWidth(), 10); // Default width
         JLabel heightLabel = new JLabel("Window Height:");
@@ -46,8 +42,6 @@ public class TEKSettings extends JDialog{
 
         // components to the container panel
         container.setLayout(new GridLayout(4, 2));
-        container.add(themeLabel);
-        container.add(themeComboBox);
         container.add(fontLabel);
         container.add(fontSizeComboBox);
         container.add(widthLabel);
@@ -58,17 +52,17 @@ public class TEKSettings extends JDialog{
         JTabbedPane pane = new JTabbedPane();
         pane.add("Container", container);
         
+        // Panel for confirm and cancel buttons
         JPanel exitHouse = new JPanel();
         JButton confirm = ButtonBuilder.addButton("Confirm", exitHouse, "Button to submit changes of settings.", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Save settings 
-                String selectedTheme = (String) themeComboBox.getSelectedItem();
+                // user inputs for settings
                 String selectedFontSize = (String) fontSizeComboBox.getSelectedItem();
                 int width = Integer.parseInt(widthField.getText());
                 int height = Integer.parseInt(heightField.getText());
 
-                // Calling the parent method to update settings
-                settingsInfo.updateSettings(selectedTheme, selectedFontSize, width, height);                dispose();
+                settingsInfo.updateSettings(selectedFontSize, width, height);
+                dispose();
             }
         });
 
