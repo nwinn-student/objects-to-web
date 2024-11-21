@@ -182,7 +182,7 @@ public class ObjectUI
                 html.append("<li>").append(similar.getName()).append("</li>");
             }
             html.append("</ul>");
-            return html.toString();
+            //return html.toString();
 
         }
 
