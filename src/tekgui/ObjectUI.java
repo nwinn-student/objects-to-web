@@ -24,7 +24,7 @@ import java.io.FileWriter;
  * manage object properties
  *
  * @Mara Doze, Noah Winn
- * @11/17/24
+ * @11/20/24
  */
 public class ObjectUI
 {
@@ -43,7 +43,18 @@ public class ObjectUI
         this.label = new TEKLabel(this);
         setPosition(position);
         setSize(size);
+        this.creationTime = getCurrentTime();  // Initialize creation time to the current time
         label.setText(TEKPanel.formatObjectDetails(this));
+
+        // Automatically save the object as an HTML file when it's created
+        saveAsHTML();
+    }
+
+    private String getCurrentTime() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now); // Get the current timestamp
+    }
     }
     private String getModifiedTime() { 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -53,17 +64,24 @@ public class ObjectUI
         return dtf.format(modifiedDate); //obtain timestamp
     }
     public String getName(){return name;}
+    
     public void setName(String name) throws IOException{
         if(file != null){
             throw new IOException("File already exists, it cannot be adjusted.");
         }
         // Will be placed in the selected directory under this name?
         this.name = name; 
+        label.setText(TEKPanel.formatObjectDetails(this));
+
     }
     public TEKLabel getLabel(){ return label;}
+    
     public void setLabel(TEKLabel label){this.label = label;}
+    
     public String getCreationTime(){return creationTime;}
+    
     public List<String> getContent(){return alteredContent;}
+    
     public void setContent(List<String> content){
         this.alteredContent = new ArrayList<>(content); // Create a copy of the list to avoid external modifications
         this.canSave = true; // Mark that the content has been altered and can be saved
@@ -164,6 +182,8 @@ public class ObjectUI
                 html.append("<li>").append(similar.getName()).append("</li>");
             }
             html.append("</ul>");
+            return html.toString();
+
         }
 
         html.append("</div>");
@@ -180,6 +200,11 @@ public class ObjectUI
         } catch (IOException e) {
             System.err.println("An error occurred while writing to the file: " + e.getMessage());
         }
+    }
+
+    // Save the object as an HTML file immediately after creation
+    private void saveAsHTML() {
+        createHTMLTextFile();  // Call the method to save the HTML file
     }
 
     // New methods to edit object details
