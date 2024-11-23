@@ -12,8 +12,10 @@ import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.awt.Dimension;
 import javax.swing.JButton;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import java.awt.GridLayout;
 
 /**
  * Write a description of class TEKSettings here.
@@ -29,11 +31,11 @@ public class TEKSettings extends JDialog{
         JPanel container = new JPanel();
         container.setPreferredSize(new Dimension(300,300));
         
-        
         JLabel fontLabel = new JLabel("Select Font Size:");
         String[] fontSizes = {"Small", "Medium", "Large"}; //font size options
         JComboBox<String> fontSizeComboBox = new JComboBox<>(fontSizes);
-
+        fontSizeComboBox.setSelectedItem(settingsInfo.getFontSize());
+        
         // window size adjustment
         JLabel widthLabel = new JLabel("Window Width:");
         JTextField widthField = new JTextField(""+TEKFile.getFrame().getWidth(), 10); // Default width
@@ -56,12 +58,13 @@ public class TEKSettings extends JDialog{
         JPanel exitHouse = new JPanel();
         JButton confirm = ButtonBuilder.addButton("Confirm", exitHouse, "Button to submit changes of settings.", new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // user inputs for settings
+                // user inputs for settings 
                 String selectedFontSize = (String) fontSizeComboBox.getSelectedItem();
                 int width = Integer.parseInt(widthField.getText());
                 int height = Integer.parseInt(heightField.getText());
 
-                settingsInfo.updateSettings(selectedFontSize, width, height);
+                // Calling the parent method to update settings
+                settingsInfo.updateSettings(selectedFontSize, width, height);                
                 dispose();
             }
         });

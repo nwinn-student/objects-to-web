@@ -2,12 +2,16 @@ package tekgui.adapter;
 
 // TEKGUI imports
 import tekgui.TEKFile;
+import tekgui.window.TEKFrame;
+import tekgui.window.FrameLocationManager;
 
 // Java imports
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
 import javax.swing.JOptionPane;
 import java.awt.event.WindowListener;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 /**
  * Used to handle popupMenu and saving when exiting.
@@ -37,7 +41,15 @@ public class TEKFrameAdapter implements WindowListener{
     }
     @Override
     public void windowClosing(WindowEvent e){
-        if(TEKFile.getFrame() == null || TEKFile.getFrame().hasSaved()){return;}
+        
+        TEKFrame frame = TEKFile.getFrame();
+        if(frame == null){
+            return;
+        }
+        FrameLocationManager.saveFrameState(frame.getBounds());
+        if(frame.hasSaved()){
+            return;
+        }
         // Add support later for if a change has occurred to ask if they want to save, until then, this does nothing
         int optionChosen = JOptionPane.showConfirmDialog(TEKFile.getFrame(), 
             "Do you wish to save your changes?",

@@ -1,32 +1,46 @@
 package tekgui.window;
 import tekgui.TEKFile;
+import java.awt.Font;
+import javax.swing.SwingUtilities;
+import java.awt.Component;
+import java.awt.Container;
 
-public class MainWindow  extends JFrame {
+public class MainWindow {
+    private String currentFontSize;
     public MainWindow() {
-        // Set initial window properties
-        setTitle("Main Window");
-        setSize(800, 600);  // Initial size
-        setVisible(true);
-
-        // Open the settings dialog
-        TEKSettings settingsDialog = new TEKSettings(this, this);
+        //initializing default values
+        this.currentFontSize = "Small";
     }
-
-    // Method to update settings from the TEKSettings dialog
+    public String getFontSize(){return currentFontSize;}
+    //  the method being called by TEKSettings to update settings
     public void updateSettings(String fontSize, int width, int height) {
-        // Apply the font size change
-        setFont(new Font("Arial", Font.PLAIN, getFontSize(fontSize)));
+        this.currentFontSize = fontSize;
 
-        // Apply the window size change
-        setSize(width, height);
-
-        // Refresh the UI after changes
-        SwingUtilities.updateComponentTreeUI(this);
-
-        // Print the applied settings for verification
-        System.out.println("Applied settings: Font Size = " + fontSize + ", Width = " + width + ", Height = " + height);
+        //System.out.println("Applied settings: Font Size = " + fontSize);
+        
+        // Apply window size changes
+        TEKFile.getFrame().setSize(width, height);
+        //TEKFile.getFrame().setFont(new Font("Arial", Font.PLAIN, ));
+        updateFont(TEKFile.getFrame(), getFontSize(fontSize));
     }
-
+    /**
+     * 
+     * 
+     * @param ancestor
+     * @param fontSize
+     */
+    public void updateFont(Component ancestor, float fontSize){
+        Font font = ancestor.getFont();
+        ancestor.setFont(font.deriveFont(fontSize));
+        try{
+            Container cont = (Container) ancestor;
+            for(Component comp : cont.getComponents()){
+                updateFont(comp, fontSize);
+            }
+        } catch(ClassCastException e){
+            // Not a container
+        }
+    }
     // Helper method to convert font size string to actual size
     private int getFontSize(String fontSize) {
         switch (fontSize) {
@@ -36,7 +50,11 @@ public class MainWindow  extends JFrame {
             default: return 16; // medium size 
         }
     }
-   public static void main(String[] args) {
-        new MainWindow();
+    /**
+     * Creates a new TEKSettings object and displays it.
+     */
+    public void displaySettings(){
+        // Create and display the settings dialog (when needed)
+        TEKSettings settingsDialog = new TEKSettings(TEKFile.getFrame(), this);
     }
 }

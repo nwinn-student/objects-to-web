@@ -73,6 +73,12 @@ public class TEKFrame extends JFrame{
         getContentPane().setFocusable(true); // intended to ensure that eyes are not distracted
         getContentPane().add(scrollPane, BorderLayout.CENTER);
         pack();
+        
+        // load previous
+        int[] loadedLoc = FrameLocationManager.loadFrameState(screenSize.width, screenSize.height);
+        if(loadedLoc != null){
+            setBounds(loadedLoc[0], loadedLoc[1], loadedLoc[2], loadedLoc[3]);
+        }
     }
     public TEKPanel getPanel(){return panel;}
     public TEKPopupMenu getPopupMenu(){return popupMenu;}

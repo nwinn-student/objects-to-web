@@ -98,6 +98,9 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
         if(pan == null){pan = TEKFile.getFrame().getPanel();}
         if(e.getButton() == MouseEvent.BUTTON3){
             // display popupMenu
+            TEKLabel label = (TEKLabel) e.getSource();
+            pan.clearSelected();
+            pan.addSelected(TEKPanel.getObjectFromLabel(label));
             TEKFile.getFrame().getPopupMenu().activate(e);
         } else if (e.getButton() == MouseEvent.BUTTON1) {
             dragStart = null;
@@ -133,7 +136,6 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
                     focusDebounce = true;
                 }
             }
-           
             e.getComponent().setBackground(TEKLabel.getHighlightColor());
         } catch(ClassCastException k){}
     }
@@ -146,7 +148,6 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
         }
         if(pan == null){pan = TEKFile.getFrame().getPanel();}
         try{
-        
             e.getComponent().setBackground(TEKLabel.getDefaultColor());
         } catch(ClassCastException k){}
     }
@@ -181,16 +182,16 @@ public class TEKLabelAdapter implements MouseListener, KeyListener, FocusListene
             int deltaX = mouseLocation.x - parentLocation.x - dragStart.x - sourceComp.getX();
             int deltaY = mouseLocation.y - parentLocation.y - dragStart.y - sourceComp.getY();
             
-            // Move all "selected" components simutaneously 
+            // Move all "selected" components simutaneously
             for (ObjectUI obj : pan.getSelected()) {
                 Component comp = obj.getLabel();
                 int newX = comp.getX() + deltaX;
                 int newY = comp.getY() + deltaY;
-                
+                    
                 // Prevent dragging outside window
                 newX = Math.max(0, Math.min(newX, comp.getParent().getWidth() - comp.getWidth()));
                 newY = Math.max(0, Math.min(newY, comp.getParent().getHeight() - comp.getHeight()));
-                
+                    
                 comp.setLocation(newX, newY);
             }
         }
