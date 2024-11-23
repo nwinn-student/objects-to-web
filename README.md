@@ -9,7 +9,7 @@ CPSC 4900 Group Project - Involves using a GUI that has GUI object elements with
 
 ## Idea
 
-A user-friendly GUI that generates HTML/PHP pages with an identical style, but the contents of the page can be modified via the GUI.  The GUI assists in the organization and potentially navigation of the pages.
+A user-friendly GUI that generates HTML/PHP pages with an identical style, but the contents of the page can be modified via the GUI.  The GUI assists in the organization and potentially navigation of the pages.  The prioritization is the adjusting of contents en masse of the files.
 
 <details>
 <summary> Course Task List </summary>
@@ -29,8 +29,9 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [X] Submit Sprint 2 Report and Deliverables
 - [X] Presentation
 - [X] Submit Plan of Sprint 3
-- [ ] Submit Sprint 3 Report and Deliverables
-- [ ] Final Presentation
+- [X] Submit Sprint 3 Report and Deliverables
+- [X] Final Presentation
+- [ ] Demo/Video
 
 Next Semester
 
@@ -79,12 +80,13 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 | Oct. 21, 2024 | Sprint Check-in | Check-in w/ team and try to flesh out Software Architecture and plan next meeting. |
 | Oct. 24, 2024 | Preparing | Complete Software Architecture and prepare for Sprint Report and Deliverables. |
 | Oct. 28, 2024 | Preparing | Flesh out Sprint Report and Deliverables. |
-| Oct. 31, 2024 | Preparing | Review Sprint Report and Deliverables and flesh out presentation. |
-| Nov. 4, 2024 | Preparing | Review for presentation and prepare for Sprint 2 Plan. |
-| Nov. 7, 2024 | Sprint Planning | Flesh out Sprint 2 Plan and have members choose their task, and plan next meeting. |
-| Nov. 11, 2024 | Sprint Check-in | Check-in w/ team and try to flesh out potential assignment material. |
-| Nov. 14, 2024 | Preparing | Complete any potential assignment and flesh out Sprint Report and Delivarables and start presentation. |
-| Nov. 18, 2024 | Final Lap | Complete presentation and verify that all code and features are functional that have been completed. |
+| Oct. 31, 2024 | Preparing | Review Sprint Report and Deliverables and presentation. |
+| Nov. 4, 2024 | Preparing | Review for presentation and choose tasks for Sprint 3 Plan. |
+| Nov. 7, 2024 | Sprint Planning | Assign tasks and complete sprint plan. |
+| Nov. 11, 2024 | Sprint Check-in | Clarify tasks and prepare sprint report. |
+| Nov. 14, 2024 | Preparing | Flesh out sprint report and work on presentation. |
+| Nov. 18, 2024 | Final Lap | Finish both presentation and report and start final presentation. |
+| Nov. 25, 2024 | Demo Day | Meeting to perform the demo during. |
 | NEXT | SEMESTER | PROJECT |
 | Jan. 6-8, 2025  | Preparation | Find out member schedules, start generating a product backlog. |
 | Jan. 9-14, 2025 | Preparation | Finish product backlog and prepare for sprint 1 plan. |
@@ -111,6 +113,19 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 | `Edit View to See the Contents of Object` | Integrated |
 | `Common Application Menu and Tools Features` | Accepted |
 | `Object Control Shortcut System` | Integrated |
+| `Object Content Adjusting` | Integrated |
+| `Generate HTML from Objects`|  Integrated |
+| `Single Object Moving Feature` | Accepted |
+| `Undo and Redo Actions on Objects` | Accepted |
+| `Remember Recently Used Files` | Accepted |
+| `Object Highlighting` | Accepted |
+| `Remembrance of Frame Location` | Reviewed |
+| `Populating Popup Menu with Common Features` | Accepted |
+| `Mass Object Selection` | Accepted |
+| `Object Relationship System` | Integrated |
+| `Object Connections Visualized` | Integrated |
+| `Mass Object Moving Feature` | Integrated |
+| `Frame UI Accessibility` | Integrated |
 </details>
 
 <details>
