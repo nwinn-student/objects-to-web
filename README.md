@@ -6,6 +6,8 @@
 
 CPSC 4900 Group Project - Involves using a GUI that has GUI object elements within that are to be used to, in some way, generate and adjust a webpage or site.  The primary usage is adjusting.
 
+## Requirements
+Java 17+
 
 ## Idea
 
@@ -31,11 +33,7 @@ A user-friendly GUI that generates HTML/PHP pages with an identical style, but t
 - [X] Submit Plan of Sprint 3
 - [X] Submit Sprint 3 Report and Deliverables
 - [X] Final Presentation
-- [ ] Demo/Video
-
-Next Semester
-
-- [ ] Submit Product Backlog
+- [X] Demo/Video
 
 </details>
 
@@ -87,9 +85,6 @@ FOR individuals looking to set up uniform website pages, website developers, or 
 | Nov. 14, 2024 | Preparing | Flesh out sprint report and work on presentation. |
 | Nov. 18, 2024 | Final Lap | Finish both presentation and report and start final presentation. |
 | Nov. 25, 2024 | Demo Day | Meeting to perform the demo during. |
-| NEXT | SEMESTER | PROJECT |
-| Jan. 6-8, 2025  | Preparation | Find out member schedules, start generating a product backlog. |
-| Jan. 9-14, 2025 | Preparation | Finish product backlog and prepare for sprint 1 plan. |
 
  
 </details>
